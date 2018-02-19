@@ -15,17 +15,23 @@ namespace JAGS.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public IActionResult CreateEdit()
         {
-            ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult CreateCourse()
         {
-            ViewData["Message"] = "Your contact page.";
+            return View();
+        }
 
+        public IActionResult EditCourse()
+        {
+            return View();
+        }
+
+        public IActionResult CreateEditUser()
+        {
             return View();
         }
 
