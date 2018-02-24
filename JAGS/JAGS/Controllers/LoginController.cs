@@ -17,7 +17,7 @@ namespace JAGS.Controllers
             Console.Write("We have pressed the login button!");
             if (ModelState.IsValid)
             {
-                return View("_Index", new HomeModel());
+                return RedirectToPage("_Index", new HomeModel());
             }
 
             return View("_Index", model);
