@@ -1,14 +1,45 @@
 ﻿@{
-    Layout = "_Layout";
+    Layout = "_Login";
 
 }
 @model JAGS.Models.LoginModel
 
-@using (Html.BeginForm("Subscribe", "Home", FormMethod.Post))
+
+@using (Html.BeginForm())
 {
-    @Html.TextBoxFor(model => model.Login)
-    @Html.ValidationMessageFor(model => model.Login)
-    @Html.TextBoxFor(model => model.Password)
-    @Html.ValidationMessageFor(model => model.Password)
-    <button type="submit">Login</button>
+    @Html.ValidationSummary(true, "Login failed. Check your login details.");
+    <div>
+        <fieldset>
+            <legend>Login</legend>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Login)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Login)
+                @Html.ValidationMessageFor(model => model.Login)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Password)
+            </div>
+            <div class="editor-field">
+                @Html.PasswordFor(model => model.Password)
+                @Html.ValidationMessageFor(model => model.Password)
+            </div>
+            <input type="submit" value="Log In" />
+        </fieldset>
+    </div>
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

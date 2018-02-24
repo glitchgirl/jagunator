@@ -39,16 +39,5 @@ namespace JAGS.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        [HttpPost]
-        public ActionResult Login(LoginModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                //TODO: LoginUser(model.Login, model.Password);
-            }
-
-            return View("Index", model);
-        }
     }
 }
