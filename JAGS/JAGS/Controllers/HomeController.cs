@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using JAGS.Models;
-using System.Web.Mvc;
+//using System.Web.Mvc;
 
 namespace JAGS.Controllers
 {
