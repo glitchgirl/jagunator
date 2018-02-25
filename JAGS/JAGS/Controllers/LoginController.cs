@@ -9,18 +9,5 @@ using JAGS.Models;
 
 namespace JAGS.Controllers
 {
-    public class LoginController : Controller
-    {
-        [HttpPost]
-        public ActionResult Login(LoginModel model)
-        {
-            Console.Write("We have pressed the login button!");
-            if (ModelState.IsValid)
-            {
-                return RedirectToPage("_Index", new HomeModel());
-            }
 
-            return View("_Index", model);
-        }
-    }
 }

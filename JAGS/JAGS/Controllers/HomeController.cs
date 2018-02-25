@@ -39,5 +39,18 @@ namespace JAGS.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        [HttpPost]
+        public ActionResult Index(LoginModel model)
+        {
+            Console.Write("We have pressed the login button!");
+            if (ModelState.IsValid)
+            {
+                return View("CreateEdit", model);
+            }
+            else
+            {
+                return View("About", model);
+            }
+        }
     }
 }
