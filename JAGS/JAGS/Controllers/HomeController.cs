@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using JAGS.Models;
 //using System.Web.Mvc;
-using System.Web;
+//using System.Web.Hosting;
+//using Environment;
+using static Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment;
 
 namespace JAGS.Controllers
 {
@@ -67,8 +69,10 @@ namespace JAGS.Controllers
         [HttpPost]
         public ActionResult Index(LoginModel model)
         {
-            var filepath = "/Users/administrator/Documents/GitHub/jagunator/JAGS/JAGS/Users/" + model.Login + ".csv";
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + model.Login + ".csv";
             var absfilepath = System.IO.File.Exists(filepath);
+            //Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath.ToString();
+            //HttpContext.Current.Server.MapPath("~/Data/Users/test.csv");
             if (absfilepath)
             {
                 return View("CreateEditUser", model);
