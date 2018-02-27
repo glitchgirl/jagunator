@@ -9,6 +9,8 @@ using JAGS.Models;
 //using System.Web.Hosting;
 //using Environment;
 using static Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment;
+//using Microsoft.VisualBasic.FileIO;
+using System.IO;
 
 namespace JAGS.Controllers
 {
@@ -72,9 +74,19 @@ namespace JAGS.Controllers
             var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Login + ".csv";
             if (System.IO.File.Exists(filepath))   //check if user csv file exists
             {
-                return View("CreateEditUser", model);
+                StreamReader readFile = new StreamReader(filepath);
+                String line = readFile.ReadLine();
+                String[] row = line.Split(',');
+                if (row[1] == model.Password)   //if password is correct
+                {
+                    ViewBag.loginname = row[0];
+                    ViewBag.pass = row[1];
+                    ViewBag.type = row[2];
+                    return View("CreateEditUser", model);
+                }
+
+                return View("About", model);
             }
-            Console.Write("We have pressed the login button!");
             else if (model.Login == "Admin")
             {
                 return View("CreateEdit", model);
