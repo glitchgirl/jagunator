@@ -69,16 +69,13 @@ namespace JAGS.Controllers
         [HttpPost]
         public ActionResult Index(LoginModel model)
         {
-            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + model.Login + ".csv";
-            var absfilepath = System.IO.File.Exists(filepath);
-            //Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath.ToString();
-            //HttpContext.Current.Server.MapPath("~/Data/Users/test.csv");
-            if (absfilepath)
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Login + ".csv";
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
             {
                 return View("CreateEditUser", model);
             }
             Console.Write("We have pressed the login button!");
-            if (model.Login == "Admin")
+            else if (model.Login == "Admin")
             {
                 return View("CreateEdit", model);
             }

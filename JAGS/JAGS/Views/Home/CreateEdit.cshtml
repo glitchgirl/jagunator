@@ -2,10 +2,11 @@
 @{
     ViewData["Title"] = "Create/Edit";
     Layout = "_Layout";
-
 }
+@using static Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment;
 
 <h2>CreateEdit</h2>
 <div id="CEScheduleTop">
+    <p>@ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)</p>
 
 </div>
