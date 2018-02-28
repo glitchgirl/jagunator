@@ -82,6 +82,7 @@ namespace JAGS.Controllers
                     ViewBag.loginname = row[0];
                     ViewBag.pass = row[1];
                     ViewBag.type = row[2];
+                    ViewBag.sessiontype = row[2];
                     return View("CreateEditUser", model);
                 }
 
