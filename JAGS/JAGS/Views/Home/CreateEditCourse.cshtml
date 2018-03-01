@@ -3,9 +3,11 @@
     ViewData["Title"] = "Create/Edit Course";
     Layout = "_Layout";
 }
+@using Microsoft.AspNetCore.Mvc; 
+@using Microsoft.AspNetCore.Http;
 
 <h2>@ViewBag.Title</h2>
-
+<p>@ViewBag.sessiontype</p>
 <div class="courseForm">
     <table>
         <tr>

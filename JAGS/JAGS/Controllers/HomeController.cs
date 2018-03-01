@@ -4,18 +4,22 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using JAGS.Models;
 //using System.Web.Mvc;
 //using System.Web.Hosting;
 //using Environment;
 using static Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment;
-//using Microsoft.VisualBasic.FileIO;
 using System.IO;
+using Microsoft.AspNetCore.Session;
 
 namespace JAGS.Controllers
 {
     public class HomeController : Microsoft.AspNetCore.Mvc.Controller
     {
+        const string SessionUserName = "_Name";
+        const string SessionUserPass = "_Pass";
+        const string SessionUserType = "_Type";
         public IActionResult Index()
         {
             return View();
@@ -24,6 +28,7 @@ namespace JAGS.Controllers
 
         public IActionResult CreateEdit()
         {
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
             return View();
         }
 
@@ -52,6 +57,7 @@ namespace JAGS.Controllers
             {
                 model.ClassroomStudentSize.Add(new ClassroomSize { ClassroomID = i, ClassSize = clSize[i] });
             }
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
 
             return View(model);
         }
@@ -61,6 +67,7 @@ namespace JAGS.Controllers
 
         public IActionResult CreateEditUser()
         {
+            ViewBag.sessiontype = this.HttpContext.Session.GetString(SessionUserType);
             return View();
         }
 
@@ -79,10 +86,20 @@ namespace JAGS.Controllers
                 String[] row = line.Split(',');
                 if (row[1] == model.Password)   //if password is correct
                 {
+                    //ViewBag.SessionUserType = SessionUserType;
                     ViewBag.loginname = row[0];
                     ViewBag.pass = row[1];
                     ViewBag.type = row[2];
-                    ViewBag.sessiontype = row[2];
+                    //ViewBag.sessiontype = "Admin";
+                    if (row[2] == "Admin")
+                    {
+                        //var currentsession = new UserModel { Username = row[0], Password = row[1], Type = true };
+                        //HttpContext.Session.SetString(SessionUserType,"Admin");//["UserModel"] = currentsession;
+
+                    }
+                    HttpContext.Session.SetString(SessionUserType, "Admin");
+                    var sessiontypename = HttpContext.Session.GetString(SessionUserType);
+                    ViewBag.sessiontype = sessiontypename;
                     return View("CreateEditUser", model);
                 }
 
