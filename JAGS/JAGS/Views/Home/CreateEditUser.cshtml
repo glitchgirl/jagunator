@@ -1,11 +1,25 @@
 ﻿
 @{
+﻿@{
     ViewData["Title"] = "CreateEditUser";
     Layout = "_Layout";
 }
+<<<<<<< HEAD
 @using Microsoft.AspNetCore.Mvc; 
 @using Microsoft.AspNetCore.Http;
 
 <p>@ViewBag.sessiontype</p>
 <h2>CreateEditUser</h2>
 
+=======
+<p> Hey, @ViewBag.loginname</p>
+<h2>Create/Edit User</h2>
+<form>
+    <div class="userform">
+        <label>Username:</label><input type="text" name = username><br> 
+        <label>Password:</label><input type="password" name = password><br>
+        <label>Access Level: </label><br>
+        <input type="radio" value="Admin">Admin <input type="radio" value="viewer"> Viewer
+    </div>
+</form>
+>>>>>>> master
