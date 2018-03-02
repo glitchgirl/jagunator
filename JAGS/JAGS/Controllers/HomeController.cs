@@ -26,9 +26,10 @@ namespace JAGS.Controllers
         }
 
 
-        public IActionResult CreateEdit()
+        public IActionResult CreateEditSchedule()
         {
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
             return View();
         }
 
@@ -58,6 +59,7 @@ namespace JAGS.Controllers
                 model.ClassroomStudentSize.Add(new ClassroomSize { ClassroomID = i, ClassSize = clSize[i] });
             }
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
 
             return View(model);
         }
@@ -67,7 +69,8 @@ namespace JAGS.Controllers
 
         public IActionResult CreateEditUser()
         {
-            ViewBag.sessiontype = this.HttpContext.Session.GetString(SessionUserType);
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
             return View();
         }
 
@@ -88,26 +91,25 @@ namespace JAGS.Controllers
                 {
                     //ViewBag.SessionUserType = SessionUserType;
                     ViewBag.loginname = row[0];
-                    ViewBag.pass = row[1];
-                    ViewBag.type = row[2];
+                    //ViewBag.pass = row[1];
+                    //ViewBag.type = row[2];
                     //ViewBag.sessiontype = "Admin";
                     if (row[2] == "Admin")
                     {
-                        //var currentsession = new UserModel { Username = row[0], Password = row[1], Type = true };
-                        //HttpContext.Session.SetString(SessionUserType,"Admin");//["UserModel"] = currentsession;
-
+                        HttpContext.Session.SetString(SessionUserType, "Admin");
+                        HttpContext.Session.SetString(SessionUserName, row[0].ToString());
                     }
-                    HttpContext.Session.SetString(SessionUserType, "Admin");
-                    var sessiontypename = HttpContext.Session.GetString(SessionUserType);
-                    ViewBag.sessiontype = sessiontypename;
+                    else
+                    {
+                        HttpContext.Session.SetString(SessionUserType, "Viewer");
+                        HttpContext.Session.SetString(SessionUserName, row[0].ToString());
+                    }
+
+                    ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
                     return View("CreateEditUser", model);
                 }
 
                 return View("About", model);
-            }
-            else if (model.Login == "Admin")
-            {
-                return View("CreateEdit", model);
             }
             else
             {
