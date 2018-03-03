@@ -7,68 +7,8 @@
 @using Microsoft.AspNetCore.Http;
 
 <h2>@ViewBag.Title</h2>
-<<<<<<< HEAD
 <p>@ViewBag.sessiontype</p>
-<div class="courseForm">
-    <table>
-        <tr>
-            <td>
-                Course
-                <p>
-                    @Html.DropDownListFor(m => m.CourseName, Enumerable.Empty<SelectListItem>(), null)
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                Instructor Name
-                <p>
-                    @Html.TextBoxFor(a => a.IntructorName)
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td>
 
-                Course Name
-                <p>
-                    @Html.TextBoxFor(a => a.CourseName)
-                </p>
-            </td>
-            <td>
-                Course ID
-                <p>
-                    @Html.TextBoxFor(a => a.CourseID)
-                </p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="CampusLocations">
-                    <h3>Campus Location</h3>
-                    @Html.HiddenFor(x => x.CourseID)
-                    @foreach (var a in Model.CampusNames)
-                    {
-                        <p>
-                            @Html.RadioButtonFor(b => b.CampusNames, a.CampusID) @a.CampusName
-                        </p>
-                    }
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <h3>Classroom Size</h3>
-                @foreach (var a in Model.ClassroomStudentSize)
-                { 
-                    <p>
-                        @Html.RadioButtonFor(b=>b.ClassroomStudentSize, a.ClassroomID) @a.ClassSize
-                    </p>
-                }
-            </td>
-        </tr>
-    </table>
-=======
 
 <div class="form-inline">
     <label for="Course">Course</label>
@@ -102,7 +42,6 @@
                 @Html.RadioButtonFor(b => b.ClassroomStudentSize, a.ClassroomID) @a.ClassSize
             }
      </div>
->>>>>>> J-branch
 </div>
 
     <input type="button" value="Save" id="crsSave" />
