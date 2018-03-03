@@ -7,6 +7,7 @@
 @using Microsoft.AspNetCore.Http;
 
 <h2>@ViewBag.Title</h2>
+<<<<<<< HEAD
 <p>@ViewBag.sessiontype</p>
 <div class="courseForm">
     <table>
@@ -67,10 +68,45 @@
             </td>
         </tr>
     </table>
+=======
+
+<div class="form-inline">
+    <label for="Course">Course</label>
+    <div class="CourseDropDown">
+        @Html.DropDownListFor(m => m.CourseName, Enumerable.Empty<SelectListItem>(), null)
+    </div>
+    <label for="InstructorName">Instructor Name</label>
+    <div class="InstructorName">
+        @Html.TextBoxFor(a => a.IntructorName)
+    </div>
+    <label for="CourseName">Course Name</label>
+    <div class="CourseName">
+        @Html.TextBoxFor(a => a.CourseName)
+    </div>
+    <label for="CourseID">Course ID</label>
+    <div class="CourseID">
+        @Html.TextBoxFor(a => a.CourseID)
+    </div>
+    <div class="form-group">
+        <label for="CampusLocation">Campus Location</label>
+        @Html.HiddenFor(x => x.CourseID)
+        @foreach (var a in Model.CampusNames)
+        {
+            @Html.RadioButtonFor(b => b.CampusNames, a.CampusID) @a.CampusName
+        }
+     </div>
+     <div class="ClassSize">
+        <label for="ClassroomSize">Classroom Size</label>
+            @foreach (var a in Model.ClassroomStudentSize)
+            {
+                @Html.RadioButtonFor(b => b.ClassroomStudentSize, a.ClassroomID) @a.ClassSize
+            }
+     </div>
+>>>>>>> J-branch
 </div>
 
-<input type ="button" value="Save" id="crsSave" />
-<input type="button" value="Cancel" id="crsCancel" />
+    <input type="button" value="Save" id="crsSave" />
+    <input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';"/>
 
 
 
