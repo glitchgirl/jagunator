@@ -106,7 +106,7 @@ namespace JAGS.Controllers
                     }
 
                     ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
-                    return View("CreateEditUser", model);
+                    return View("CreateEditUser");
                 }
 
                 return View("About", model);

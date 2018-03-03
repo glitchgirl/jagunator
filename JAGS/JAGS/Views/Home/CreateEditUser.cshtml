@@ -5,7 +5,8 @@
 <<<<<<< HEAD
 @using Microsoft.AspNetCore.Mvc; 
 @using Microsoft.AspNetCore.Http;
-
+@using JAGS.Models;
+@model JAGS.Models.UserModel
 <p>@ViewBag.sessiontype</p>
 <h2>CreateEditUser</h2>
 
@@ -14,10 +15,31 @@
 <h2>Create/Edit User</h2>
 <form>
     <div class="userform">
-        <label>Username:</label><input type="text" name = username><br> 
-        <label>Password:</label><input type="password" name = password><br>
-        <label>Access Level: </label><br>
-        <input type="radio" value="Admin">Admin <input type="radio" value="viewer"> Viewer
+        <fieldset>
+            <legend>User</legend>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Username)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Username)
+                @Html.ValidationMessageFor(model => model.Username)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Password)
+            </div>
+            <div class="editor-field">
+                @Html.PasswordFor(model => model.Password)
+                @Html.ValidationMessageFor(model => model.Password)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Type)
+            </div>
+            <div class="editor-field">
+                @Html.RadioButtonFor(model => model.Type, true) <text>Admin</text>
+                @Html.RadioButtonFor(model => model.Type, false) <text>Viewer</text>
+            </div>
+            <input type="submit" value="Create/Edit" />
+        </fieldset>
     </div>
 </form>
 >>>>>>> master

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 namespace JAGS.Models
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
-    [Serializable]
+    //[Serializable]
     public class UserModel
     {
         public string Username { get; set; }
