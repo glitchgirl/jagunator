@@ -94,7 +94,7 @@ namespace JAGS.Controllers
             {
                 System.IO.File.Delete(filepath);   //delete user file if it exists
             }
-            if (model.Type == true)
+            if (model.Type == true)  //get text value of user type
             {
                 usertype = "Admin";
             }
@@ -102,15 +102,9 @@ namespace JAGS.Controllers
             {
                 usertype = "Viewer";
             }
-            ViewBag.filepathuser = filepath;
-            var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype.ToString();
-            //using (var w = new StreamWriter(filepath))
-            //{
-            //    w.WriteLine(csv);
-            //    w.Flush();
-            //}
-            System.IO.File.WriteAllText(filepath, csv.ToString());
-            //System.IO.File.WriteAllText(filePath, csv.ToString());
+            var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype.ToString();  //create csv string to write out
+            System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
+
 
 
 
