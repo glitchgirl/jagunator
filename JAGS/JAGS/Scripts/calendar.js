@@ -1,5 +1,4 @@
-﻿// Write your JavaScript code.
-$(document).ready(function() {
+﻿$(document).ready(function() {
 
                 // Manage status of dragging event and calendar
                 var calEventStatus = [];
