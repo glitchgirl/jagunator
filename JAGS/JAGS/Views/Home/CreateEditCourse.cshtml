@@ -14,22 +14,22 @@
 
 <div class="form-inline">
     <label for="Course">Course</label>
-    <div class="CourseDropDown">
-        @Html.DropDownListFor(c => c.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"),"--None--")
+    <div class="CourseDropDown" id="CECourseDropDown">
+        @Html.DropDownListFor(c => c.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"),"----None----")
     </div>
     <label for="InstructorName">Instructor Name</label>
-    <div class="InstructorName">
+    <div class="CEInstructorName" id="CEInstructorName">
         @Html.TextBoxFor(a => a.IntructorName)
     </div>
     <label for="CourseName">Course Name</label>
-    <div class="CourseName">
+    <div class="CECourseName" id="CECourseName">
         @Html.TextBoxFor(a => a.CourseName)
     </div>
     <label for="CourseID">Course ID</label>
-    <div class="CourseID">
+    <div class="CECourseID" id="CECourseID">
         @Html.TextBoxFor(a => a.CourseID)
     </div>
-    <div class="form-group">
+    <div class="form-group" id="CECampusLocation">
         <label for="CampusLocation">Campus Location</label>
         @Html.HiddenFor(x => x.CourseID)
         @foreach (var a in Model.CampusNames)
@@ -37,7 +37,7 @@
             @Html.RadioButtonFor(b => b.CampusNames, a.CampusID) @a.CampusName
         }
      </div>
-     <div class="ClassSize">
+     <div class="ClassSize" id="CEClassroomSize">
         <label for="ClassroomSize">Classroom Size</label>
             @foreach (var a in Model.ClassroomStudentSize)
             {
@@ -48,6 +48,9 @@
 
     <input type="button" value="Save" id="crsSave" />
     <input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';"/>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="~/js/LoadCourse.js" type="text/javascript"></script>
 
 
 

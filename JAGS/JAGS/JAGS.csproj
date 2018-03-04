@@ -37,4 +37,7 @@
     <None Remove="Controllers\test.csv" />
     <None Remove="test.csv" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\js\LoadCourse.js" />
+  </ItemGroup>
 </Project>
