@@ -46,9 +46,9 @@ namespace JAGS.Controllers
             };
             string[] clSize =
             {
-                "1  - 24",
-                "25 - 39",
-                "40 + "
+                "1  - 30",
+                "30 - 45",
+                "46 + "
             };
             var model = new CourseInfo();
             for(int i = 0; i < CampusNames.Length; i++)
