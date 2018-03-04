@@ -70,13 +70,17 @@ namespace JAGS.Controllers
 
 
         [HttpPost]
-        public ActionResult GetUserValues(string val)
+        public ActionResult GetUserValues(int? val)
         {
+            ViewBag.reached = 1;
             if (val != null)
             {
+                ViewBag.reached = 2;
+                Debug.Write("Not Null");
                 //Your logic here to return TNUM and CONTACT 
                 return Json(new { Success = "true", Data = new { TNUM = "abc", CONTACT = "test" } });
             }
+            Debug.Write("Null");
             return Json(new { Success = "false" });
         }
 
@@ -92,7 +96,7 @@ namespace JAGS.Controllers
             ViewBag.filepathdir = filepathusers;
             string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
             int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
-            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = index.ToString() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "admin" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
             ViewBag.listusers = listofusers;
             return View("CreateEditUser");
         }
@@ -125,7 +129,7 @@ namespace JAGS.Controllers
             String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
             string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
             int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
-            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = index.ToString() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "admin" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
             ViewBag.listusers = listofusers;
             return View("CreateEditUser");
 
@@ -164,7 +168,7 @@ namespace JAGS.Controllers
                     ViewBag.filepathdir = filepathusers;
                     string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
                     int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
-                    var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = index.ToString() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+                    var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "admin" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
                     ViewBag.listusers = listofusers;
                     return View("CreateEditUser", new UserModel());
                 }

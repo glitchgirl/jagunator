@@ -43,23 +43,27 @@
         </fieldset>
     </div>
 </form>
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
- (function(){
+ $(function(){
       $("#selecteduser").change(function() {
-            var t = $(this).val();
-            if (t !== "") {               
-                $.post("@Url.Action("GetUserValues", "Home")?val=" + t, function(res) {
-                    if (res.Success === "true") {
-                      //set the value
-                        $("#Username").val(res.Data.TNUM);
-                        $("#Password").val(res.Data.CONTACT);
-                    } else {
-                        alert("Error getting data!");
-                    }
-                });
-            } 
+            //var t = $(this).val();
+            var u = $("#selecteduser option:selected").text()
+            //alert(u);
+            $("#Username").val(u);
+            //if (t !== "") {               
+            //    $.post("@Url.Action("GetUserValues", "Home")?val=" + t, function(res) {
+            //        if (res.Success === "false") {
+            //          set the value
+            //            $("#Username").val(res.Data.TNUM);
+            //            $("#Password").val(res.Data.CONTACT);
+            //        } else {
+            //            alert("Error getting data!");
+            //        }
+            //    });
+            //} 
         });
  });
 </script>
 >>>>>>> master
+@ViewBag.reached
