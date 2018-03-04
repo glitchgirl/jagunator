@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,7 +7,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using JAGS.Models;
-//using System.Web.Mvc;
+using Microsoft.AspNetCore.Razor;
+using System.Web.Optimization;
+//using System.Web
+//using static System.Web.Mvc.SelectListItem;
 //using System.Web.Hosting;
 //using Environment;
 using static Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment;
@@ -78,14 +82,72 @@ namespace JAGS.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult GetUserValues(int? val)
+        {
+            ViewBag.reached = 1;
+            if (val != null)
+            {
+                ViewBag.reached = 2;
+                Debug.Write("Not Null");
+                //Your logic here to return TNUM and CONTACT 
+                return Json(new { Success = "true", Data = new { TNUM = "abc", CONTACT = "test" } });
+            }
+            Debug.Write("Null");
+            return Json(new { Success = "false" });
+        }
+
+
         /*-----------------------------------------------*/
 
         public IActionResult CreateEditUser()
         {
-            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
-            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
-            return View();
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+
+            String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
+            ViewBag.filepathdir = filepathusers;
+            string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
+            int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
+            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "admin" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            ViewBag.listusers = listofusers;
+            return View("CreateEditUser");
         }
+
+        /*-----------------------------------------------*/
+
+        [HttpPost("CreateEditUser")]
+        public ActionResult CreateEditUser(UserModel model)
+        {
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+            var usertype = "";
+
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Username + ".csv";  //get absolute file path for possible user file
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            {
+                System.IO.File.Delete(filepath);   //delete user file if it exists
+            }
+            if (model.Type == true)  //get text value of user type
+            {
+                usertype = "Admin";
+            }
+            else
+            {
+                usertype = "Viewer";
+            }
+            var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype.ToString();  //create csv string to write out
+            System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
+
+            String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
+            string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
+            int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
+            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "admin" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            ViewBag.listusers = listofusers;
+            return View("CreateEditUser");
+
+        }
+
 
         public IActionResult Error()
         {
@@ -102,11 +164,7 @@ namespace JAGS.Controllers
                 String[] row = line.Split(',');
                 if (row[1] == model.Password)   //if password is correct
                 {
-                    //ViewBag.SessionUserType = SessionUserType;
                     ViewBag.loginname = row[0];
-                    //ViewBag.pass = row[1];
-                    //ViewBag.type = row[2];
-                    //ViewBag.sessiontype = "Admin";
                     if (row[2] == "Admin")
                     {
                         HttpContext.Session.SetString(SessionUserType, "Admin");
@@ -119,7 +177,13 @@ namespace JAGS.Controllers
                     }
 
                     ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
-                    return View("CreateEditUser", model);
+                    String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
+                    ViewBag.filepathdir = filepathusers;
+                    string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
+                    int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
+                    var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "admin" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+                    ViewBag.listusers = listofusers;
+                    return View("CreateEditUser", new UserModel());
                 }
 
                 return View("About", model);

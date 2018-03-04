@@ -23,6 +23,7 @@
     <PackageReference Include="System.IO" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.2.4" />
     <PackageReference Include="Microsoft.NETCore.Targets" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNet.Web.Optimization" Version="1.1.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +37,28 @@
   <ItemGroup>
     <None Remove="Controllers\test.csv" />
     <None Remove="test.csv" />
+    <None Remove="demos\agenda-views.html" />
+    <None Remove="demos\background-events.html" />
+    <None Remove="demos\basic-views.html" />
+    <None Remove="demos\default.html" />
+    <None Remove="demos\external-dragging.html" />
+    <None Remove="demos\gcal.html" />
+    <None Remove="demos\json.html" />
+    <None Remove="demos\list-views.html" />
+    <None Remove="demos\locales.html" />
+    <None Remove="demos\selectable.html" />
+    <None Remove="demos\themes.html" />
+    <None Remove="demos\timezones.html" />
+    <None Remove="demos\week-numbers.html" />
+    <None Remove="demos\js\theme-chooser.js" />
+    <None Remove="demos\php\get-events.php" />
+    <None Remove="demos\php\get-timezones.php" />
+    <None Remove="demos\php\utils.php" />
+    <None Remove="wwwroot\css\Calendar+Dep\fullcalendar.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="demos\json\events.json" />
+    <Content Remove="wwwroot\css\Calendar+Dep\fullcalendar.css" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\js\LoadCourse.js" />
