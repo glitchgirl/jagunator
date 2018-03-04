@@ -2,12 +2,34 @@
     ViewData["Title"] = "Create/Edit Schedule";
     Layout = "_Layout";
 }
-<link rel='stylesheet' href='fullcalendar/fullcalendar.css' />
-<script src='lib/jquery.min.js'></script>
-<script src='lib/moment.min.js'></script>
-<script src='fullcalendar/fullcalendar.js'></script>
-
+@Scripts.Render(~wwwroot/js/site.js)
 <h2>Create Edit Schedule</h2>
-<div class="CEScheduleTop">
-     
-</div>
+<div id='wrap'>
+                <div id='external-events'>
+                  <div id='external-events-listing'>
+                    <h4>Draggable Events</h4>
+                    <div class='fc-event'>My Event 1</div>
+                    <div class='fc-event'>My Event 2</div>
+                    <div class='fc-event'>My Event 3</div>
+                    <div class='fc-event'>My Event 4</div>
+                    <div class='fc-event'>My Event 5</div>
+                  </div>
+                </div>
+                <div class="container">
+                    <div class="col-md-12">
+                      
+                      <div class="col-md-6 mb-20">
+                        <div id='calendar1'></div>
+                      </div>
+                      
+                      <div class="col-md-6 mb-20">
+                        <div id='calendar2'></div>
+                      </div>
+                      
+                      <div class="col-md-6 mb-20">
+                        <div id='calendar3'></div>
+                      </div>
+                      
+                    </div>
+                </div>
+        </div>
