@@ -82,10 +82,46 @@ namespace JAGS.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("CreateEditUser")]
         public ActionResult CreateEditUser(UserModel model)
         {
-            return View();
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+            var usertype = "";
+
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Username + ".csv";  //get absolute file path for possible user file
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            {
+                System.IO.File.Delete(filepath);   //delete user file if it exists
+            }
+            if (model.Type == true)
+            {
+                usertype = "Admin";
+            }
+            else
+            {
+                usertype = "Viewer";
+            }
+            var csv = model.Username.ToString() + "," + model.Password.ToString() + usertype.ToString();
+            //using (var w = new StreamWriter(filepath))
+            //{
+            //    w.WriteLine(csv);
+            //    w.Flush();
+            //}
+            System.IO.File.WriteAllText(filepath, csv.ToString());
+            //System.IO.File.WriteAllText(filePath, csv.ToString());
+
+
+
+
+
+            String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
+            ViewBag.filepathdir = filepathusers;
+            string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
+            int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
+            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = index.ToString() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            ViewBag.listusers = listofusers;
+            return View("CreateEditUser");
 
         }
 

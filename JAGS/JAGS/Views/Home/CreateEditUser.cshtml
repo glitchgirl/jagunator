@@ -5,7 +5,6 @@
 <<<<<<< HEAD
 @using Microsoft.AspNetCore.Mvc; 
 @using Microsoft.AspNetCore.Http;
-@using JAGS.Models;
 @model JAGS.Models.UserModel
 <p>@ViewBag.sessiontype</p>
 <h2>CreateEditUser</h2>
@@ -41,7 +40,7 @@
                 @Html.RadioButtonFor(model => model.Type, true) <text>Admin</text>
                 @Html.RadioButtonFor(model => model.Type, false) <text>Viewer</text>
             </div>
-            <input type="submit" value="Create/Edit" />
+            <input type="submit" value="Create/Edit" id="usrCreate/Edit" onclick="window.location.href='CreateEditUser';"/>
         </fieldset>
     </div>
 </form>

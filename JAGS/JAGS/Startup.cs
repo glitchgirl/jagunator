@@ -52,9 +52,14 @@ namespace JAGS
             app.UseSession();
             app.UseMvc(routes =>
             {
+                routes.MapRoute("CreateEditUser", "CreateEditUser",
+                    defaults: new { controller = "Home", action = "CreateEditUser" });
+                
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+
+
             });
         }
     }
