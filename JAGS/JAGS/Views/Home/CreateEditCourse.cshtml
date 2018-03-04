@@ -3,7 +3,7 @@
     ViewData["Title"] = "Create/Edit Course";
     Layout = "_Layout";
 }
-@using Microsoft.AspNetCore.Mvc; 
+@using Microsoft.AspNetCore.Mvc;
 @using Microsoft.AspNetCore.Http;
 @using System.Linq;
 @using System.Collections.Generic;
@@ -12,45 +12,42 @@
 <p>@ViewBag.sessiontype</p>
 
 
-<div class="form-inline">
-    <label for="Course">Course</label>
-    <div class="CourseDropDown" id="CECourseDropDown">
-        @Html.DropDownListFor(c => c.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"),"----None----")
-    </div>
-    <label for="InstructorName">Instructor Name</label>
-    <div class="CEInstructorName" id="CEInstructorName">
-        @Html.TextBoxFor(a => a.IntructorName)
-    </div>
-    <label for="CourseName">Course Name</label>
-    <div class="CECourseName" id="CECourseName">
-        @Html.TextBoxFor(a => a.CourseName)
-    </div>
-    <label for="CourseID">Course ID</label>
-    <div class="CECourseID" id="CECourseID">
-        @Html.TextBoxFor(a => a.CourseID)
-    </div>
-    <div class="form-group" id="CECampusLocation">
-        <label for="CampusLocation">Campus Location</label>
-        @Html.HiddenFor(x => x.CourseID)
-        @foreach (var a in Model.CampusNames)
-        {
-            @Html.RadioButtonFor(b => b.CampusNames, a.CampusID) @a.CampusName
-        }
-     </div>
-     <div class="ClassSize" id="CEClassroomSize">
-        <label for="ClassroomSize">Classroom Size</label>
+    <div class="form-inline">
+        <label for="Course">Course</label>
+        <div class="CourseDropDown" id="CECourseDropDown">
+            @Html.DropDownListFor(c => c.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"), "----None----", new { onchange = "this.form.submit();" })
+        </div>
+        <label for="InstructorName">Instructor Name</label>
+        <div class="CEInstructorName" id="CEInstructorName">
+            @Html.TextBoxFor(a => a.IntructorName)
+        </div>
+        <label for="CourseName">Course Name</label>
+        <div class="CECourseName" id="CECourseName">
+            @Html.TextBoxFor(a => a.CourseName)
+        </div>
+        <label for="CourseID">Course ID</label>
+        <div class="CECourseID" id="CECourseID">
+            @Html.TextBoxFor(a => a.CourseID)
+        </div>
+        <div class="form-group" id="CECampusLocation">
+            <label for="CampusLocation">Campus Location</label>
+            @Html.HiddenFor(x => x.CourseID)
+            @foreach (var a in Model.CampusNames)
+            {
+                @Html.RadioButtonFor(b => b.CampusNames, a.CampusID) @a.CampusName
+            }
+        </div>
+        <div class="ClassSize" id="CEClassroomSize">
+            <label for="ClassroomSize">Classroom Size</label>
             @foreach (var a in Model.ClassroomStudentSize)
             {
                 @Html.RadioButtonFor(b => b.ClassroomStudentSize, a.ClassroomID) @a.ClassSize
             }
-     </div>
-</div>
+        </div>
+    </div>
 
-    <input type="button" value="Save" id="crsSave" />
-    <input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';"/>
+<input type="button" value="Save" id="crsSave" />
+<input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';" />
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-<script src="~/js/LoadCourse.js" type="text/javascript"></script>
-
-
-
+<script src="~/js/LoadCourse.js" type="text/javascript"></script> 
