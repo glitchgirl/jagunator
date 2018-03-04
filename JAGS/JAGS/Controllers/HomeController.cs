@@ -36,6 +36,8 @@ namespace JAGS.Controllers
         /*-----------------------------------------------*/
         public IActionResult CreateEditCourse()
         {
+            
+
             string[] CampusNames = 
             {
                 "Summerville",
@@ -49,6 +51,7 @@ namespace JAGS.Controllers
                 "30 - 45",
                 "46 + "
             };
+
             var model = new CourseInfo();
             for(int i = 0; i < CampusNames.Length; i++)
             {
@@ -58,6 +61,16 @@ namespace JAGS.Controllers
             {
                 model.ClassroomStudentSize.Add(new ClassroomSize { ClassroomID = i, ClassSize = clSize[i] });
             }
+
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/";
+            int fileCounter = 0;
+            foreach (string s in Directory.GetFiles(filepath))
+            {
+                var path = Path.GetFileNameWithoutExtension(s);
+                model.CourseList.Add(new ListOfCourses { CourseNumberID = fileCounter, CourseNameFromFile = path});//CourseNameFromFile = s.Remove(s.Length-4)});
+            }
+
+
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
             ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
 

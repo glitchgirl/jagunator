@@ -5,6 +5,8 @@
 }
 @using Microsoft.AspNetCore.Mvc; 
 @using Microsoft.AspNetCore.Http;
+@using System.Linq;
+@using System.Collections.Generic;
 
 <h2>@ViewBag.Title</h2>
 <p>@ViewBag.sessiontype</p>
@@ -13,7 +15,7 @@
 <div class="form-inline">
     <label for="Course">Course</label>
     <div class="CourseDropDown">
-        @Html.DropDownListFor(m => m.CourseName, Enumerable.Empty<SelectListItem>(), null)
+        @Html.DropDownListFor(c => c.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"),"--None--")
     </div>
     <label for="InstructorName">Instructor Name</label>
     <div class="InstructorName">

@@ -23,12 +23,15 @@ namespace JAGS.Models
 
         public List<CampusLocation> CampusNames { get; set; }
         public List<ClassroomSize> ClassroomStudentSize { get; set; }
-
+        public List<ListOfCourses> CourseList { get; set; }
+        //public List<String>Semester { get; set; }
 
         public CourseInfo()
         {
             ClassroomStudentSize = new List<ClassroomSize>();
             CampusNames = new List<CampusLocation>();
+            CourseList = new List<ListOfCourses>();
+            //Semester = new List<String>();
         }
 
     }
