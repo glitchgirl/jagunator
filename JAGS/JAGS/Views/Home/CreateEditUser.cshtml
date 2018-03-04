@@ -6,18 +6,17 @@
 @using Microsoft.AspNetCore.Mvc; 
 @using Microsoft.AspNetCore.Http;
 @model JAGS.Models.UserModel
-<p>@ViewBag.sessiontype</p>
 <h2>CreateEditUser</h2>
 
 =======
-<p> Hey, @ViewBag.loginname</p>
+<p> Hello, @ViewBag.loginname</p>
 <h2>Create/Edit User</h2>
 <form>
     <div class="userform">
         <fieldset>
             <legend>User</legend>
             <div class="editor-label">
-                @Html.DropDownListFor(m => m.Username, new SelectList(ViewBag.listusers, "Value", "Text"), "-Select User to Edit-")
+                @Html.DropDownListFor(m => m.selecteduser, new SelectList(ViewBag.listusers, "Value", "Text"), "-Select User to Edit-")
             </div>
             <div class="editor-label">
                 @Html.LabelFor(model => model.Username)
@@ -40,7 +39,7 @@
                 @Html.RadioButtonFor(model => model.Type, true) <text>Admin</text>
                 @Html.RadioButtonFor(model => model.Type, false) <text>Viewer</text>
             </div>
-            <input type="submit" value="Create/Edit" id="usrCreate/Edit" onclick="window.location.href='CreateEditUser';"/>
+            <input type="submit" name="Create/Edit" value="Create/Edit" formaction=@Url.Action("CreateEditUser") formmethod="post" class="btn btn-primary" />
         </fieldset>
     </div>
 </form>

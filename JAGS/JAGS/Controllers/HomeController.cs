@@ -79,7 +79,7 @@ namespace JAGS.Controllers
             int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
             var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = index.ToString() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
             ViewBag.listusers = listofusers;
-            return View();
+            return View("CreateEditUser");
         }
 
         [HttpPost("CreateEditUser")]
@@ -102,7 +102,8 @@ namespace JAGS.Controllers
             {
                 usertype = "Viewer";
             }
-            var csv = model.Username.ToString() + "," + model.Password.ToString() + usertype.ToString();
+            ViewBag.filepathuser = filepath;
+            var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype.ToString();
             //using (var w = new StreamWriter(filepath))
             //{
             //    w.WriteLine(csv);
@@ -165,7 +166,7 @@ namespace JAGS.Controllers
                     int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
                     var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = index.ToString() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
                     ViewBag.listusers = listofusers;
-                    return View("CreateEditUser");
+                    return View("CreateEditUser", new UserModel());
                 }
 
                 return View("About", model);
