@@ -82,6 +82,8 @@ namespace JAGS.Controllers
             return View("CreateEditUser");
         }
 
+        /*-----------------------------------------------*/
+
         [HttpPost("CreateEditUser")]
         public ActionResult CreateEditUser(UserModel model)
         {
@@ -105,13 +107,7 @@ namespace JAGS.Controllers
             var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype.ToString();  //create csv string to write out
             System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
 
-
-
-
-
-
             String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
-            ViewBag.filepathdir = filepathusers;
             string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
             int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
             var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = index.ToString() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
@@ -136,11 +132,7 @@ namespace JAGS.Controllers
                 String[] row = line.Split(',');
                 if (row[1] == model.Password)   //if password is correct
                 {
-                    //ViewBag.SessionUserType = SessionUserType;
                     ViewBag.loginname = row[0];
-                    //ViewBag.pass = row[1];
-                    //ViewBag.type = row[2];
-                    //ViewBag.sessiontype = "Admin";
                     if (row[2] == "Admin")
                     {
                         HttpContext.Session.SetString(SessionUserType, "Admin");
@@ -153,7 +145,6 @@ namespace JAGS.Controllers
                     }
 
                     ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
-                    //ViewBag.filepathdir = filepath;
                     String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
                     ViewBag.filepathdir = filepathusers;
                     string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
