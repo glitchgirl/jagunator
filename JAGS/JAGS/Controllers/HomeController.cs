@@ -29,6 +29,11 @@ namespace JAGS.Controllers
             return View();
         }
 
+        public IActionResult Logout()
+        {
+            return View("Index");
+        }
+
 
         public IActionResult CreateEditSchedule()
         {
@@ -70,18 +75,35 @@ namespace JAGS.Controllers
 
 
         [HttpPost]
-        public ActionResult GetUserValues(int? val)
+        public ActionResult GetUserValues(string val)
         {
-            ViewBag.reached = 1;
-            if (val != null)
+            String[] row;
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + val + ".csv";
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
             {
-                ViewBag.reached = 2;
+                StreamReader readFile = new StreamReader(filepath);
+                String line = readFile.ReadLine();
+                row = line.Split(',');
+            }
+            else
+            {
+                return Json(new { Success = "false" });
+            }
+
+            //ViewBag.reached = 1;
+            if (row[2] == "Admin")
+            {
+                //ViewBag.reached = 2;
                 Debug.Write("Not Null");
                 //Your logic here to return TNUM and CONTACT 
-                return Json(new { Success = "true", Data = new { TNUM = "abc", CONTACT = "test" } });
+                return Json(new { Success = "true", Data = new { usertype = 1 } });
             }
-            Debug.Write("Null");
-            return Json(new { Success = "false" });
+            else
+            {
+                return Json(new { Success = "true", Data = new { usertype = 0 } });
+            }
+            //Debug.Write("Null");
+            //return Json(new { Success = "false" });
         }
 
 
@@ -93,7 +115,6 @@ namespace JAGS.Controllers
             ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
 
             String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
-            ViewBag.filepathdir = filepathusers;
             string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
             int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
             var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "admin" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
@@ -168,7 +189,7 @@ namespace JAGS.Controllers
                     ViewBag.filepathdir = filepathusers;
                     string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
                     int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
-                    var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "admin" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+                    var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = row[2].ToLower() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
                     ViewBag.listusers = listofusers;
                     return View("CreateEditUser", new UserModel());
                 }

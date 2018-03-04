@@ -2,13 +2,9 @@
     ViewData["Title"] = "CreateEditUser";
     Layout = "_Layout";
 }
-<<<<<<< HEAD
 @using Microsoft.AspNetCore.Mvc; 
 @using Microsoft.AspNetCore.Http;
 @model JAGS.Models.UserModel
-<h2>CreateEditUser</h2>
-
-=======
 <p> Hello, @ViewBag.loginname</p>
 <h2>Create/Edit User</h2>
 <form>
@@ -36,8 +32,14 @@
                 @Html.LabelFor(model => model.Type)
             </div>
             <div class="editor-field">
-                @Html.RadioButtonFor(model => model.Type, true) <text>Admin</text>
-                @Html.RadioButtonFor(model => model.Type, false) <text>Viewer</text>
+                @Html.RadioButtonFor(model => model.Type, true, new { id = "Option1", data_val = "true", data_val_required = "Please select one option." })
+                <label for="Option1">Admin</label>
+                @Html.RadioButtonFor(model => model.Type, false, new { id = "Option2", data_val = "true", data_val_required = "Please select one option." })
+                <label for="Option2">Viewer</label>
+
+                
+                @*Html.RadioButtonFor(model => model.Type, true) <text>Admin</text>
+                @Html.RadioButtonFor(model => model.Type, false) <text>Viewer</text>*@
             </div>
             <input type="submit" name="Create/Edit" value="Create/Edit" formaction=@Url.Action("CreateEditUser") formmethod="post" class="btn btn-primary" />
         </fieldset>
@@ -45,25 +47,41 @@
 </form>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
- $(function(){
-      $("#selecteduser").change(function() {
-            //var t = $(this).val();
+ $(function()
+ {
+      $("#selecteduser").change(function() 
+        {
             var u = $("#selecteduser option:selected").text()
             //alert(u);
             $("#Username").val(u);
-            //if (t !== "") {               
-            //    $.post("@Url.Action("GetUserValues", "Home")?val=" + t, function(res) {
-            //        if (res.Success === "false") {
-            //          set the value
-            //            $("#Username").val(res.Data.TNUM);
-            //            $("#Password").val(res.Data.CONTACT);
-            //        } else {
-            //            alert("Error getting data!");
-            //        }
-            //    });
-            //} 
+            if (u !== "") 
+            {               
+                $.post("@Url.Action("GetUserValues", "Home")?val=" + u, function(res) 
+                {
+                    //alert(JSON.stringify(res));
+                    //alert(res.success);
+                    if (res.success === "true") 
+                    {
+                      //set the value
+                        //alert(@ViewBag.reached);
+                        $("#Username").val(u);
+                        if (res.data.usertype === 1)
+                        {
+                            $("#Option1").prop("checked",true);
+                        }
+                        else
+                        {
+                            $("#Option2").prop("checked",true);
+                        }
+                    } 
+                    else 
+                    {
+                        //alert(@ViewBag.reached);
+                        alert("Error getting data!");
+                    }
+                });
+            } 
         });
  });
 </script>
->>>>>>> master
 @ViewBag.reached
