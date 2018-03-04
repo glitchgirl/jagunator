@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using JAGS.Models;
+using Microsoft.AspNetCore.Razor;
+using System.Web.Optimization;
 //using System.Web
 //using static System.Web.Mvc.SelectListItem;
 //using System.Web.Hosting;
@@ -64,6 +66,18 @@ namespace JAGS.Controllers
             ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
 
             return View(model);
+        }
+
+
+        [HttpPost]
+        public ActionResult GetUserValues(string val)
+        {
+            if (val != null)
+            {
+                //Your logic here to return TNUM and CONTACT 
+                return Json(new { Success = "true", Data = new { TNUM = "abc", CONTACT = "test" } });
+            }
+            return Json(new { Success = "false" });
         }
 
 

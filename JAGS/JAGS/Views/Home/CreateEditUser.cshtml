@@ -43,4 +43,23 @@
         </fieldset>
     </div>
 </form>
+
+<script type="text/javascript">
+ (function(){
+      $("#selecteduser").change(function() {
+            var t = $(this).val();
+            if (t !== "") {               
+                $.post("@Url.Action("GetUserValues", "Home")?val=" + t, function(res) {
+                    if (res.Success === "true") {
+                      //set the value
+                        $("#Username").val(res.Data.TNUM);
+                        $("#Password").val(res.Data.CONTACT);
+                    } else {
+                        alert("Error getting data!");
+                    }
+                });
+            } 
+        });
+ });
+</script>
 >>>>>>> master
