@@ -18,6 +18,9 @@
         <fieldset>
             <legend>User</legend>
             <div class="editor-label">
+                @Html.DropDownListFor(m => m.Username, new SelectList(ViewBag.listusers, "Value", "Text"), "-Select User to Edit-")
+            </div>
+            <div class="editor-label">
                 @Html.LabelFor(model => model.Username)
             </div>
             <div class="editor-field">

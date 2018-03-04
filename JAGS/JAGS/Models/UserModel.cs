@@ -11,6 +11,7 @@ namespace JAGS.Models
     //[Serializable]
     public class UserModel
     {
+        public List<string> userlist { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public bool Type { get; set; }

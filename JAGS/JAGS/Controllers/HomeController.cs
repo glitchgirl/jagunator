@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using JAGS.Models;
-//using System.Web.Mvc;
+//using static System.Web.Mvc.SelectListItem;
 //using System.Web.Hosting;
 //using Environment;
 using static Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment;
@@ -69,10 +70,25 @@ namespace JAGS.Controllers
 
         public IActionResult CreateEditUser()
         {
-            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
-            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+
+            String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
+            ViewBag.filepathdir = filepathusers;
+            string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
+            int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
+            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = index.ToString() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            ViewBag.listusers = listofusers;
             return View();
         }
+
+        [HttpPost]
+        public ActionResult CreateEditUser(UserModel model)
+        {
+            return View();
+
+        }
+
 
         public IActionResult Error()
         {
@@ -106,6 +122,13 @@ namespace JAGS.Controllers
                     }
 
                     ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
+                    //ViewBag.filepathdir = filepath;
+                    String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
+                    ViewBag.filepathdir = filepathusers;
+                    string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
+                    int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
+                    var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = index.ToString() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+                    ViewBag.listusers = listofusers;
                     return View("CreateEditUser");
                 }
 
