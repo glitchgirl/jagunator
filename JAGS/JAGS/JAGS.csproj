@@ -35,7 +35,6 @@
     <Folder Include="Data\Users\" />
     <Folder Include="Data\Courses\" />
     <Folder Include="Data\Schedules\" />
-    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Controllers\test.csv" />
@@ -57,8 +56,10 @@
     <None Remove="demos\php\get-events.php" />
     <None Remove="demos\php\get-timezones.php" />
     <None Remove="demos\php\utils.php" />
+    <None Remove="wwwroot\css\Calendar+Dep\fullcalendar.css" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="demos\json\events.json" />
+    <Content Remove="wwwroot\css\Calendar+Dep\fullcalendar.css" />
   </ItemGroup>
 </Project>
