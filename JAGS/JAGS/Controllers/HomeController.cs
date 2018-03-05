@@ -251,14 +251,14 @@ namespace JAGS.Controllers
                     int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
                     var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = row[2].ToLower() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
                     ViewBag.listusers = listofusers;
-                    return View("CreateEditUser", new UserModel());
+                    return View("CreateEditSchedule", new UserModel());
                 }
 
-                return View("About", model);
+                return View("Index");
             }
             else
             {
-                return View("About", model);
+                return View("Index");
             }
         }
     }
