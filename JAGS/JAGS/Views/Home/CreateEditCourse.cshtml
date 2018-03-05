@@ -8,13 +8,13 @@
 @using System.Linq;
 @using System.Collections.Generic;
 
-<h2>@ViewBag.Title</h2>
+<h2>@ViewBag.Title</h2> 
 
 
     <div class="form-inline">
         <label for="Course">Course</label>
         <div class="CourseDropDown" id="CECourseDropDown">
-            @Html.DropDownListFor(c => c.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"), "----None----", new { onchange = "this.form.submit();" })
+            @Html.DropDownListFor(c => c.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"), "----None----")
         </div>
         <label for="InstructorName">Instructor Name</label>
         <div class="CEInstructorName" id="CEInstructorName">
@@ -49,4 +49,27 @@
 <input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';" />
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-<script src="~/js/LoadCourse.js" type="text/javascript"></script> 
+<!--         <script src="~/js/LoadCourse.js" type="text/javascript"></script>  -->
+ 
+<script type="text/javascript">
+    $(function () {
+        $('#CourseList').change(function () {
+            if ($('#CourseList option:selected').text() !== '----None----') {
+                //var selected = window.location.protocol + '//' + window.location.host + '/' + 'Home/Data/Courses/' + $('#CourseList option:selected').text() + '.csv';
+                var selected = $('#CourseList option:selected').text();
+
+
+                $.post("@Url.Action("GetCourseValues", "Home")?val=" + selected, function (res) {
+                    if (res.success === "true")
+                    {
+                        $('#IntructorName').val(res.data.instructorName);
+                        $('#CourseName').val(res.data.courseName);
+                        $('#CourseID').val(res.data.courseID);
+                        $('#CampusNames').val(res.data.campusName).prop('checked', true);
+                        $('#ClassroomStudentSize').val(res.data.classroomSize).prop('checked', true);
+                    }
+                });
+            }
+        });
+    })
+    </script>

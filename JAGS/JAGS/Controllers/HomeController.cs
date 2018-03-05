@@ -122,6 +122,40 @@ namespace JAGS.Controllers
 
         /*-----------------------------------------------*/
 
+        [HttpPost]
+        public ActionResult GetCourseValues(string val)
+        {
+            String[] row;
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/" + val + ".csv";
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            {
+                StreamReader readFile = new StreamReader(filepath);
+                String line = readFile.ReadLine();
+                row = line.Split(',');
+            }
+            else
+            {
+                return Json(new { Success = "false" });
+            }
+
+            //ViewBag.reached = 1;
+            return Json(new
+            {
+                Success = "true",
+                Data = new
+                {
+                    InstructorName = row[0],
+                    CourseName = row[1],
+                    CourseID = row[2],
+                    CampusName = row[3],
+                    ClassroomSize = row[4]
+                }
+            });
+            
+        }
+
+        /*-----------------------------------------------*/
+
         public IActionResult CreateEditUser()
         {
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session

@@ -1,11 +1,27 @@
-﻿$(function () {
-    $('#CourseList').change(function () {
-        if ($('#CourseList option:selected').text() !== '----None----') {
+﻿$(function ()
+{
+    $('#CourseList').change(function ()
+    {
+        if ($('#CourseList option:selected').text() !== '----None----')
+        {
             //var selected = window.location.protocol + '//' + window.location.host + '/' + 'Home/Data/Courses/' + $('#CourseList option:selected').text() + '.csv';
-            var selected = $('#CourseList option:selected').text() + '.csv';
-            //loadCSV(selected);
-            loadCSV(selected);
+            var selected = $('#CourseList option:selected').text();
 
+
+            $.post("@Url.Action("GetCourseValues", "Home")?val=" + selected, function (res)
+                {
+                if (res.Success === "true") {
+                    $('#InstructorName').val(res.data.InstructorName);
+                    $('#CourseName').val(res.data.CourseName);
+                    $('#CourseID').val(res.data.CourseID);
+                    $('#CampusNames').val(res.data.CampusName);
+                    $('#ClassroomStudentSize').val(res.data.ClassroomSize);
+                }
+            });
+
+
+            //loadCSV(selected);
+            /*
             function loadCSV(selected) {
                 $.ajax({
                     type: "POST",
@@ -17,7 +33,10 @@
                     }
                 }
             }
+            */
 
+
+            /*
             function LoadData(CourseInfo) {
                 var AllText = CourseInfo.split(/\r\n|\n/);
                 var headers = AllText[0].split(',');
@@ -34,6 +53,7 @@
                 $('#CampusNames').val(data[3]);
                 $('#ClassroomStudentSize').val(data[4]);
             }
+                */
 
 
         }
