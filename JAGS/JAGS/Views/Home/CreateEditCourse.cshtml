@@ -14,7 +14,7 @@
     <div class="form-inline">
         <label for="Course">Course</label>
         <div class="CourseDropDown" id="CECourseDropDown">
-            @Html.DropDownListFor(c => c.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"), "----None----")
+            @Html.DropDownListFor(c => c.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"), "Create New Course")
         </div>
         <label for="InstructorName">Instructor Name</label>
         <div class="CEInstructorName" id="CEInstructorName">
@@ -28,21 +28,24 @@
         <div class="CECourseID" id="CECourseID">
             @Html.TextBoxFor(a => a.CourseID)
         </div>
-        <div class="form-group" id="CECampusLocation">
             <label for="CampusLocation">Campus Location</label>
             @Html.HiddenFor(x => x.CourseID)
             @foreach (var a in Model.CampusNames)
             {
+                <div class="form-horizontal">
                 @Html.RadioButtonFor(b => b.CampusNames, a.CampusID) @a.CampusName
+                </div>
             }
-        </div>
-        <div class="ClassSize" id="CEClassroomSize">
+        
+        
             <label for="ClassroomSize">Classroom Size</label>
             @foreach (var a in Model.ClassroomStudentSize)
             {
+                <div class="form-horizontal">
                 @Html.RadioButtonFor(b => b.ClassroomStudentSize, a.ClassroomID) @a.ClassSize
+                    </div>
             }
-        </div>
+       
     </div>
 
 <input type="button" value="Save" id="crsSave" />
@@ -54,14 +57,13 @@
 <script type="text/javascript">
     $(function () {
         $('#CourseList').change(function () {
-            if ($('#CourseList option:selected').text() !== '----None----') {
+            if ($('#CourseList option:selected').text() !== 'Create New Course') {
                 //var selected = window.location.protocol + '//' + window.location.host + '/' + 'Home/Data/Courses/' + $('#CourseList option:selected').text() + '.csv';
                 var selected = $('#CourseList option:selected').text();
 
 
                 $.post("@Url.Action("GetCourseValues", "Home")?val=" + selected, function (res) {
-                    if (res.success === "true")
-                    {
+                    if (res.success === "true") {
                         $('#IntructorName').val(res.data.instructorName);
                         $('#CourseName').val(res.data.courseName);
                         $('#CourseID').val(res.data.courseID);
@@ -69,6 +71,14 @@
                         $('input[name=ClassroomStudentSize][value=' + res.data.classroomSize + ']').prop('checked', true);
                     }
                 });
+            }
+            else
+            { 
+                $('#IntructorName').val("");
+                $('#CourseName').val("");
+                $('#CourseID').val("");
+                $('input[name = CampusNames][value = ' + 0 + ']').prop('checked', true);
+                $('input[name=ClassroomStudentSize][value=' + 0 + ']').prop('checked', true);
             }
         });
     })
