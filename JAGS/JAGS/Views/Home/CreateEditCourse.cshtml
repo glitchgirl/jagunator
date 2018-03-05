@@ -65,8 +65,8 @@
                         $('#IntructorName').val(res.data.instructorName);
                         $('#CourseName').val(res.data.courseName);
                         $('#CourseID').val(res.data.courseID);
-                        $('#CampusNames').val(res.data.campusName).prop('checked', true);
-                        $('#ClassroomStudentSize').val(res.data.classroomSize).prop('checked', true);
+                        $('input[name = CampusNames][value = ' + res.data.campusName + ']').prop('checked', true);
+                        $('input[name=ClassroomStudentSize][value=' + res.data.classroomSize + ']').prop('checked', true);
                     }
                 });
             }
