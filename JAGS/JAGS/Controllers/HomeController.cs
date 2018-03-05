@@ -103,20 +103,14 @@ namespace JAGS.Controllers
                 return Json(new { Success = "false" });
             }
 
-            //ViewBag.reached = 1;
             if (row[2] == "Admin")
             {
-                //ViewBag.reached = 2;
-                Debug.Write("Not Null");
-                //Your logic here to return TNUM and CONTACT 
                 return Json(new { Success = "true", Data = new { usertype = 1 } });
             }
             else
             {
                 return Json(new { Success = "true", Data = new { usertype = 0 } });
             }
-            //Debug.Write("Null");
-            //return Json(new { Success = "false" });
         }
 
 
