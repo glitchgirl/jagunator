@@ -10,7 +10,7 @@
 
 <h2>@ViewBag.Title</h2> 
 
-
+<form>
     <div class="form-inline">
         <label for="Course">Course</label>
         <div class="CourseDropDown" id="CECourseDropDown">
@@ -33,7 +33,7 @@
             @foreach (var a in Model.CampusNames)
             {
                 <div class="form-horizontal">
-                @Html.RadioButtonFor(b => b.CampusNames, a.CampusID) @a.CampusName
+                @Html.RadioButtonFor(b => b.CampusLocation, a.CampusID) @a.CampusName
                 </div>
             }
         
@@ -42,15 +42,15 @@
             @foreach (var a in Model.ClassroomStudentSize)
             {
                 <div class="form-horizontal">
-                @Html.RadioButtonFor(b => b.ClassroomStudentSize, a.ClassroomID) @a.ClassSize
+                @Html.RadioButtonFor(b => b.ClassSize, a.ClassroomID) @a.ClassSize
                     </div>
             }
        
     </div>
+<input type="submit" name="CreateEdit" value="Save" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
+<input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';" class="btn btn-pr"/>
 
-<input type="button" value="Save" id="crsSave" />
-<input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';" />
-
+    </form>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <!--         <script src="~/js/LoadCourse.js" type="text/javascript"></script>  -->
  
@@ -67,8 +67,8 @@
                         $('#IntructorName').val(res.data.instructorName);
                         $('#CourseName').val(res.data.courseName);
                         $('#CourseID').val(res.data.courseID);
-                        $('input[name = CampusNames][value = ' + res.data.campusName + ']').prop('checked', true);
-                        $('input[name=ClassroomStudentSize][value=' + res.data.classroomSize + ']').prop('checked', true);
+                        $('input[name = CampusLocation][value = ' + res.data.campusName + ']').prop('checked', true);
+                        $('input[name=ClassSize][value=' + res.data.classroomSize + ']').prop('checked', true);
                     }
                 });
             }
@@ -77,8 +77,8 @@
                 $('#IntructorName').val("");
                 $('#CourseName').val("");
                 $('#CourseID').val("");
-                $('input[name = CampusNames][value = ' + 0 + ']').prop('checked', true);
-                $('input[name=ClassroomStudentSize][value=' + 0 + ']').prop('checked', true);
+                $('input[name = CampusLocation][value = ' + 0 + ']').prop('checked', true);
+                $('input[name=ClassSize][value=' + 0 + ']').prop('checked', true);
             }
         });
     })

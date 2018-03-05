@@ -21,6 +21,14 @@ namespace JAGS.Models
         [Display(Name ="Course ID")]
         public string CourseID { get; set; }
 
+        [Required]
+        [Display(Name ="Campus Name")]
+        public string CampusLocation { get; set; }
+
+        [Required]
+        [Display(Name ="ClassSize")]
+        public string ClassSize { get; set; }
+
         public List<CampusLocation> CampusNames { get; set; }
         public List<ClassroomSize> ClassroomStudentSize { get; set; }
         public List<ListOfCourses> CourseList { get; set; }

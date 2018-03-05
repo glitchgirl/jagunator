@@ -43,6 +43,7 @@ namespace JAGS.Controllers
         }
 
         /*-----------------------------------------------*/
+        [HttpGet]
         public IActionResult CreateEditCourse()
         {
             
@@ -203,7 +204,25 @@ namespace JAGS.Controllers
 
         }
 
+        
+        [HttpPost]
+        public ActionResult CreateEditCourse(CourseInfo courseInfo)
+        {
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
 
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/" + courseInfo.CourseID.Replace(" ","") + ".csv";
+            if (System.IO.File.Exists(filepath))
+            {
+                System.IO.File.Delete(filepath);
+            }
+
+            var csv = courseInfo.IntructorName.ToString() + "," + courseInfo.CourseName.ToString() + "," + courseInfo.CourseID.ToString() + "," + courseInfo.CampusLocation + "," + courseInfo.ClassSize;  //create csv string to write out
+            System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
+           
+            return View("CreateEditCourse");
+        }
+        
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
