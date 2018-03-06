@@ -32,13 +32,14 @@
                 @Html.LabelFor(model => model.Type)
             </div>
             <div class="editor-field">
+                @Html.ValidationMessageFor(model => model.Type)
                 @Html.RadioButtonFor(model => model.Type, 0, new { id = "Option0", data_val = "true", data_val_required = "Please select one option." })
                 <label for="Option1">Admin</label>
                 @Html.RadioButtonFor(model => model.Type, 1, new { id = "Option1", data_val = "true", data_val_required = "Please select one option." })
                 <label for="Option1">Editor</label>
                 @Html.RadioButtonFor(model => model.Type, 2, new { id = "Option2", data_val = "true", data_val_required = "Please select one option." })
                 <label for="Option2">Viewer</label>
-                @Html.ValidationMessageFor(model => model.Type)
+
 
                 
                 @*Html.RadioButtonFor(model => model.Type, true) <text>Admin</text>
