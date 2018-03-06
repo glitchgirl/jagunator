@@ -8,7 +8,6 @@
 
 @using (Html.BeginForm())
 {
-    @Html.ValidationSummary(true, "Login failed. Check your login details.");
     <div>
         <fieldset>
             <legend>Login</legend>
@@ -29,4 +28,5 @@
             <input type="submit" value="Log In" />
         </fieldset>
     </div>
+    <h2>@ViewBag.ErrorMessage</h2>
 }

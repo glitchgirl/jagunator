@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace JAGS.Models
 {
@@ -13,9 +14,15 @@ namespace JAGS.Models
     {
         public List<string> userlist { get; set; }
         public string selecteduser { get; set; }
+
+        [Required(ErrorMessage = "Login is required")]
         public string Username { get; set; }
+
+        [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
-        public bool Type { get; set; }
+
+        [Required(ErrorMessage = "Type is required")]
+        public int Type { get; set; }
     }
 
     // Extension method used to add the middleware to the HTTP request pipeline.

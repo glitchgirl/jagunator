@@ -26,6 +26,7 @@ namespace JAGS.Controllers
         const string SessionUserType = "_Type";
         public IActionResult Index()
         {
+            ViewBag.ErrorMessage = "";
             return View();
         }
 
@@ -103,15 +104,16 @@ namespace JAGS.Controllers
             {
                 return Json(new { Success = "false" });
             }
-
-            if (row[2] == "Admin")
-            {
-                return Json(new { Success = "true", Data = new { usertype = 1 } });
-            }
-            else
-            {
-                return Json(new { Success = "true", Data = new { usertype = 0 } });
-            }
+            ViewBag.Jsonstr = Json(new { Success = "true", Data = new { usertype = row[2] } });
+            return Json(new { Success = "true", Data = new { usertype = row[2] } });
+            //if (row[2] == "Admin")
+            //{
+            //    return Json(new { Success = "true", Data = new { usertype = 1 } });
+            //}
+            //else
+            //{
+            //    return Json(new { Success = "true", Data = new { usertype = 0 } });
+            //}
         }
 
 
@@ -153,13 +155,14 @@ namespace JAGS.Controllers
 
         public IActionResult CreateEditUser()
         {
+            ViewBag.Jsonstr = "";
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
             ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
 
             String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
             string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
             int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
-            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "admin" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "user" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
             ViewBag.listusers = listofusers;
             return View("CreateEditUser");
         }
@@ -178,21 +181,26 @@ namespace JAGS.Controllers
             {
                 System.IO.File.Delete(filepath);   //delete user file if it exists
             }
-            if (model.Type == true)  //get text value of user type
+            if (model.Type == 0)  //get text value of user type
             {
                 usertype = "Admin";
+            }
+            else if (model.Type == 1)
+            {
+                usertype = "Editor";
             }
             else
             {
                 usertype = "Viewer";
             }
-            var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype.ToString();  //create csv string to write out
+
+            var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype;  //create csv string to write out
             System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
 
             String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
             string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
             int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
-            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "admin" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "user" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
             ViewBag.listusers = listofusers;
             return View("CreateEditUser");
 
@@ -253,11 +261,12 @@ namespace JAGS.Controllers
                     ViewBag.listusers = listofusers;
                     return View("CreateEditSchedule", new UserModel());
                 }
-
+                ViewBag.ErrorMessage = "Login or Password incorrect";
                 return View("Index");
             }
             else
             {
+                ViewBag.ErrorMessage = "Login or Password incorrect";
                 return View("Index");
             }
         }
