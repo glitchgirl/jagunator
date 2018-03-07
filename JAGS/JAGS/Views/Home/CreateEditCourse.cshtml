@@ -1,7 +1,18 @@
 ﻿@model CourseInfo
 @{
     ViewData["Title"] = "Create/Edit Course";
+    if (ViewBag.sessiontype == "Admin")
+    {
     Layout = "_Layout";
+    }
+    else if (ViewBag.sessiontype == "Editor")
+    {
+    Layout = "_LayoutEditor";
+    }
+    else if (ViewBag.sessiontype == "Viewer")
+    {
+    Layout = "_LayoutViewer";
+    }
 }
 @using Microsoft.AspNetCore.Mvc;
 @using Microsoft.AspNetCore.Http;
