@@ -1,6 +1,18 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Create/Edit Schedule";
+    if (ViewBag.sessiontype == "Admin")
+    {
     Layout = "_Layout";
+    }
+    else if (ViewBag.sessiontype == "Editor")
+    {
+    Layout = "_LayoutEditor";
+    }
+    else if (ViewBag.sessiontype == "Viewer")
+    {
+    Layout = "_LayoutViewer";
+    }
 }
 @*Scripts.Render(~wwwroot/js/site.js)*@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

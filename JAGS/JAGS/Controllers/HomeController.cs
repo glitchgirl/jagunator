@@ -202,7 +202,7 @@ namespace JAGS.Controllers
             int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
             var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "user" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
             ViewBag.listusers = listofusers;
-            return View("CreateEditUser");
+            return View();
 
         }
 
@@ -241,12 +241,17 @@ namespace JAGS.Controllers
                 if (row[1] == model.Password)   //if password is correct
                 {
                     ViewBag.loginname = row[0];
-                    if (row[2] == "Admin")
+                    if (row[2] == "0")
                     {
                         HttpContext.Session.SetString(SessionUserType, "Admin");
                         HttpContext.Session.SetString(SessionUserName, row[0].ToString());
                     }
-                    else
+                    else if (row[2] == "1")
+                    {
+                        HttpContext.Session.SetString(SessionUserType, "Editor");
+                        HttpContext.Session.SetString(SessionUserName, row[0].ToString());
+                    }
+                    else if (row[2] == "2")
                     {
                         HttpContext.Session.SetString(SessionUserType, "Viewer");
                         HttpContext.Session.SetString(SessionUserName, row[0].ToString());
