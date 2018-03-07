@@ -183,15 +183,15 @@ namespace JAGS.Controllers
             }
             if (model.Type == 0)  //get text value of user type
             {
-                usertype = "Admin";
+                usertype = "0";
             }
             else if (model.Type == 1)
             {
-                usertype = "Editor";
+                usertype = "1";
             }
             else
             {
-                usertype = "Viewer";
+                usertype = "2";
             }
 
             var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype;  //create csv string to write out

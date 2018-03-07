@@ -55,6 +55,7 @@
     <None Remove="demos\php\get-timezones.php" />
     <None Remove="demos\php\utils.php" />
     <None Remove="wwwroot\css\Calendar+Dep\fullcalendar.css" />
+    <None Remove="Data\Users\admin.csv" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="demos\json\events.json" />
