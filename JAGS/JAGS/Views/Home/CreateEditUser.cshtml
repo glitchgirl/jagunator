@@ -1,6 +1,17 @@
 ﻿﻿@{
     ViewData["Title"] = "CreateEditUser";
+    if (ViewBag.sessiontype == "Admin")
+    {
     Layout = "_Layout";
+    }
+    else if (ViewBag.sessiontype == "Editor")
+    {
+    Layout = "_LayoutEditor";
+    }
+    else if (ViewBag.sessiontype == "Viewer")
+    {
+    Layout = "_LayoutViewer";
+    }
 }
 @using Microsoft.AspNetCore.Mvc; 
 @using Microsoft.AspNetCore.Http;
@@ -56,18 +67,13 @@
       $("#selecteduser").change(function() 
         {
             var u = $("#selecteduser option:selected").text()
-            //alert(u);
             $("#Username").val(u);
             if (u !== "") 
             {               
                 $.post("@Url.Action("GetUserValues", "Home")?val=" + u, function(res) 
                 {
-                    //alert(JSON.stringify(res));
-                    //alert(res.success);
                     if (res.success === "true") 
                     {
-                      //set the value
-                        //alert(@ViewBag.reached);
                         $("#Username").val(u);
                         if (res.data.usertype === "0")
                         {
@@ -84,7 +90,6 @@
                     } 
                     else 
                     {
-                        //alert(@ViewBag.reached);
                         alert("Error getting data!");
                     }
                 });
@@ -92,4 +97,3 @@
         });
  });
 </script>
-@ViewBag.reached
