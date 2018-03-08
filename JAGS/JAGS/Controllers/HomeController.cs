@@ -206,6 +206,86 @@ namespace JAGS.Controllers
 
         }
 
+        /*-----------------------------------------------*/
+
+        [HttpPost("CreateEditFaculty")]
+        public ActionResult CreateEditFaculty(FacultyModel model)
+        {
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+            var factype = "";
+
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + model.Facultyname + ".csv";  //get absolute file path for possible user file
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            {
+                System.IO.File.Delete(filepath);   //delete user file if it exists
+            }
+            if (model.Facultytype == 0)  //get text value of user type
+            {
+                factype = "0";
+            }
+            else if (model.Facultytype == 1)
+            {
+                factype = "1";
+            }
+            else
+            {
+                factype = "2";
+            }
+
+            var csv = model.Facultyname.ToString() + "," + model.Facultytitle.ToString() + "," + factype;  //create csv string to write out
+            System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
+
+            String filepathfac = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";  //get file path for faculty folder
+            string[] fileEntries = Directory.GetFiles(filepathfac);  //get array of files in user directory
+            int pos = filepathfac.LastIndexOf("/") + 1;  //get position of last slash
+            var listoffac = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "fac" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            ViewBag.listfac = listoffac;
+            return View();
+
+        }
+
+        /*-----------------------------------------------*/
+
+        public IActionResult CreateEditFaculty()
+        {
+            ViewBag.Jsonstr = "";
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+
+            String filepathfac = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";  //get file path for users folder
+            string[] fileEntries = Directory.GetFiles(filepathfac);  //get array of files in user directory
+            int pos = filepathfac.LastIndexOf("/") + 1;  //get position of last slash
+            var listoffac = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "fac" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            ViewBag.listfac = listoffac;
+            return View("CreateEditFaculty");
+        }
+
+        /*-----------------------------------------------*/
+
+
+        [HttpPost]
+        public ActionResult GetFacultyValues(string val)
+        {
+            String[] row;
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + val + ".csv";
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            {
+                StreamReader readFile = new StreamReader(filepath);
+                String line = readFile.ReadLine();
+                row = line.Split(',');
+            }
+            else
+            {
+                return Json(new { Success = "false" });
+            }
+            ViewBag.Jsonstr = Json(new { Success = "true", Data = new { factype = row[2] } });
+            return Json(new { Success = "true", Data = new { factype = row[2] } });
+        }
+
+
+        /*-----------------------------------------------*/
+
         
         [HttpPost]
         public ActionResult CreateEditCourse(CourseInfo courseInfo)

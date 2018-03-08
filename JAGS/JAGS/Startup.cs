@@ -55,6 +55,8 @@ namespace JAGS
             {
                 routes.MapRoute("CreateEditUser", "CreateEditUser",
                     defaults: new { controller = "Home", action = "CreateEditUser" });
+                routes.MapRoute("CreateEditFaculty", "CreateEditFaculty",
+                    defaults: new { controller = "Home", action = "CreateEditFaculty" });
                 
                 routes.MapRoute(
                     name: "default",
