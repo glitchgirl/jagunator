@@ -1,0 +1,100 @@
+﻿﻿@{
+    ViewData["Title"] = "CreateEditFaculty";
+    if (ViewBag.sessiontype == "Admin")
+    {
+    Layout = "_Layout";
+    }
+    else if (ViewBag.sessiontype == "Editor")
+    {
+    Layout = "_LayoutEditor";
+    }
+    else if (ViewBag.sessiontype == "Viewer")
+    {
+    Layout = "_LayoutViewer";
+    }
+}
+@using Microsoft.AspNetCore.Mvc; 
+@using Microsoft.AspNetCore.Http;
+@model JAGS.Models.FacultyModel
+<p> Hello, @ViewBag.loginname</p>
+<h2>Create/Edit User</h2>
+<form>
+    <div class="userform">
+        <fieldset>
+            <legend>User</legend>
+            <div class="editor-label">
+                @Html.DropDownListFor(m => m.selectedfac, new SelectList(ViewBag.listfac, "Value", "Text"), "-Select Faculty to Edit-")
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Facultyname)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Facultyname)
+                @Html.ValidationMessageFor(model => model.Facultyname)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Facultytitle)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Facultytitle)
+                @Html.ValidationMessageFor(model => model.Facultytitle)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Facultytype)
+            </div>
+            <div class="editor-field">
+                @Html.ValidationMessageFor(model => model.Facultytype)
+                @Html.RadioButtonFor(model => model.Facultytype, 0, new { id = "Option0", data_val = "true", data_val_required = "Please select one option." })
+                <label for="Option1">Adjunct</label>
+                @Html.RadioButtonFor(model => model.Facultytype, 1, new { id = "Option1", data_val = "true", data_val_required = "Please select one option." })
+                <label for="Option1">Professor</label>
+                @Html.RadioButtonFor(model => model.Facultytype, 2, new { id = "Option2", data_val = "true", data_val_required = "Please select one option." })
+                <label for="Option2">Instructor</label>
+
+
+                
+                @*Html.RadioButtonFor(model => model.Type, true) <text>Admin</text>
+                @Html.RadioButtonFor(model => model.Type, false) <text>Viewer</text>*@
+            </div>
+            <input type="submit" name="Create/Edit" value="Create/Edit" formaction=@Url.Action("CreateEditFaculty") formmethod="post" class="btn btn-primary" />
+        </fieldset>
+    </div>
+</form>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+ $(function()
+ {
+      $("#selectedfac").change(function() 
+        {
+            var u = $("#selectedfac option:selected").text()
+            $("#Facultyname").val(u);
+            if (u !== "") 
+            {               
+                $.post("@Url.Action("GetFacultyValues", "Home")?val=" + u, function(res) 
+                {
+                    if (res.success === "true") 
+                    {
+                        alert(res.data.factype)
+                        $("#Facultyname").val(u);
+                        if (res.data.factype === "0")
+                        {
+                            $("#Option0").prop("checked",true);
+                        }
+                        else if (res.data.factype === "1")
+                        {
+                            $("#Option1").prop("checked",true);
+                        }
+                        else if (res.data.factype === "2")
+                        {
+                            $("#Option2").prop("checked",true);
+                        }
+                    } 
+                    else 
+                    {
+                        alert("Error getting data!");
+                    }
+                });
+            } 
+        });
+ });
+</script>

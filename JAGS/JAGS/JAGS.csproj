@@ -33,6 +33,7 @@
   <ItemGroup>
     <Folder Include="Data\Users\" />
     <Folder Include="Data\Schedules\" />
+    <Folder Include="Data\Faculty\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Controllers\test.csv" />
