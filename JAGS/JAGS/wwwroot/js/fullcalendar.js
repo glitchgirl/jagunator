@@ -2615,7 +2615,7 @@ exports.globalDefaults = {
     nextDayThreshold: '09:00:00',
     // display
     columnHeader: true,
-    defaultView: 'month',
+    defaultView: 'week',
     aspectRatio: 1.35,
     header: {
         left: 'title',
