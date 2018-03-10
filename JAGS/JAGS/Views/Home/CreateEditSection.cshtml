@@ -1,0 +1,23 @@
+﻿@model Section
+@{
+    ViewData["Title"] = "CreateEditSection";
+    if (ViewBag.sessiontype == "Admin")
+    {
+    Layout = "_Layout";
+    }
+    else if (ViewBag.sessiontype == "Editor")
+    {
+    Layout = "_LayoutEditor";
+    }
+    else if (ViewBag.sessiontype == "Viewer")
+    {
+    Layout = "_LayoutViewer";
+    }
+}
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Http;
+@using System.Linq;
+@using System.Collections.Generic;
+
+<h2>CreateEditSection</h2>
+
