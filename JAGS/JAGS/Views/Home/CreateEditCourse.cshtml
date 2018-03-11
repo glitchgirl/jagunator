@@ -24,6 +24,10 @@
 
 <form>
     <div class="form-inline">
+        <label for="Semester">Semester</label>
+        <div class="text-center" id="Semester">
+            @Html.DropDownListFor(a => a.Item1.Semester, new SelectList(Model.Item1.CourseList, "SemesterID","SemesterNameFromDirectory"), "Select Semester", new {@class="form-control"})
+        </div>
         <label for="Course">Course</label>
         <div class="dropdown" id="CECourseDropDown">
             @Html.DropDownListFor(a => a.Item1.CourseList, new SelectList(Model.Item1.CourseList, "CourseNumberID", "CourseNameFromFile"), "Create New Course", new {@class="form-control"})
@@ -42,14 +46,17 @@
                 @Html.TextBoxFor(a => a.Item1.IntructorName, new { @class = "form-control" })
             </div>
             <label for="CampusLocation">Campus Location</label>
-            @Html.HiddenFor(x => x.Item1.CourseID)
-            @foreach (var a in Model.Item1.CampusNames)
+
+        <!--
+            @@Html.HiddenFor(x => x.Item1.CourseID)
+            @@foreach (var a in Model.Item1.CampusNames)
             {
                 <div class="form-horizontal">
-                    @Html.RadioButtonFor(b => b.Item1.CampusLocation, a.CampusID) @a.CampusName
+                    @@Html.RadioButtonFor(b => b.Item1.CampusLocation, a.CampusID) @@a.CampusName
                 </div>
             }
-
+        -->
+        
 
             <label for="ClassroomSize">Classroom Size</label>
             @foreach (var a in Model.Item1.ClassroomStudentSize)
