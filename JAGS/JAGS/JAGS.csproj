@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Users\" />
-    <Folder Include="Data\Schedules\" />
+    <Folder Include="Data\Courses\" />
+    <Folder Include="Data\Schedules\Fall2018\" />
     <Folder Include="Data\Faculty\" />
   </ItemGroup>
   <ItemGroup>

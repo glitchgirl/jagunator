@@ -84,7 +84,6 @@ namespace JAGS.Controllers
 
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
             ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
-
             return View(model);
         }
 
