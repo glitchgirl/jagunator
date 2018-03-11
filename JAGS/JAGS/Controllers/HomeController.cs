@@ -99,12 +99,13 @@ namespace JAGS.Controllers
             }
 
             //Semester Load into model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) +"Data/Schedule";
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) +"Data/Schedules/";
             directories = Directory.GetDirectories(filepath);
             counter = 0;
             foreach (string s in directories)
             {
-                model.Semester.Add(new ListOfSemesters { SemesterID = counter, SemesterNameFromDirectory = s });
+                string[] tmp = s.Split("Schedules/");
+                model.Semester.Add(new ListOfSemesters { SemesterID = counter, SemesterNameFromDirectory = tmp[1] });
                 counter++;
             }
 
