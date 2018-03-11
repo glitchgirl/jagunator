@@ -357,3 +357,8 @@ namespace JAGS.Controllers
         }
     }
 }
+[HttpGet]
+public IActionResult CreateSchedule(CourseInfo model)
+{
+    return View("CreateEditSchedule");
+}
