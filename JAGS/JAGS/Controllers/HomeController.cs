@@ -116,11 +116,11 @@ namespace JAGS.Controllers
             foreach (string s in Directory.GetFiles(filepath))
             {
                 var path = Path.GetFileNameWithoutExtension(s);
-<<<<<<< HEAD
-                model.CourseList.Add(new ListOfCourses { CourseNumberID = fileCounter, CourseNameFromFile = path });//CourseNameFromFile = s.Remove(s.Length-4)});
-=======
+//<<<<<<< HEAD
+                //model.CourseList.Add(new ListOfCourses { CourseNumberID = fileCounter, CourseNameFromFile = path });//CourseNameFromFile = s.Remove(s.Length-4)});
+//=======
                 model.CourseList.Add(new ListOfCourses { CourseNumberID = counter, CourseNameFromFile = path});//CourseNameFromFile = s.Remove(s.Length-4)});
->>>>>>> J-branch
+//>>>>>>> J-branch
             }
 
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
