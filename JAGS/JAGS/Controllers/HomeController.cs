@@ -78,13 +78,11 @@ namespace JAGS.Controllers
             foreach (string s in Directory.GetFiles(filepath))
             {
                 var path = Path.GetFileNameWithoutExtension(s);
-                model.CourseList.Add(new ListOfCourses { CourseNumberID = fileCounter, CourseNameFromFile = path});//CourseNameFromFile = s.Remove(s.Length-4)});
+                model.CourseList.Add(new ListOfCourses { CourseNumberID = fileCounter, CourseNameFromFile = path });//CourseNameFromFile = s.Remove(s.Length-4)});
             }
-
 
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
             ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
-
             return View(model);
         }
 
@@ -344,7 +342,7 @@ namespace JAGS.Controllers
                     int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
                     var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = row[2].ToLower() }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
                     ViewBag.listusers = listofusers;
-                    return View("CreateEditSchedule", new UserModel());
+                    return View("CreateEditSchedule");
                 }
                 ViewBag.ErrorMessage = "Login or Password incorrect";
                 return View("Index");
@@ -357,8 +355,8 @@ namespace JAGS.Controllers
         }
     }
 }
-[HttpGet]
-public IActionResult CreateSchedule(CourseInfo model)
-{
-    return View("CreateEditSchedule");
-}
+//[HttpGet]
+//public IActionResult CreateSchedule(CourseInfo model)
+//{
+//    return View("CreateEditSchedule");
+//}

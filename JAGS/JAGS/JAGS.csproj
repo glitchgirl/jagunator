@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Users\" />
-    <Folder Include="Data\Schedules\" />
+    <Folder Include="Data\Courses\" />
+    <Folder Include="Data\Schedules\Fall2018\" />
     <Folder Include="Data\Faculty\" />
   </ItemGroup>
   <ItemGroup>
@@ -56,7 +56,6 @@
     <None Remove="demos\php\get-timezones.php" />
     <None Remove="demos\php\utils.php" />
     <None Remove="wwwroot\css\Calendar+Dep\fullcalendar.css" />
-    <None Remove="Data\Users\admin.csv" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="demos\json\events.json" />
