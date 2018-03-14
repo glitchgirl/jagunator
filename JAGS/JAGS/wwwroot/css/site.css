@@ -87,3 +87,6 @@ body {
 .SemesterAndLabel{
     float:left;
 }
+.navbar-inverse {
+    background-color: #002F55; !important
+}
