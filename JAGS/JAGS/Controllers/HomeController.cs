@@ -39,13 +39,6 @@ namespace JAGS.Controllers
 
         /*------------------------------------------------------------------------------------------------------------------*/
 
-        public IActionResult CreateEditSchedule()
-        {
-            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
-            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
-            return View();
-        }
-
         /*------------------------------------------------------------------------------------------------------------------*/ 
 
         [HttpGet]
@@ -354,12 +347,11 @@ namespace JAGS.Controllers
            
             return View("CreateEditCourse", courseInfo);
         }
-        
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
 
         /*------------------------------------------------------------------------------------------------------------------*/
 
@@ -410,10 +402,85 @@ namespace JAGS.Controllers
                 return View("Index");
             }
         }
-    }
+
+        [HttpGet]
+        public IActionResult CreateEditSchedule()
+        {
+            string[] listDetails;
+            string data;
+            string[] directories;
+            int counter = 0;
+
+            //CampusLocation Load into model
+            var model = new CourseInfo();
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/CampusLocations.csv";
+            if (System.IO.File.Exists(filepath))
+            {
+                StreamReader readFile = new StreamReader(filepath);
+                data = readFile.ReadLine();
+                listDetails = data.Split(',');
+
+            }
+            else
+            {
+                listDetails = new string[0];
+            }
+
+            foreach (string s in listDetails)
+            {
+                model.CampusNames.Add(new CampusLocation { CampusID = counter, CampusName = s });
+                counter++;
+            }
+
+            //ScheduleType Load into model
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/ScheduleType.csv";
+            counter = 0;
+            if (System.IO.File.Exists(filepath))
+            {
+                StreamReader readFile = new StreamReader(filepath);
+                data = readFile.ReadLine();
+                listDetails = data.Split(',');
+
+            }
+            else
+            {
+                listDetails = new string[0];
+            }
+
+            foreach (string s in listDetails)
+            {
+                model.ScheduleType.Add(new ScheduleTypeList { ScheduleTypeID = counter, ScheduleTypeName = s });
+                counter++;
+            }
+
+            //Semester Load into model
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/";
+            directories = Directory.GetDirectories(filepath);
+            counter = 0;
+            foreach (string s in directories)
+            {
+                string[] tmp = s.Split("Schedules/");
+                model.Semester.Add(new ListOfSemesters { SemesterID = counter, SemesterNameFromDirectory = tmp[1] });
+                counter++;
+            }
+
+
+            //Course Subject Load into model
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/";
+            counter = 0;
+            foreach (string s in Directory.GetFiles(filepath))
+            {
+                var path = Path.GetFileNameWithoutExtension(s);
+                //<<<<<<< HEAD
+                //model.CourseList.Add(new ListOfCourses { CourseNumberID = fileCounter, CourseNameFromFile = path });//CourseNameFromFile = s.Remove(s.Length-4)});
+                //=======
+                model.CourseList.Add(new ListOfCourses { CourseNumberID = counter, CourseNameFromFile = path });//CourseNameFromFile = s.Remove(s.Length-4)});
+                                                                                                                //>>>>>>> J-branch
+            }
+
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
+            return View(model);
+        }
+    }//namespace
 }
-//[HttpGet]
-//public IActionResult CreateSchedule(CourseInfo model)
-//{
-//    return View("CreateEditSchedule");
-//}
