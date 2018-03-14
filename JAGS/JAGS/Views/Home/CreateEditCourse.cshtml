@@ -1,4 +1,4 @@
-﻿@model Tuple<CourseInfo, FacultyModel>
+﻿@model CourseInfo
 
 @{
     ViewData["Title"] = "Create/Edit Course";
@@ -24,38 +24,45 @@
 
 <form>
     <div class="form-inline">
+        <label for="Semester">Semester</label>
+        <div class="text-center" id="Semester">
+            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "SemesterID","SemesterNameFromDirectory"), "Select Semester", new {@class="form-control"})
+        </div>
         <label for="Course">Course</label>
         <div class="dropdown" id="CECourseDropDown">
-            @Html.DropDownListFor(a => a.Item1.CourseList, new SelectList(Model.Item1.CourseList, "CourseNumberID", "CourseNameFromFile"), "Create New Course", new {@class="form-control"})
+            @Html.DropDownListFor(a => a.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"), "Create New Course", new {@class="form-control"})
         </div>
         <label for="CourseName">Course Name</label>
         <div class="text-center" id="CECourseName">
-            @Html.TextBoxFor(Model => Model.Item1.CourseName, new { @class = "form-control" })
+            @Html.TextBoxFor(Model => Model.CourseName, new { @class = "form-control" })
         </div>
         <label for="CourseID">Course ID</label>
         <div class="text-center" id="CECourseID">
-            @Html.TextBoxFor(Model => Model.Item1.CourseID, new { @class = "form-control" })
+            @Html.TextBoxFor(Model => Model.CourseID, new { @class = "form-control" })
         </div>
             <label for="CourseSection" class="center-block">Course Section</label>
             <label for="InstructorName">Instructor Name</label>
             <div class="text-center" id="CEInstructorName">
-                @Html.TextBoxFor(a => a.Item1.IntructorName, new { @class = "form-control" })
+                @Html.TextBoxFor(a => a.IntructorName, new { @class = "form-control" })
             </div>
             <label for="CampusLocation">Campus Location</label>
-            @Html.HiddenFor(x => x.Item1.CourseID)
-            @foreach (var a in Model.Item1.CampusNames)
+
+        <!--
+            @@Html.HiddenFor(x => x.Item1.CourseID)
+            @@foreach (var a in Model.Item1.CampusNames)
             {
                 <div class="form-horizontal">
-                    @Html.RadioButtonFor(b => b.Item1.CampusLocation, a.CampusID) @a.CampusName
+                    @@Html.RadioButtonFor(b => b.Item1.CampusLocation, a.CampusID) @@a.CampusName
                 </div>
             }
-
+        -->
+        
 
             <label for="ClassroomSize">Classroom Size</label>
-            @foreach (var a in Model.Item1.ClassroomStudentSize)
+            @foreach (var a in Model.ClassroomStudentSize)
             {
                 <div class="form-horizontal">
-                    @Html.RadioButtonFor(b => b.Item1.ClassSize, a.ClassroomID) @a.ClassSize
+                    @Html.RadioButtonFor(b => b.ClassSize, a.ClassroomID) @a.ClassSize
                 </div>
             }
     </div>
