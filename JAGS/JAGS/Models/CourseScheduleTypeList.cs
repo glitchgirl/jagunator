@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace JAGS.Models
 {
-    public class ScheduleTypeList
+    public class CourseScheduleTypeList
     {
         public int ScheduleTypeID { get; set; }
         public string ScheduleTypeName { get; set; }

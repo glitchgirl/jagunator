@@ -53,13 +53,14 @@ namespace JAGS.Controllers
             string data;
             string[] directories;
             int counter = 0;
+            StreamReader readFile;
 
             //CampusLocation Load into model
             var model = new CourseInfo();
             var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/CampusLocations.csv";
             if (System.IO.File.Exists(filepath))
             {
-                StreamReader readFile = new StreamReader(filepath);
+                readFile = new StreamReader(filepath);
                 data = readFile.ReadLine();
                 listDetails = data.Split(',');
 
@@ -80,7 +81,7 @@ namespace JAGS.Controllers
             counter = 0;
             if (System.IO.File.Exists(filepath))
             {
-                StreamReader readFile = new StreamReader(filepath);
+                readFile = new StreamReader(filepath);
                 data = readFile.ReadLine();
                 listDetails = data.Split(',');
 
@@ -109,17 +110,42 @@ namespace JAGS.Controllers
 
 
             //Course Subject Load into model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/";
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/Subject.csv";
             counter = 0;
-            foreach (string s in Directory.GetFiles(filepath))
+            if (System.IO.File.Exists(filepath))
             {
-                var path = Path.GetFileNameWithoutExtension(s);
-//<<<<<<< HEAD
-                //model.CourseList.Add(new ListOfCourses { CourseNumberID = fileCounter, CourseNameFromFile = path });//CourseNameFromFile = s.Remove(s.Length-4)});
-//=======
-                model.CourseList.Add(new ListOfCourses { CourseNumberID = counter, CourseNameFromFile = path});//CourseNameFromFile = s.Remove(s.Length-4)});
-//>>>>>>> J-branch
+                readFile = new StreamReader(filepath);
+                data = readFile.ReadLine();
+                listDetails = data.Split(',');
             }
+            else
+            {
+                listDetails = new string[0];
+            }
+            foreach (string s in listDetails)
+            {
+                model.Subject.Add(new CourseSubjectModel {CourseSubjectID = counter, SubjectCode = s});
+                counter++;
+            }
+
+
+
+
+
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";
+            counter = 0;
+            listDetails = Directory.GetFiles(filepath);
+            int pos = filepath.LastIndexOf("/") + 1;
+            foreach (string s in listDetails)
+            {
+                model.ListOfInstructors.Add(new CourseInstructorModel { InstructorListID = counter, InstructorName = s.Substring(pos, s.Length - pos-4)});
+                counter++;
+            }
+
+
+
+
+
 
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
             ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
