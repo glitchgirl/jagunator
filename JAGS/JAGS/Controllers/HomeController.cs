@@ -408,7 +408,7 @@ namespace JAGS.Controllers
                 System.IO.File.Delete(filepath);
             }
 
-            var csv = courseInfo.IntructorName.ToString() + "," + courseInfo.CourseName.ToString() + "," + courseInfo.CourseID.ToString() + "," + courseInfo.CampusLocation + "," + courseInfo.ClassSize;  //create csv string to write out
+            var csv = courseInfo.IntructorName.ToString() + "," + courseInfo.CourseName.ToString() + "," + courseInfo.CourseID.ToString() + "," + courseInfo.CampusLocation;  //create csv string to write out
             System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
            
             return View("CreateEditCourse", courseInfo);

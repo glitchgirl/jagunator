@@ -24,47 +24,29 @@
 
 <form>
     <div class="form-inline">
-        <label for="Semester">Semester</label>
-        <div class="text-center" id="Semester">
-            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "SemesterID","SemesterNameFromDirectory"), "Select Semester", new {@class="form-control"})
-        </div>
         <label for="Course">Course Subject</label>
         <div class="dropdown" id="CECourseDropDown">
             @Html.DropDownListFor(a => a.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"), "Create New Course", new {@class="form-control"})
-        </div>
-        <label for="CourseName">Course Name</label>
-        <div class="text-center" id="CECourseName">
-            @Html.DropDownListFor(a => a.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"), "Create New Course", new { @class = "form-control" })
         </div>
         <label for="CourseID">Course ID</label>
         <div class="text-center" id="CECourseID">
             @Html.TextBoxFor(Model => Model.CourseID, new { @class = "form-control" })
         </div>
+        <label for="CourseName">Course Name</label>
+        <div class="text-center" id="CECourseName">
+            @Html.DropDownListFor(a => a.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"), "Create New Course", new { @class = "form-control" })
+        </div>
             <label for="CourseSection" class="center-block">Course Section</label>
+        <label for="Semester">Semester</label>
+        <div class="text-center" id="Semester">
+            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "SemesterID", "SemesterNameFromDirectory"), "Select Semester", new { @class = "form-control" })
+        </div>
             <label for="InstructorName">Instructor Name</label>
             <div class="text-center" id="CEInstructorName">
                 @Html.TextBoxFor(a => a.IntructorName, new { @class = "form-control" })
             </div>
             <label for="CampusLocation">Campus Location</label>
 
-        <!--
-            @@Html.HiddenFor(x => x.Item1.CourseID)
-            @@foreach (var a in Model.Item1.CampusNames)
-            {
-                <div class="form-horizontal">
-                    @@Html.RadioButtonFor(b => b.Item1.CampusLocation, a.CampusID) @@a.CampusName
-                </div>
-            }
-        -->
-        
-
-            <label for="ClassroomSize">Classroom Size</label>
-            @foreach (var a in Model.ClassroomStudentSize)
-            {
-                <div class="form-horizontal">
-                    @Html.RadioButtonFor(b => b.ClassSize, a.ClassroomID) @a.ClassSize
-                </div>
-            }
     </div>
     <input type="submit" name="CreateEdit" value="Save" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
     <input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';" class="btn btn-pr" />
@@ -86,8 +68,8 @@
                         $('#IntructorName').val(res.data.instructorName);
                         $('#CourseName').val(res.data.courseName);
                         $('#CourseID').val(res.data.courseID);
-                        $('input[name = CampusLocation][value = ' + res.data.campusName + ']').prop('checked', true);
-                        $('input[name=ClassSize][value=' + res.data.classroomSize + ']').prop('checked', true);
+                        //$('input[name = CampusLocation][value = ' + res.data.campusName + ']').prop('checked', true);
+                        //$('input[name=ClassSize][value=' + res.data.classroomSize + ']').prop('checked', true);
                     }
                 });
             }
@@ -96,8 +78,8 @@
                 $('#IntructorName').val("");
                 $('#CourseName').val("");
                 $('#CourseID').val("");
-                $('input[name = CampusLocation][value = ' + 0 + ']').prop('checked', true);
-                $('input[name=ClassSize][value=' + 0 + ']').prop('checked', true);
+                //$('input[name = CampusLocation][value = ' + 0 + ']').prop('checked', true);
+                //$('input[name=ClassSize][value=' + 0 + ']').prop('checked', true);
             }
         });
     })
