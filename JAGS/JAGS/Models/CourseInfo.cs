@@ -51,20 +51,20 @@ namespace JAGS.Models
         //[Display(Name ="ClassSize")]
         //public string ClassSize { get; set; }
 
-        public List<FacultyModel> listOfFaculty { get; set; }
-        public List<CampusLocation> CampusNames { get; set; }
+        public List<CourseInstructorModel> ListOfInstructors { get; set; }
+        public List<CourseCampusLocation> CampusNames { get; set; }
         public List<ClassroomSize> ClassroomStudentSize { get; set; }
         public List<ListOfCourses> CourseList { get; set; }
         public List<ListOfSemesters> Semester { get; set; }
-        public List<ScheduleTypeList> ScheduleType { get; set; }
+        public List<CourseScheduleTypeList> ScheduleType { get; set; }
 
         public CourseInfo()
         {
-            ScheduleType = new List<ScheduleTypeList>();
+            ScheduleType = new List<CourseScheduleTypeList>();
             Semester = new List<ListOfSemesters>();
-            listOfFaculty = new List<FacultyModel>();
+            ListOfInstructors = new List<CourseInstructorModel>();
             ClassroomStudentSize = new List<ClassroomSize>();
-            CampusNames = new List<CampusLocation>();
+            CampusNames = new List<CourseCampusLocation>();
             CourseList = new List<ListOfCourses>();
             //Semester = new List<String>();
         }

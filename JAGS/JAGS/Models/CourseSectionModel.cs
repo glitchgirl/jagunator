@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace JAGS.Models
 {
-    public class CreditModel
+    public class CourseSectionModel
     {
-        public int CreditID { get; set; }
-        public string CreditAmount { get; set; }
+        public int CourseSectionID { get; set; }
+        public string SectionName { get; set; }
     }
 }

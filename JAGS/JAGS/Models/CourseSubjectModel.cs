@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace JAGS.Models
 {
-    public class CourseSubject
+    public class CourseSubjectModel
     {
         public int CourseSubjectID { get; set; }
         public string SubjectCode { get; set; }

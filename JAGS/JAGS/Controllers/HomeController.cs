@@ -71,7 +71,7 @@ namespace JAGS.Controllers
 
             foreach (string s in listDetails)
             {
-                model.CampusNames.Add(new CampusLocation { CampusID = counter, CampusName = s });
+                model.CampusNames.Add(new CourseCampusLocation { CampusID = counter, CampusName = s });
                 counter++;
             }
             
@@ -92,7 +92,7 @@ namespace JAGS.Controllers
 
             foreach (string s in listDetails)
             {
-                model.ScheduleType.Add(new ScheduleTypeList { ScheduleTypeID = counter, ScheduleTypeName = s });
+                model.ScheduleType.Add(new CourseScheduleTypeList { ScheduleTypeID = counter, ScheduleTypeName = s });
                 counter++;
             }
 
@@ -494,7 +494,7 @@ namespace JAGS.Controllers
 
             foreach (string s in listDetails)
             {
-                model.CampusNames.Add(new CampusLocation { CampusID = counter, CampusName = s });
+                model.CampusNames.Add(new CourseCampusLocation { CampusID = counter, CampusName = s });
                 counter++;
             }
 
@@ -515,7 +515,7 @@ namespace JAGS.Controllers
 
             foreach (string s in listDetails)
             {
-                model.ScheduleType.Add(new ScheduleTypeList { ScheduleTypeID = counter, ScheduleTypeName = s });
+                model.ScheduleType.Add(new CourseScheduleTypeList { ScheduleTypeID = counter, ScheduleTypeName = s });
                 counter++;
             }
 
