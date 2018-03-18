@@ -28,13 +28,13 @@
         <div class="text-center" id="Semester">
             @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "SemesterID","SemesterNameFromDirectory"), "Select Semester", new {@class="form-control"})
         </div>
-        <label for="Course">Course</label>
+        <label for="Course">Course Subject</label>
         <div class="dropdown" id="CECourseDropDown">
             @Html.DropDownListFor(a => a.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"), "Create New Course", new {@class="form-control"})
         </div>
         <label for="CourseName">Course Name</label>
         <div class="text-center" id="CECourseName">
-            @Html.TextBoxFor(Model => Model.CourseName, new { @class = "form-control" })
+            @Html.DropDownListFor(a => a.CourseList, new SelectList(Model.CourseList, "CourseNumberID", "CourseNameFromFile"), "Create New Course", new { @class = "form-control" })
         </div>
         <label for="CourseID">Course ID</label>
         <div class="text-center" id="CECourseID">
