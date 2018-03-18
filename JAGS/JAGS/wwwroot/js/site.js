@@ -63,11 +63,7 @@
                 });
 
                 $('#calendar1').fullCalendar({
-                    header: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'month,agendaWeek,agendaDay'
-                    },
+                    header: false,
                     editable: true,
                     droppable: true, 
                     dragRevertDuration: 0,

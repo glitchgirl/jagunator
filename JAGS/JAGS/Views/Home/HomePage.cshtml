@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    if (ViewBag.sessiontype == "Admin")
+    {
+    Layout = "_Layout";
+    }
+    else if (ViewBag.sessiontype == "Editor")
+    {
+    Layout = "_LayoutEditor";
+    }
+    else if (ViewBag.sessiontype == "Viewer")
+    {
+    Layout = "_LayoutViewer";
+    }
+}
+
+
+<h2>Welcome to JAGS!</h2>
