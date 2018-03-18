@@ -53,6 +53,7 @@ namespace JAGS.Controllers
             string data;
             string[] directories;
             int counter = 0;
+            int pos;
             StreamReader readFile;
 
             //CampusLocation Load into model
@@ -128,14 +129,11 @@ namespace JAGS.Controllers
                 counter++;
             }
 
-
-
-
-
+            //Load Faculty into Model
             filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";
             counter = 0;
             listDetails = Directory.GetFiles(filepath);
-            int pos = filepath.LastIndexOf("/") + 1;
+            pos = filepath.LastIndexOf("/") + 1;
             foreach (string s in listDetails)
             {
                 model.ListOfInstructors.Add(new CourseInstructorModel { InstructorListID = counter, InstructorName = s.Substring(pos, s.Length - pos-4)});
@@ -143,7 +141,16 @@ namespace JAGS.Controllers
             }
 
 
-
+            //Load courses
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/";
+            counter = 0;
+            listDetails = Directory.GetFiles(filepath);
+            pos = filepath.LastIndexOf("/") + 1;
+            foreach (string s in listDetails)
+            {
+                model.CourseIDList.Add(new CourseIDModel { CourseListID = counter, CourseIDForSchedule = s.Substring(pos, s.Length - pos - 4) });
+                counter++;
+            }
 
 
 
