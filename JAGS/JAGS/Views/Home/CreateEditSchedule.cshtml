@@ -1,4 +1,4 @@
-﻿@model CourseInfo 
+﻿@model CourseInfo
 @{
     ViewData["Title"] = "Create/Edit Schedule";
     if (ViewBag.sessiontype == "Admin")
@@ -14,6 +14,12 @@
     Layout = "_LayoutViewer";
     }
 }
+
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Http;
+@using System.Linq;
+@using System.Collections.Generic;
+
 @*Scripts.Render(~wwwroot/js/site.js)*@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -26,6 +32,14 @@
 <script src="~/js/site.js"></script>
 <h2>Create Edit Schedule</h2>
 <div id='wrap'>
+    <form>
+    <div class="form-inline">
+    <div class="SemesterAndLabel">
+    <label for="Semester">Semester</label>
+        <div class="text-center" id="Semester">
+            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "SemesterID","SemesterNameFromDirectory"), "Select Semester", new {@class="form-control"})
+        </div>
+                
                 <div id='external-events'>
                   <div id='external-events-listing'>
                     <h4>Classes</h4>
@@ -35,6 +49,7 @@
                     <div class='fc-event'>My Event 4</div>
                     <div class='fc-event'>My Event 5</div>
                   </div>
+                </div>
                 </div>
                 <div class="container">
                     <div class="col-md-12">
@@ -54,6 +69,9 @@
                     </div>
                 </div>
         </div>
+        </div>
+        </form> 
+
         <script type="text/javascript">
     $(function () {
                 //var selected = window.location.protocol + '//' + window.location.host + '/' + 'Home/Data/Courses/' + $('#CourseList option:selected').text() + '.csv';

@@ -82,5 +82,13 @@ body {
 }
 
 .mb-20 {
-    margin-bottom: 20px
+    margin-bottom: 20px
+}
+
+.SemesterAndLabel{
+    float:left;
+}
+
+.navbar-inverse {
+    background-color: #002F55; !important;
 }
