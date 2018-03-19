@@ -64,6 +64,7 @@
 
                 $('#calendar1').fullCalendar({
                     header: false,
+                    //columnFormat: 'dddd',
                     editable: true,
                     droppable: true, 
                     dragRevertDuration: 0,
