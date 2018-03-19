@@ -44,7 +44,7 @@ namespace JAGS.Controllers
             return View();
         }
 
-        /*------------------------------------------------------------------------------------------------------------------*/ 
+        /*------------------------------------------------------------------------------------------------------------------*/
 
         [HttpGet]
         public IActionResult CreateEditCourse()
@@ -77,7 +77,7 @@ namespace JAGS.Controllers
                 model.CampusNames.Add(new CourseCampusLocation { CampusID = counter, CampusName = s });
                 counter++;
             }
-            
+
             //ScheduleType Load into model
             filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/ScheduleType.csv";
             counter = 0;
@@ -100,7 +100,7 @@ namespace JAGS.Controllers
             }
 
             //Semester Load into model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) +"Data/Schedules/";
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/";
             directories = Directory.GetDirectories(filepath);
             counter = 0;
             foreach (string s in directories)
@@ -126,7 +126,7 @@ namespace JAGS.Controllers
             }
             foreach (string s in listDetails)
             {
-                model.Subject.Add(new CourseSubjectModel {CourseSubjectID = counter, SubjectCode = s});
+                model.Subject.Add(new CourseSubjectModel { CourseSubjectID = counter, SubjectCode = s });
                 counter++;
             }
 
@@ -188,6 +188,34 @@ namespace JAGS.Controllers
         }
 
         /*------------------------------------------------------------------------------------------------------------------*/
+
+        [HttpPost]
+        public ActionResult CreateEditCourse(CourseInfo model, string buttonName)
+        {
+            if (ModelState.IsValid)
+            {
+                ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+                ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+
+                var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
+                    + "Data/Courses/"
+                    + model.CourseID
+                    + ".csv";
+
+                if (System.IO.File.Exists(filepath))
+                {
+                    System.IO.File.Delete(filepath);
+                }
+
+                var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;  //create csv string to write out
+                System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
+
+                return RedirectToAction("CreateEditCourse", model);
+            }
+            return RedirectToAction("CreateEditCourse", model);
+        }
+
+
 
         [HttpPost]
         public ActionResult GetUserValues(string val)
@@ -451,36 +479,7 @@ namespace JAGS.Controllers
         /*------------------------------------------------------------------------------------------------------------------*/
 
         
-        [HttpPost]
-        public ActionResult CreateEditCourse(CourseInfo courseInfo, FacultyModel fmodel, String semester)
-        {
-            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
-            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
 
-            //Filename is created as ..../Data/Schedules/CSCI1301A.csv
-            //Course Subject = CSCI  |   CourseID = 1301  |  CourseSection = A
-            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) 
-                + "Data/Schedules/" 
-                + semester + "/" 
-                + courseInfo.CourseSubject 
-                + courseInfo.CourseID 
-                + courseInfo.CourseSection + ".csv";
-
-            if (System.IO.File.Exists(filepath))
-            {
-                System.IO.File.Delete(filepath);
-            }
-
-            var csv = courseInfo.IntructorName.ToString() + "," + courseInfo.CourseName.ToString() + "," + courseInfo.CourseID.ToString() + "," + courseInfo.CampusLocation;  //create csv string to write out
-            System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
-           
-            return View("CreateEditCourse", courseInfo);
-        }
-
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
 
         /*------------------------------------------------------------------------------------------------------------------*/
 

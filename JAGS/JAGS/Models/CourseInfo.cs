@@ -9,7 +9,7 @@ namespace JAGS.Models
 {
     public class CourseInfo
     {
-        [Required]
+        //[Required]
         [Display(Name = "Instructor Name")]
         public string IntructorName { get; set; }
 
@@ -26,22 +26,24 @@ namespace JAGS.Models
         public string CourseID { get; set; }
 
         [Required]
+        [Display(Name ="Credit Hours")]
+        public string CreditHours { get; set; }
+
+        //[Required]
         [Display(Name = "Course Section")]
         public string CourseSection;
 
-        [Required]
+        //[Required]
         [Display(Name = "Campus Name")]
         public string CampusLocation { get; set; }
 
-        [Display(Name = "Crosslist")]
-        public string CrossList_With { get; set; }
+
+        //[Display(Name = "Crosslist")]
+        //public string CrossList_With { get; set; }
 
 
         //Since no math is required for this and it is only for a visual representation, 
         //Credits are being made into a string so nop converstions are requried
-        [Required]
-        [Display(Name = "Credits")]
-        public string Credits { get; set; }
 
 
 
