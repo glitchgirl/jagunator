@@ -49,6 +49,7 @@ namespace JAGS.Controllers
         [HttpGet]
         public IActionResult CreateEditCourse()
         {
+
             string[] listDetails;
             string data;
             string[] directories;
@@ -129,6 +130,26 @@ namespace JAGS.Controllers
                 counter++;
             }
 
+
+            //Course Credit Hours Load into model
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/CreditHours.csv";
+            counter = 0;
+            if (System.IO.File.Exists(filepath))
+            {
+                readFile = new StreamReader(filepath);
+                data = readFile.ReadLine();
+                listDetails = data.Split(',');
+            }
+            else
+            {
+                listDetails = new string[0];
+            }
+            foreach (string s in listDetails)
+            {
+                model.CourseCreditList.Add(new CourseCreditModel { CreditID = counter, CreditAmount = s });
+                counter++;
+            }
+
             //Load Faculty into Model
             filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";
             counter = 0;
@@ -141,7 +162,11 @@ namespace JAGS.Controllers
             }
 
 
-            //Load courses
+            //Load courses 
+             
+             //* Trying a new way to load these,
+             //* this list can get very large so I would
+             //* rather only load what needs to be loaded
             filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/";
             counter = 0;
             listDetails = Directory.GetFiles(filepath);
@@ -151,7 +176,10 @@ namespace JAGS.Controllers
                 model.CourseIDList.Add(new CourseIDModel { CourseListID = counter, CourseIDForSchedule = s.Substring(pos, s.Length - pos - 4) });
                 counter++;
             }
+            
 
+            //test
+            //model.CourseIDList.Add(new CourseIDModel { CourseListID = 0, CourseIDForSchedule = "" });
 
 
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
@@ -191,15 +219,19 @@ namespace JAGS.Controllers
 
         /*------------------------------------------------------------------------------------------------------------------*/
 
+
+
         [HttpPost]
         public ActionResult GetCourseValues(string val)
         {
             String[] row;
+            StreamReader readFile;
+            string line;
             var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/" + val + ".csv";
             if (System.IO.File.Exists(filepath))   //check if user csv file exists
             {
-                StreamReader readFile = new StreamReader(filepath);
-                String line = readFile.ReadLine();
+                readFile = new StreamReader(filepath);
+                line = readFile.ReadLine();
                 row = line.Split(',');
             }
             else
@@ -213,12 +245,10 @@ namespace JAGS.Controllers
                 Success = "true",
                 Data = new
                 {
-                    CourseName = row[0],
+                    CourseSubject = row[0],
                     CourseID = row[1],
-                    CourseSection = row[2],
-                    InstructorName = row[3],
-                    CampusName = row[4],
-                    ClassroomSize = row[5]
+                    CourseName = row[2],
+                    CourseCredit = row[3],
                 }
             });
             

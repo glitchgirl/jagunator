@@ -52,6 +52,7 @@ namespace JAGS.Models
         //public string ClassSize { get; set; }
 
         //public List<Section>
+        public List<CourseCreditModel> CourseCreditList { get; set; }
         public List<CourseInstructorModel> ListOfInstructors { get; set; }
         public List<CourseCampusLocation> CampusNames { get; set; }
         public List<ClassroomSize> ClassroomStudentSize { get; set; }
@@ -63,6 +64,7 @@ namespace JAGS.Models
 
         public CourseInfo()
         {
+            CourseCreditList = new List<CourseCreditModel>();
             CourseIDList = new List<CourseIDModel>();
             ScheduleType = new List<CourseScheduleTypeList>();
             Semester = new List<ListOfSemesters>();
