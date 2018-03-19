@@ -72,44 +72,43 @@
         <div class="row">
             <input type="submit" name="SaveCourse" value="Save Course" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
         </div>
+        <!-------------------------------------PAGE SEPARATION BREAK--------------------------------------->
+
+
+        <div class="row">
+            <div class="col-lg-12 text-center"><h3>Section Information</h3></div>
+        </div>
+
+        <label for="Semester">Semester</label>
+        <div class="text-center" id="Semester">
+            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "SemesterID", "SemesterNameFromDirectory"), "Select Semester", new { @class = "form-control" })
+        </div>
+
+        <!--
+        <label for="Section">Section</label>
+        <div class="text-center" id="Section">
+           @@Html.DropDownListFor(a => a.CourseSection, new SelectList(Model.CourseSection, "CourseSectionID", "SectionName"), "Select Section", new {@@class = "form-control" })
+        </div>
+            -->
+        <label for="InstructorName">Instructor Name</label>
+        <div class="text-center" id="CEInstructorName">
+            @Html.DropDownListFor(a => a.ListOfInstructors, new SelectList(Model.ListOfInstructors, "InstructorListID", "InstructorName"), "Select Instructor", new { @class = "form-control" })
+        </div>
+
+        <label for="CampusLocation">Campus Location</label>
+        <div class="text-center" id="CECampus">
+            @Html.DropDownListFor(a => a.CampusNames, new SelectList(Model.CampusNames, "CampusID", "CampusName"), "Select Campus", new { @class = "form-control" })
+        </div>
+
+        <label for="ScheduleType">Schedule Type</label>
+        <div class="text-center" id="CEScheduleTpye">
+            @Html.DropDownListFor(a => a.ScheduleType, new SelectList(Model.ScheduleType, "ScheduleTypeID", "ScheduleTypeName"), "Select Schedule Type", new { @class = "form-control" })
+        </div>
+        <input type="submit" name="submit" value="Save" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
+        <input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';" class="btn btn-pr" />
+
     </fieldset>
 </form>
-<!-------------------------------------PAGE SEPARATION BREAK--------------------------------------->
-
-
-<div class="row">
-    <div class="col-lg-12 text-center"><h3>Section Information</h3></div>
-</div>
-
-<label for="Semester">Semester</label>
-<div class="text-center" id="Semester">
-    @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "SemesterID", "SemesterNameFromDirectory"), "Select Semester", new { @class = "form-control" })
-</div>
-
-<!--
-<label for="Section">Section</label>
-<div class="text-center" id="Section">
-   @@Html.DropDownListFor(a => a.CourseSection, new SelectList(Model.CourseSection, "CourseSectionID", "SectionName"), "Select Section", new {@@class = "form-control" })
-</div>
-    -->
-<label for="InstructorName">Instructor Name</label>
-<div class="text-center" id="CEInstructorName">
-    @Html.DropDownListFor(a => a.ListOfInstructors, new SelectList(Model.ListOfInstructors, "InstructorListID", "InstructorName"), "Select Instructor", new { @class = "form-control" })
-</div>
-
-<label for="CampusLocation">Campus Location</label>
-<div class="text-center" id="CECampus">
-    @Html.DropDownListFor(a => a.CampusNames, new SelectList(Model.CampusNames, "CampusID", "CampusName"), "Select Campus", new { @class = "form-control" })
-</div>
-
-<label for="ScheduleType">Schedule Type</label>
-<div class="text-center" id="CEScheduleTpye">
-    @Html.DropDownListFor(a => a.ScheduleType, new SelectList(Model.ScheduleType, "ScheduleTypeID", "ScheduleTypeName"), "Select Schedule Type", new { @class = "form-control" })
-</div>
-<input type="submit" name="CreateEdit" value="Save" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
-<input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';" class="btn btn-pr" />
-
-
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <!--         <script src="~/js/LoadCourse.js" type="text/javascript"></script>  -->

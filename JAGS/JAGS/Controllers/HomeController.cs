@@ -190,29 +190,38 @@ namespace JAGS.Controllers
         /*------------------------------------------------------------------------------------------------------------------*/
 
         [HttpPost]
-        public ActionResult CreateEditCourse(CourseInfo model, string buttonName)
+        public ActionResult CreateEditCourse(CourseInfo model,string submit)
         {
-            if (ModelState.IsValid)
+            //IF COURSE SAVE IS PRESSED
+            if (string.IsNullOrEmpty(submit))
             {
-                ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
-                ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
-
-                var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
-                    + "Data/Courses/"
-                    + model.CourseID
-                    + ".csv";
-
-                if (System.IO.File.Exists(filepath))
+                if (ModelState.IsValid)
                 {
-                    System.IO.File.Delete(filepath);
+
+                    ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+                    ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+
+                    var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
+                        + "Data/Courses/"
+                        + model.CourseID
+                        + ".csv";
+
+                    if (System.IO.File.Exists(filepath))
+                    {
+                        System.IO.File.Delete(filepath);
+                    }
+
+                    var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;  //create csv string to write out
+                    System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
+
+                    return RedirectToAction("CreateEditCourse", model);
                 }
-
-                var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;  //create csv string to write out
-                System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
-
-                return RedirectToAction("CreateEditCourse", model);
+                else
+                    return RedirectToAction("CreateEditCourse", model);
             }
-            return RedirectToAction("CreateEditCourse", model);
+            //ELSE SAVE SECTION IS PRESSED
+            else
+                return RedirectToAction("CreateEditCourse", model);
         }
 
 
