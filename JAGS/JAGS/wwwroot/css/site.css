@@ -90,5 +90,15 @@ body {
 }
 
 .navbar-inverse {
-    background-color: #002F55; !important;
+    background-color: #A5ACAF !important;
+    color: white
+}
+
+img{
+    float:left;
+    height:64px;
+    width:128px;
+}
+.navbar-inverse .navbar-brand{
+    color:white;
 }
