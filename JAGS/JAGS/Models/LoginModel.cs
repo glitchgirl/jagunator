@@ -14,7 +14,7 @@ namespace JAGS.Models
 
         public bool IsValid(string _login, string _password)
         {
-            if (_login == "test" && _password == "test")
+            if (_login != null && _password != null)
             {
                 return true;
             }

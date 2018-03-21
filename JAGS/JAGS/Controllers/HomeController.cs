@@ -114,11 +114,7 @@ namespace JAGS.Controllers
             foreach (string s in Directory.GetFiles(filepath))
             {
                 var path = Path.GetFileNameWithoutExtension(s);
-//<<<<<<< HEAD
-                //model.CourseList.Add(new ListOfCourses { CourseNumberID = fileCounter, CourseNameFromFile = path });//CourseNameFromFile = s.Remove(s.Length-4)});
-//=======
                 model.CourseList.Add(new ListOfCourses { CourseNumberID = counter, CourseNameFromFile = path});//CourseNameFromFile = s.Remove(s.Length-4)});
-//>>>>>>> J-branch
             }
 
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
@@ -213,52 +209,64 @@ namespace JAGS.Controllers
         [HttpPost("CreateEditUser")]
         public ActionResult CreateEditUser(UserModel model, string CreateEdit)
         {
+            String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
+            string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
+            int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
+            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "user" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            ViewBag.listusers = listofusers;
             //ViewBag.debugtext = "Entered createedituser after button";
             switch (CreateEdit)
             {   
-                case "CreateEdit":
-                    //ViewBag.debugtext = "entered createedit case";
-                    ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
-                    ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
-                    var usertype = "";
-                            
-                    var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Username + ".csv";  //get absolute file path for possible user file
-                    if (System.IO.File.Exists(filepath))   //check if user csv file exists
+                case "Create/Edit":
+                    if (model.IsValid(model.Username,model.Password))
                     {
-                        System.IO.File.Delete(filepath);   //delete user file if it exists
-                    }
-                    if (model.Type == 0)  //get text value of user type
-                    {
-                        usertype = "0";
-                    }
-                    else if (model.Type == 1)
-                    {
-                        usertype = "1";
-                    }
-                    else
-                    {
-                        usertype = "2";
-                    }
+                        //ViewBag.debugtext = "entered createedit case";
+                        ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+                        ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+                        var usertype = "";
 
-                    var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype;  //create csv string to write out
-                    System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
-                        
-                    String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
-                    string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
-                    int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
-                    var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "user" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
-                    ViewBag.listusers = listofusers;
-                    return View();
+                        var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Username + ".csv";  //get absolute file path for possible user file
+                        if (System.IO.File.Exists(filepath))   //check if user csv file exists
+                        {
+                            System.IO.File.Delete(filepath);   //delete user file if it exists
+                        }
+                        if (model.Type == 0)  //get text value of user type
+                        {
+                            usertype = "0";
+                        }
+                        else if (model.Type == 1)
+                        {
+                            usertype = "1";
+                        }
+                        else
+                        {
+                            usertype = "2";
+                        }
+                        if (model.Password == null)
+                        {
+                            model.Password = "";
+                        }
+                        var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype;  //create csv string to write out
+                        System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
+
+                        filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
+                        fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
+                        pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
+                        listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "user" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+                        ViewBag.listusers = listofusers;
+                        return View("CreateEditUser");
+                    }
+                    break;
 
                 case "Delete":
                     //ViewBag.debugtext = "entered delete case";
                     ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
                     ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
 
-                    filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Username + ".csv";  //get absolute file path for possible user file
-                    if (System.IO.File.Exists(filepath))   //check if user csv file exists
+                    filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Username + ".csv";  //get absolute file path for possible user file
+                    if (System.IO.File.Exists(filepathusers))   //check if user csv file exists
                     {
-                        System.IO.File.Delete(filepath);   //delete user file if it exists
+                        System.IO.File.Delete(filepathusers);   //delete user file if it exists
                     }
 
                     filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
@@ -272,6 +280,9 @@ namespace JAGS.Controllers
                     return View();
 
              }
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
+            return View();
 
         }
 

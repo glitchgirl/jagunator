@@ -23,7 +23,22 @@ namespace JAGS.Models
 
         [Required(ErrorMessage = "Type is required")]
         public int Type { get; set; }
+
+        public bool IsValid(string _Username, string _Password)
+        {
+            if (_Username != null && _Password != null)
+            {
+                return true;
+            }
+            else
+            {
+                //[ErrorMessage = "Login or Password is incorrect"]
+                return false;
+            }
+
+        }
     }
+
 
     // Extension method used to add the middleware to the HTTP request pipeline.
     public static class UserModelExtensions
