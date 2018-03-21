@@ -48,9 +48,9 @@
                     <div class='fc-event'>My Event 3</div>
                     <div class='fc-event'>My Event 4</div>
                     <div class='fc-event'>My Event 5</div>
-                  </div>
-                </div>
-                </div>
+                  </div> <!--listing-->
+                </div><!--events-->
+                
                 <div class="container">
                     <div class="col-md-12">
                       
@@ -70,31 +70,11 @@
                 </div>
         </div>
         </div>
-        </form> 
-
-        <script type="text/javascript">
-    $(function () {
-                //var selected = window.location.protocol + '//' + window.location.host + '/' + 'Home/Data/Courses/' + $('#CourseList option:selected').text() + '.csv';
-                var selected = $('#CourseList option:selected').text();
-
-
-                $.post("@Url.Action("GetCourseValues", "Home")?val=" + selected, function (res) {
-                    if (res.success === "true") {
-                        $('#IntructorName').val(res.data.instructorName);
-                        $('#CourseName').val(res.data.courseName);
-                        $('#CourseID').val(res.data.courseID);
-                        $('input[name = CampusLocation][value = ' + res.data.campusName + ']').prop('checked', true);
-                        $('input[name=ClassSize][value=' + res.data.classroomSize + ']').prop('checked', true);
-                    }
-                });
-            
-            else
-            { 
-                $('#IntructorName').val("");
-                $('#CourseName').val("");
-                $('#CourseID').val("");
-                $('input[name = CampusLocation][value = ' + 0 + ']').prop('checked', true);
-                $('input[name=ClassSize][value=' + 0 + ']').prop('checked', true);
-            }
-        });
-    </script>
+        </form> <br>
+    <div class="scheduleButtons">
+        <input type="button" value="Clear"><br>
+        <input type="button" value="Export schedule"><br>
+    </div>
+ <div class="scheduleErrors">
+        Conflicts 
+    </div>
