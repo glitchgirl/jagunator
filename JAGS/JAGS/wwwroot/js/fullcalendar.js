@@ -2615,8 +2615,9 @@ exports.globalDefaults = {
     nextDayThreshold: '09:00:00',
     // display
     columnHeader: true,
-    defaultView: 'basicWeek',
-    aspectRatio: 1.35,
+    columnFormat: 'ddd',
+    defaultView: 'agendaWeek',
+    aspectRatio: 1.5,
     header: {
         left: 'title',
         center: '',

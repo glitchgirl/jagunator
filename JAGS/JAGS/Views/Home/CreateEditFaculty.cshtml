@@ -18,6 +18,7 @@
 @model JAGS.Models.FacultyModel
 <p> Hello, @ViewBag.loginname</p>
 <h2>Create/Edit User</h2>
+<p>@ViewBag.debugtext</p>
 <form>
     <div class="userform">
         <fieldset>
@@ -56,7 +57,8 @@
                 @*Html.RadioButtonFor(model => model.Type, true) <text>Admin</text>
                 @Html.RadioButtonFor(model => model.Type, false) <text>Viewer</text>*@
             </div>
-            <input type="submit" name="Create/Edit" value="Create/Edit" formaction=@Url.Action("CreateEditFaculty") formmethod="post" class="btn btn-primary" />
+            <input type="submit" name="CreateEdit" value="CreateEdit" formaction=@Url.Action("CreateEditFaculty") formmethod="post" class="btn btn-primary" />
+            <input type="submit" name="CreateEdit" value="Delete" formaction=@Url.Action("CreateEditFaculty") formmethod="post" class="btn btn-primary" />
         </fieldset>
     </div>
 </form>
@@ -74,7 +76,7 @@
                 {
                     if (res.success === "true") 
                     {
-                        alert(res.data.factype)
+                        //alert(res.data.factype)
                         $("#Facultyname").val(u);
                         if (res.data.factype === "0")
                         {
