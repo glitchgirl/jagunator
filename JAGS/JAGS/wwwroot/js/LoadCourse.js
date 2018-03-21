@@ -11,7 +11,7 @@
             $.post("@Url.Action("GetCourseValues", "Home")?val=" + selected, function (res)
                 {
                 if (res.Success === "true") {
-                    $('#InstructorName').val(res.data.InstructorName);
+                    //$('#InstructorName').val(res.data.InstructorName);
                     $('#CourseName').val(res.data.CourseName);
                     $('#CourseID').val(res.data.CourseID);
                     $('#CampusNames').val(res.data.CampusName);

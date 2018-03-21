@@ -90,5 +90,25 @@ body {
 }
 
 .navbar-inverse {
-    background-color: #002F55; !important;
+    background-color: #A5ACAF !important;
+    color: white
+}
+
+.navbar img{
+    float:left;
+    height:64px;
+    width:128px;
+}
+.navbar-inverse .navbar-brand {
+    color: #002F55;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #002F55;
+}
+.scheduleButtons{
+    float:right;
+}
+.scheduleErrors{
+    border: 1px solid black;
 }

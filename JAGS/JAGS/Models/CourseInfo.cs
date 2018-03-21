@@ -9,50 +9,72 @@ namespace JAGS.Models
 {
     public class CourseInfo
     {
-        [Required]
+        //[Required]
         [Display(Name = "Instructor Name")]
         public string IntructorName { get; set; }
 
         [Required]
-        [Display(Name ="Course Name")]
+        [Display(Name = "Course Name")]
         public string CourseName { get; set; }
 
         [Required]
-        [Display(Name ="Course Subject")]
+        [Display(Name = "Course Subject")]
         public string CourseSubject { get; set; }
 
         [Required]
-        [Display(Name ="Course ID")]
+        [Display(Name = "Course ID")]
         public string CourseID { get; set; }
 
         [Required]
+        [Display(Name ="Credit Hours")]
+        public string CreditHours { get; set; }
+
+        //[Required]
         [Display(Name = "Course Section")]
         public string CourseSection;
 
-        [Required]
-        [Display(Name ="Campus Name")]
+        //[Required]
+        [Display(Name = "Campus Name")]
         public string CampusLocation { get; set; }
 
-        [Required]
-        [Display(Name ="ClassSize")]
-        public string ClassSize { get; set; }
 
-        public List<FacultyModel> listOfFaculty { get; set; }
-        public List<CampusLocation> CampusNames { get; set; }
+        //[Display(Name = "Crosslist")]
+        //public string CrossList_With { get; set; }
+
+
+        //Since no math is required for this and it is only for a visual representation, 
+        //Credits are being made into a string so nop converstions are requried
+
+
+
+
+
+        //[Required]
+        //[Display(Name ="ClassSize")]
+        //public string ClassSize { get; set; }
+
+        //public List<Section>
+        public List<CourseCreditModel> CourseCreditList { get; set; }
+        public List<CourseInstructorModel> ListOfInstructors { get; set; }
+        public List<CourseCampusLocation> CampusNames { get; set; }
         public List<ClassroomSize> ClassroomStudentSize { get; set; }
         public List<ListOfCourses> CourseList { get; set; }
         public List<ListOfSemesters> Semester { get; set; }
-        public List<ScheduleTypeList> ScheduleType { get; set; }
+        public List<CourseSubjectModel> Subject { get; set; }
+        public List<CourseScheduleTypeList> ScheduleType { get; set; }
+        public List<CourseIDModel>CourseIDList { get; set; }
 
         public CourseInfo()
         {
-            ScheduleType = new List<ScheduleTypeList>();
+            CourseCreditList = new List<CourseCreditModel>();
+            CourseIDList = new List<CourseIDModel>();
+            ScheduleType = new List<CourseScheduleTypeList>();
             Semester = new List<ListOfSemesters>();
-            listOfFaculty = new List<FacultyModel>();
+            Subject = new List<CourseSubjectModel>();
+            ListOfInstructors = new List<CourseInstructorModel>();
             ClassroomStudentSize = new List<ClassroomSize>();
-            CampusNames = new List<CampusLocation>();
+            CampusNames = new List<CourseCampusLocation>();
             CourseList = new List<ListOfCourses>();
-            //Semester = new List<String>();
         }
 
     }
