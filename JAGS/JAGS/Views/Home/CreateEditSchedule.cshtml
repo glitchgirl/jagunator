@@ -20,57 +20,49 @@
 @using System.Linq;
 @using System.Collections.Generic;
 
-@*Scripts.Render(~wwwroot/js/site.js)*@
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+@*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>*@
 <script src="~/js/moment.min.js"></script>
-@*<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.2/fullcalendar.js"></script>*@
 <script src="~/js/fullcalendar.js"></script>
+<script src="~/js/site.js"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.2/fullcalendar.min.css">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<script src="~/js/site.js"></script>
+
 <h2>Create Edit Schedule</h2>
 <div id='wrap'>
-    <form>
     <div class="form-inline">
     <div class="SemesterAndLabel">
     <label for="Semester">Semester</label>
         <div class="text-center" id="Semester">
             @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "SemesterID","SemesterNameFromDirectory"), "Select Semester", new {@class="form-control"})
         </div>
-                
-                <div id='external-events'>
-                  <div id='external-events-listing'>
-                    <h4>Classes</h4>
-                    <div class='fc-event'>Class 1</div>
-                    <div class='fc-event'>class 2</div>
-                    <div class='fc-event'>My Event 3</div>
-                    <div class='fc-event'>My Event 4</div>
-                    <div class='fc-event'>My Event 5</div>
-                  </div> <!--listing-->
-                </div><!--events-->
-                
-                <div class="container">
-                    <div class="col-md-12">
-                      
-                      <div class="col-md-6 mb-20">
-                        <div id='calendar1'></div>
-                      </div>
-                      
-                      <div class="col-md-6 mb-20">
-                        <div id='calendar2'></div>
-                      </div>
-                      
-                      <div class="col-md-6 mb-20">
-                        <div id='calendar3'></div>
-                      </div>
-                      
-                    </div>
-                </div>
+         <!--TODO: Add dropdown for subject-->     
+                <div id='wrap'>
+        <div id='external-events'>
+            <div id='external-events-listing'>
+                <h4>Courses</h4>
+                <div class='fc-event'>My Event 1</div>
+                <div class='fc-event'>My Event 2</div>
+                <div class='fc-event'>My Event 3</div>
+                <div class='fc-event'>My Event 4</div>
+                <div class='fc-event'>My Event 5</div>
+            </div>
+            <p>
+                <input type='checkbox' id='drop-remove'  checked='checked'/>
+                <label for='drop-remove'>remove after drop</label>
+            </p>
         </div>
-        </div>
-        </form> <br>
+
+        <div id='calendar'></div>
+
+        <div style='clear:both'></div>
+
+    </div>
+        <br>
     <div class="scheduleButtons">
         <input type="button" value="Clear"><br>
         <input type="button" value="Export schedule"><br>
