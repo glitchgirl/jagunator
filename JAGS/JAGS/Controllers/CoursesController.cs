@@ -244,6 +244,23 @@ namespace JAGS.Controllers
 
         }
 
+        /*-----------------------------------------------------------------------------------------------------------------*/
+
+        [HttpPost]
+        public ActionResult DeleteCourse(string val)
+        {
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/" + val + ".csv";
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            {
+                System.IO.File.Delete(filepath);
+            }
+            else
+            {
+                return Json(new { Success = "false" });
+            }
+            return Json(new { success = "true" });
+        }
+
 
     }
 }
