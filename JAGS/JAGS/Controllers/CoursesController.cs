@@ -171,7 +171,7 @@ namespace JAGS.Controllers
             return View(model);
         }
 
-
+        /*-----------------------------------------------------------------------------------------------------------------*/
 
         [HttpPost]
         public ActionResult CreateEditCourse(CourseInfo model, string submit)
@@ -206,7 +206,10 @@ namespace JAGS.Controllers
             //ELSE SAVE SECTION IS PRESSED
             else
                 return RedirectToAction("CreateEditCourse", model);
-    }
+        }
+
+        /*-----------------------------------------------------------------------------------------------------------------*/
+
         [HttpPost]
         public ActionResult GetCourseValues(string val)
         {
