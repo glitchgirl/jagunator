@@ -65,7 +65,7 @@ namespace JAGS.Controllers
                 readFile = new StreamReader(filepath);
                 data = readFile.ReadLine();
                 listDetails = data.Split(',');
-
+                readFile.Close();
             }
             else
             {
@@ -86,6 +86,7 @@ namespace JAGS.Controllers
                 readFile = new StreamReader(filepath);
                 data = readFile.ReadLine();
                 listDetails = data.Split(',');
+                readFile.Close();
 
             }
             else
@@ -119,6 +120,7 @@ namespace JAGS.Controllers
                 readFile = new StreamReader(filepath);
                 data = readFile.ReadLine();
                 listDetails = data.Split(',');
+                readFile.Close();
             }
             else
             {
@@ -139,6 +141,7 @@ namespace JAGS.Controllers
                 readFile = new StreamReader(filepath);
                 data = readFile.ReadLine();
                 listDetails = data.Split(',');
+                readFile.Close();
             }
             else
             {
@@ -270,6 +273,7 @@ namespace JAGS.Controllers
                 readFile = new StreamReader(filepath);
                 line = readFile.ReadLine();
                 row = line.Split(',');
+                readFile.Close();
             }
             else
             {
