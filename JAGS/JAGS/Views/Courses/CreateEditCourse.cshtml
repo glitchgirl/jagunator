@@ -134,7 +134,7 @@
                     //var selected = window.location.protocol + '//' + window.location.host + '/' + 'Home/Data/Courses/' + $('#CourseList option:selected').text() + '.csv';
                     var selected = $('#CourseListID option:selected').text();
 
-                    $.post("@Url.Action("GetCourseValues", "Home")?val=" + selected, function (res) {
+                    $.post("@Url.Action("GetCourseValues", "Courses")?val=" + selected, function (res) {
                         if (res.success === "true") {
 
                             $('#CourseNameID').val(res.data.courseName);
