@@ -465,6 +465,7 @@ namespace JAGS.Controllers
 
         public IActionResult CreateEditFaculty()
         {
+            //var model = new FacultyModel();
             ViewBag.debugtext = "create edit faculty";
             ViewBag.Jsonstr = "";
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session

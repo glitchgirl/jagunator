@@ -33,6 +33,7 @@
   <ItemGroup>
     <Folder Include="Data\Schedules\Fall2018\" />
     <Folder Include="Data\Faculty\" />
+    <Folder Include="Views\Home\images\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Controllers\test.csv" />
@@ -55,6 +56,11 @@
     <None Remove="demos\php\get-timezones.php" />
     <None Remove="demos\php\utils.php" />
     <None Remove="wwwroot\css\Calendar+Dep\fullcalendar.css" />
+    <None Remove="Views\Home\images\banner1.svg" />
+    <None Remove="Views\Home\images\banner2.svg" />
+    <None Remove="Views\Home\images\banner3.svg" />
+    <None Remove="Views\Home\images\banner4.svg" />
+    <None Remove="Views\Home\images\logorev-1.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="demos\json\events.json" />
@@ -62,5 +68,22 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\js\LoadCourse.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\images\banner1.svg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Home\images\banner2.svg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Home\images\banner3.svg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Home\images\banner4.svg">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Home\images\logorev-1.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 </Project>
