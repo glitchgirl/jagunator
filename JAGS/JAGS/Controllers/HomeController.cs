@@ -47,202 +47,7 @@ namespace JAGS.Controllers
         /*------------------------------------------------------------------------------------------------------------------*/
 
 
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*
-        [HttpGet]
-        public IActionResult CreateEditCourse()
-        {
-
-            string[] listDetails;
-            string data;
-            string[] directories;
-            int counter = 0;
-            int pos;
-            StreamReader readFile;
-
-            //CampusLocation Load into model
-            var model = new CourseInfo();
-            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/CampusLocations.csv";
-            if (System.IO.File.Exists(filepath))
-            {
-                readFile = new StreamReader(filepath);
-                data = readFile.ReadLine();
-                listDetails = data.Split(',');
-                readFile.Close();
-            }
-            else
-            {
-                listDetails = new string[0];
-            }
-
-            foreach (string s in listDetails)
-            {
-                model.CampusNames.Add(new CourseCampusLocation { CampusID = counter, CampusName = s });
-                counter++;
-            }
-
-            //ScheduleType Load into model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/ScheduleType.csv";
-            counter = 0;
-            if (System.IO.File.Exists(filepath))
-            {
-                readFile = new StreamReader(filepath);
-                data = readFile.ReadLine();
-                listDetails = data.Split(',');
-                readFile.Close();
-
-            }
-            else
-            {
-                listDetails = new string[0];
-            }
-
-            foreach (string s in listDetails)
-            {
-                model.ScheduleType.Add(new CourseScheduleTypeList { ScheduleTypeID = counter, ScheduleTypeName = s });
-                counter++;
-            }
-
-            //Semester Load into model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/";
-            directories = Directory.GetDirectories(filepath);
-            counter = 0;
-            foreach (string s in directories)
-            {
-                string[] tmp = s.Split("Schedules/");
-                model.Semester.Add(new ListOfSemesters { SemesterID = counter, SemesterNameFromDirectory = tmp[1] });
-                counter++;
-            }
-
-
-            //Course Subject Load into model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/Subject.csv";
-            counter = 0;
-            if (System.IO.File.Exists(filepath))
-            {
-                readFile = new StreamReader(filepath);
-                data = readFile.ReadLine();
-                listDetails = data.Split(',');
-                readFile.Close();
-            }
-            else
-            {
-                listDetails = new string[0];
-            }
-            foreach (string s in listDetails)
-            {
-                model.Subject.Add(new CourseSubjectModel { CourseSubjectID = counter, SubjectCode = s });
-                counter++;
-            }
-
-
-            //Course Credit Hours Load into model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/CreditHours.csv";
-            counter = 0;
-            if (System.IO.File.Exists(filepath))
-            {
-                readFile = new StreamReader(filepath);
-                data = readFile.ReadLine();
-                listDetails = data.Split(',');
-                readFile.Close();
-            }
-            else
-            {
-                listDetails = new string[0];
-            }
-            foreach (string s in listDetails)
-            {
-                model.CourseCreditList.Add(new CourseCreditModel { CreditID = counter, CreditAmount = s });
-                counter++;
-            }
-
-            //Load Faculty into Model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";
-            counter = 0;
-            listDetails = Directory.GetFiles(filepath);
-            pos = filepath.LastIndexOf("/") + 1;
-            foreach (string s in listDetails)
-            {
-                model.ListOfInstructors.Add(new CourseInstructorModel { InstructorListID = counter, InstructorName = s.Substring(pos, s.Length - pos-4)});
-                counter++;
-            }
-
-
-            //Load courses 
-             
-             //* Trying a new way to load these,
-             //* this list can get very large so I would
-             //* rather only load what needs to be loaded
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/";
-            counter = 0;
-            listDetails = Directory.GetFiles(filepath);
-            pos = filepath.LastIndexOf("/") + 1;
-            foreach (string s in listDetails)
-            {
-                model.CourseIDList.Add(new CourseIDModel { CourseListID = counter, CourseIDForSchedule = s.Substring(pos, s.Length - pos - 4) });
-                counter++;
-            }
-            
-
-            //test
-            //model.CourseIDList.Add(new CourseIDModel { CourseListID = 0, CourseIDForSchedule = "" });
-
-
-            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
-            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
-            return View(model);
-        }
-        */
-         
-        /*------------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-
-        /*
-        [HttpPost]
-        public ActionResult CreateEditCourse(CourseInfo model,string submit)
-        {
-            //IF COURSE SAVE IS PRESSED
-            if (string.IsNullOrEmpty(submit))
-            {
-                if (ModelState.IsValid)
-                {
-
-                    ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
-                    ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
-
-                    var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
-                        + "Data/Courses/"
-                        + model.CourseID
-                        + ".csv";
-
-                    if (System.IO.File.Exists(filepath))
-                    {
-                        System.IO.File.Delete(filepath);
-                    }
-
-                    var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;  //create csv string to write out
-                    System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
-
-                    return RedirectToAction("CreateEditCourse", model);
-                }
-                else
-                    return RedirectToAction("CreateEditCourse", model);
-            }
-            //ELSE SAVE SECTION IS PRESSED
-            else
-                return RedirectToAction("CreateEditCourse", model);
-        }
-
-        */
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
+        
 
         [HttpPost]
         public ActionResult GetUserValues(string val)
@@ -272,49 +77,7 @@ namespace JAGS.Controllers
         }
 
 
-        /*------------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
 
-        /*
-        [HttpPost]
-        public ActionResult GetCourseValues(string val)
-        {
-            String[] row;
-            StreamReader readFile;
-            string line;
-            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/" + val + ".csv";
-            if (System.IO.File.Exists(filepath))   //check if user csv file exists
-            {
-                readFile = new StreamReader(filepath);
-                line = readFile.ReadLine();
-                row = line.Split(',');
-                readFile.Close();
-            }
-            else
-            {
-                return Json(new { Success = "false" });
-            }
-
-            //ViewBag.reached = 1;
-            return Json(new
-            {
-                Success = "true",
-                Data = new
-                {
-                    CourseSubject = row[0],
-                    CourseID = row[1],
-                    CourseName = row[2],
-                    CourseCredit = row[3],
-                }
-            });
-            
-        }
-        */
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
         /*------------------------------------------------------------------------------------------------------------------*/
 
         public IActionResult CreateEditUser()
@@ -642,6 +405,250 @@ namespace JAGS.Controllers
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
             ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
             return View(model);
+
+
         }//createeditschedule
+
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*
+        [HttpGet]
+        public IActionResult CreateEditCourse()
+        {
+
+            string[] listDetails;
+            string data;
+            string[] directories;
+            int counter = 0;
+            int pos;
+            StreamReader readFile;
+
+            //CampusLocation Load into model
+            var model = new CourseInfo();
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/CampusLocations.csv";
+            if (System.IO.File.Exists(filepath))
+            {
+                readFile = new StreamReader(filepath);
+                data = readFile.ReadLine();
+                listDetails = data.Split(',');
+                readFile.Close();
+            }
+            else
+            {
+                listDetails = new string[0];
+            }
+
+            foreach (string s in listDetails)
+            {
+                model.CampusNames.Add(new CourseCampusLocation { CampusID = counter, CampusName = s });
+                counter++;
+            }
+
+            //ScheduleType Load into model
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/ScheduleType.csv";
+            counter = 0;
+            if (System.IO.File.Exists(filepath))
+            {
+                readFile = new StreamReader(filepath);
+                data = readFile.ReadLine();
+                listDetails = data.Split(',');
+                readFile.Close();
+
+            }
+            else
+            {
+                listDetails = new string[0];
+            }
+
+            foreach (string s in listDetails)
+            {
+                model.ScheduleType.Add(new CourseScheduleTypeList { ScheduleTypeID = counter, ScheduleTypeName = s });
+                counter++;
+            }
+
+            //Semester Load into model
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/";
+            directories = Directory.GetDirectories(filepath);
+            counter = 0;
+            foreach (string s in directories)
+            {
+                string[] tmp = s.Split("Schedules/");
+                model.Semester.Add(new ListOfSemesters { SemesterID = counter, SemesterNameFromDirectory = tmp[1] });
+                counter++;
+            }
+
+
+            //Course Subject Load into model
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/Subject.csv";
+            counter = 0;
+            if (System.IO.File.Exists(filepath))
+            {
+                readFile = new StreamReader(filepath);
+                data = readFile.ReadLine();
+                listDetails = data.Split(',');
+                readFile.Close();
+            }
+            else
+            {
+                listDetails = new string[0];
+            }
+            foreach (string s in listDetails)
+            {
+                model.Subject.Add(new CourseSubjectModel { CourseSubjectID = counter, SubjectCode = s });
+                counter++;
+            }
+
+
+            //Course Credit Hours Load into model
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/CreditHours.csv";
+            counter = 0;
+            if (System.IO.File.Exists(filepath))
+            {
+                readFile = new StreamReader(filepath);
+                data = readFile.ReadLine();
+                listDetails = data.Split(',');
+                readFile.Close();
+            }
+            else
+            {
+                listDetails = new string[0];
+            }
+            foreach (string s in listDetails)
+            {
+                model.CourseCreditList.Add(new CourseCreditModel { CreditID = counter, CreditAmount = s });
+                counter++;
+            }
+
+            //Load Faculty into Model
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";
+            counter = 0;
+            listDetails = Directory.GetFiles(filepath);
+            pos = filepath.LastIndexOf("/") + 1;
+            foreach (string s in listDetails)
+            {
+                model.ListOfInstructors.Add(new CourseInstructorModel { InstructorListID = counter, InstructorName = s.Substring(pos, s.Length - pos-4)});
+                counter++;
+            }
+
+
+            //Load courses 
+             
+             //* Trying a new way to load these,
+             //* this list can get very large so I would
+             //* rather only load what needs to be loaded
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/";
+            counter = 0;
+            listDetails = Directory.GetFiles(filepath);
+            pos = filepath.LastIndexOf("/") + 1;
+            foreach (string s in listDetails)
+            {
+                model.CourseIDList.Add(new CourseIDModel { CourseListID = counter, CourseIDForSchedule = s.Substring(pos, s.Length - pos - 4) });
+                counter++;
+            }
+            
+
+            //test
+            //model.CourseIDList.Add(new CourseIDModel { CourseListID = 0, CourseIDForSchedule = "" });
+
+
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
+            return View(model);
+        }
+        */
+
+        /*------------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+
+        /*
+        [HttpPost]
+        public ActionResult CreateEditCourse(CourseInfo model,string submit)
+        {
+            //IF COURSE SAVE IS PRESSED
+            if (string.IsNullOrEmpty(submit))
+            {
+                if (ModelState.IsValid)
+                {
+
+                    ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+                    ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+
+                    var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
+                        + "Data/Courses/"
+                        + model.CourseID
+                        + ".csv";
+
+                    if (System.IO.File.Exists(filepath))
+                    {
+                        System.IO.File.Delete(filepath);
+                    }
+
+                    var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;  //create csv string to write out
+                    System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
+
+                    return RedirectToAction("CreateEditCourse", model);
+                }
+                else
+                    return RedirectToAction("CreateEditCourse", model);
+            }
+            //ELSE SAVE SECTION IS PRESSED
+            else
+                return RedirectToAction("CreateEditCourse", model);
+        }
+
+        */
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+
+        /*------------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+
+        /*
+        [HttpPost]
+        public ActionResult GetCourseValues(string val)
+        {
+            String[] row;
+            StreamReader readFile;
+            string line;
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/" + val + ".csv";
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            {
+                readFile = new StreamReader(filepath);
+                line = readFile.ReadLine();
+                row = line.Split(',');
+                readFile.Close();
+            }
+            else
+            {
+                return Json(new { Success = "false" });
+            }
+
+            //ViewBag.reached = 1;
+            return Json(new
+            {
+                Success = "true",
+                Data = new
+                {
+                    CourseSubject = row[0],
+                    CourseID = row[1],
+                    CourseName = row[2],
+                    CourseCredit = row[3],
+                }
+            });
+            
+        }
+        */
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+
     }//class
 }//namespace

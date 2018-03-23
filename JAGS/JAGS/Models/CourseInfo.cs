@@ -13,19 +13,19 @@ namespace JAGS.Models
         [Display(Name = "Instructor Name")]
         public string IntructorName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "*Required*")]
         [Display(Name = "Course Name")]
         public string CourseName { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "*Required*")]
         [Display(Name = "Course Subject")]
         public string CourseSubject { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "*Required*")]
         [Display(Name = "Course ID")]
         public string CourseID { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "*Required*")]
         [Display(Name ="Credit Hours")]
         public string CreditHours { get; set; }
 
@@ -36,6 +36,12 @@ namespace JAGS.Models
         //[Required]
         [Display(Name = "Campus Name")]
         public string CampusLocation { get; set; }
+
+        [Display(Name = "Course Semester")]
+        public string sectionSemester { get; set; }
+
+        [Display(Name ="Schedule Type")]
+        public string ScheduleAtt { get; set; }
 
 
         //[Display(Name = "Crosslist")]

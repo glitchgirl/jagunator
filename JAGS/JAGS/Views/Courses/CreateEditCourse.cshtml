@@ -34,6 +34,7 @@
             <label for="Course" class="col-md-3 text-right">Course Subject</label>
             <div class="col-md-3" id="CECourseSubject">
                 @Html.TextBoxFor(a => a.CourseSubject, new { @id = "textSubjectID", @class = "hidden" })
+                @Html.ValidationMessageFor(a => a.CourseSubject, null, new { @class = "text-danger" })
                 @Html.DropDownListFor(a => a.CourseSubject, new SelectList(Model.Subject, "CourseSubjectID", "SubjectCode"), "Select Subject", new { @id = "subjectID", @class = "form-control" })
             </div>
             <label for="CourseName" class="col-md-3 text-right">Course Name</label>
@@ -70,8 +71,9 @@
 
         <br />
         <div class="row">
-            <input type="submit" name="SaveCourse" value="Save Course" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
-            
+            <input type="submit" name="SaveCourse" value="Save Course" formaction=@Url.Action("SaveCourse") formmethod="post" class="btn btn-primary" />
+            <input type="submit" name="DeleteCourse" value="Delete Course" formaction=@Url.Action("DeleteCourse") formmethod="post" class="btn btn-primary" />
+
         </div>
         <!-------------------------------------PAGE SEPARATION BREAK--------------------------------------->
 
@@ -80,33 +82,43 @@
             <div class="col-lg-12 text-center"><h3>Section Information</h3></div>
         </div>
 
-        <label for="Semester">Semester</label>
-        <div class="text-center" id="Semester">
-            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "SemesterID", "SemesterNameFromDirectory"), "Select Semester", new { @class = "form-control" })
+        <div class="row">
+            <label for="Semester" class="col-md-3 text-right">Semester</label>
+            <div class="col-md-3" id="Semester">
+                @Html.TextBoxFor(a => a.sectionSemester, new { @id = "sectionSemester", @class = "hidden" })
+                @Html.DropDownListFor(a => a.sectionSemester, new SelectList(Model.Semester, "SemesterID", "SemesterNameFromDirectory"), "Select Semester", new { @class = "form-control", @id = "SemesterSelection" })
+            </div>
+            <label for="InstructorName" class="col-md-3 text-right">Instructor Name</label>
+            <div class="col-md-3" id="CEInstructorName">
+                @Html.TextBoxFor(a => a.IntructorName, new { @id = "InstructorName", @class = "hidden" })
+                @Html.DropDownListFor(a => a.IntructorName, new SelectList(Model.ListOfInstructors, "InstructorListID", "InstructorName"), "Select Instructor", new { @class = "form-control", @id = "InstructorSelection" })
+            </div>
         </div>
 
+        <br />
         <!--
         <label for="Section">Section</label>
         <div class="text-center" id="Section">
            @@Html.DropDownListFor(a => a.CourseSection, new SelectList(Model.CourseSection, "CourseSectionID", "SectionName"), "Select Section", new {@@class = "form-control" })
         </div>
             -->
-        <label for="InstructorName">Instructor Name</label>
-        <div class="text-center" id="CEInstructorName">
-            @Html.DropDownListFor(a => a.ListOfInstructors, new SelectList(Model.ListOfInstructors, "InstructorListID", "InstructorName"), "Select Instructor", new { @class = "form-control" })
-        </div>
+        <div class="row">
 
-        <label for="CampusLocation">Campus Location</label>
-        <div class="text-center" id="CECampus">
-            @Html.DropDownListFor(a => a.CampusNames, new SelectList(Model.CampusNames, "CampusID", "CampusName"), "Select Campus", new { @class = "form-control" })
+            <label for="CampusLocation" class="col-md-3 text-right">Campus Location</label>
+            <div class="col-md-3" id="CECampus">
+                @Html.TextBoxFor(a => a.CampusLocation, new { @id = "CampusLocation", @class = "hidden" })
+                @Html.DropDownListFor(a => a.CampusLocation, new SelectList(Model.CampusNames, "CampusID", "CampusName"), "Select Campus", new { @class = "form-control", @id = "CampusSelection" })
+            </div>
+            <label for="ScheduleType" class="col-md-3 text-right">Schedule Type</label>
+            <div class="col-md-3" id="CEScheduleTpye">
+                @Html.TextBoxFor(a => a.ScheduleAtt, new { @id = "ScheduleAtt", @class = "hidden" })
+                @Html.DropDownListFor(a => a.ScheduleAtt, new SelectList(Model.ScheduleType, "ScheduleTypeID", "ScheduleTypeName"), "Select Schedule Type", new { @class = "form-control", @id = "ScheduleSelection" })
+            </div>
         </div>
-
-        <label for="ScheduleType">Schedule Type</label>
-        <div class="text-center" id="CEScheduleTpye">
-            @Html.DropDownListFor(a => a.ScheduleType, new SelectList(Model.ScheduleType, "ScheduleTypeID", "ScheduleTypeName"), "Select Schedule Type", new { @class = "form-control" })
-        </div>
-        <input type="submit" name="submit" value="Save" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
+        <br />
+        <input type="submit" name="submit" value="Save Section" formaction=@Url.Action("SaveSection") formmethod="post" class="btn btn-primary" />
         <input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';" class="btn btn-pr" />
+
 
     </fieldset>
 </form>
@@ -121,39 +133,80 @@
                 var selected = $('#subjectID option:selected').text();
                 $('#textSubjectID').val(selected);
             }
-        }),
-            $('#CourseCreditHours').change(function () {
-                if ($('#CourseCreditHours option:selected').text() !== 'Select Subject') {
-                    var selected = $('#CourseCreditHours option:selected').text();
-                    $('#CreditHours').val(selected);
-                }
-            }),
+        });
 
-            $('#CourseListID').change(function () {
-                if ($('#CourseListID option:selected').text() !== 'Select ID') {
-                    //var selected = window.location.protocol + '//' + window.location.host + '/' + 'Home/Data/Courses/' + $('#CourseList option:selected').text() + '.csv';
-                    var selected = $('#CourseListID option:selected').text();
+        $('#CourseCreditHours').change(function () {
+            if ($('#CourseCreditHours option:selected').text() !== 'Select Subject') {
+                var selected = $('#CourseCreditHours option:selected').text();
+                $('#CreditHours').val(selected);
+                alert(selected);
+            }
+        });
 
-                    $.post("@Url.Action("GetCourseValues", "Courses")?val=" + selected, function (res) {
-                        if (res.success === "true") {
+        $('#CourseListID').change(function () {
+            if ($('#CourseListID option:selected').text() !== 'Select ID') {
+                //var selected = window.location.protocol + '//' + window.location.host + '/' + 'Home/Data/Courses/' + $('#CourseList option:selected').text() + '.csv';
+                var selected = $('#CourseListID option:selected').text();
 
-                            $('#CourseNameID').val(res.data.courseName);
-                            $('#CourseCreditHours').val(res.data.courseCredit - 1).attr('selected', true);
-                            $('#CourseIDText').val(res.data.courseID);
-                            //$('input[name = CampusLocation][value = ' + res.data.campusName + ']').prop('checked', true);
-                            //$('input[name=ClassSize][value=' + res.data.classroomSize + ']').prop('checked', true);
-                        }
-                    });
-                }
-                else {
-                    $('#CourseNameID').val("");
-                    $('#CourseCreditHours').val("").attr('selected', false);
-                    $('#CourseIDText').val("");
-                    //$('input[name = CampusLocation][value = ' + 0 + ']').prop('checked', true);
-                    //$('input[name=ClassSize][value=' + 0 + ']').prop('checked', true);
-                }
-            });
+                $.post("@Url.Action("GetCourseValues", "Courses")?val=" + selected, function (res) {
+                    if (res.success === "true") {
+
+                        $('#CourseNameID').val(res.data.courseName);
+                        $('#CourseCreditHours').val(res.data.courseCredit - 1).attr('selected', true);
+                        $('#CourseIDText').val(res.data.courseID);
+                        //$('input[name = CampusLocation][value = ' + res.data.campusName + ']').prop('checked', true);
+                        //$('input[name=ClassSize][value=' + res.data.classroomSize + ']').prop('checked', true);
+                    }
+                })
+            }
+            else {
+                $('#CourseNameID').val("");
+                $('#CourseCreditHours').val("").attr('selected', false);
+                $('#CourseIDText').val("");
+                //$('input[name = CampusLocation][value = ' + 0 + ']').prop('checked', true);
+                //$('input[name=ClassSize][value=' + 0 + ']').prop('checked', true);
+            }
+        });
+            
+
+        $('#SemesterSelection').change(function () {
+            if ($('#SemesterSelection option:selected').text() !== 'Select Semester') {
+                var selected = $('#SemesterSelection option:selected').text();
+                $('#sectionSemester').val(selected);
+                alert(selected);
+            }
+
+        });
+
+        $('#InstructorSelection').change(function () {
+            if ($('#InstructorSelection option:selected').text() !== 'Select Instructor') {
+                var selected = $('#InstructorSelection option:selected').text();
+                $('#InstructorName').val(selected);
+                alert(selected);
+            }
+
+        });
+
+        $('#ScheduleSelection').change(function () {
+
+            if ($('#ScheduleSelection option:selected').text() !== 'Select Schedule Type') {
+                var selected = $('#ScheduleSelection option:selected').text();
+                $('#ScheduleAtt').val(selected);
+                alert(selected);
+            }
+        });
+
+        $('#CampusSelection').change(function () {
+
+            if ($('#CampusSelection option:selected').text() !== 'Select Campus') {
+                var selected = $('#CampusSelection option:selected').text();
+                $('#CampusLocation').val(selected);
+                alert(selected);
+            }
+        });
+
     });
+
 
 
 </script>
