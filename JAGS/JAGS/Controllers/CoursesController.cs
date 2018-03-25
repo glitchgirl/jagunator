@@ -327,6 +327,8 @@ namespace JAGS.Controllers
 
         }
 
+
+
         [HttpPost]
         public ActionResult SaveSection(CourseInfo model)
         {
@@ -335,11 +337,14 @@ namespace JAGS.Controllers
 
                 ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
                 ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
-                Console.Write(model.CourseSection);
                 var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
                     + "Data/Schedules/"
                     + model.sectionSemester
                     + "/"
+                    + model.CourseSubject
+                    + "_"
+                    + model.CourseID
+                    + "_"
                     + model.CourseSection
                     + ".csv";
 
@@ -365,8 +370,31 @@ namespace JAGS.Controllers
         }
 
         /*-----------------------------------------------------------------------------------------------------------------*/
+        [HttpPost]
+        public ActionResult DeleteSection(CourseInfo model)
+        {
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
 
-        
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
+                    + "Data/Schedules/"
+                    + model.sectionSemester
+                    + "/"
+                    + model.CourseSubject
+                    + "_"
+                    + model.CourseID
+                    + "_"
+                    + model.CourseSection
+                    + ".csv";
+
+            if (System.IO.File.Exists(filepath))
+            {
+                System.IO.File.Delete(filepath);
+            }
+
+            return RedirectToAction("CreateEditCourse", model);
+        }
+
 
 
     }
