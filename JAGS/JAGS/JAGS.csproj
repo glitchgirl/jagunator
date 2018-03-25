@@ -61,6 +61,7 @@
     <None Remove="Views\Home\images\banner3.svg" />
     <None Remove="Views\Home\images\banner4.svg" />
     <None Remove="Views\Home\images\logorev-1.png" />
+    <None Remove="Data\Faculty\-Select Faculty to Edit-.csv" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="demos\json\events.json" />
