@@ -31,7 +31,7 @@ namespace JAGS.Models
 
         //[Required]
         [Display(Name = "Course Section")]
-        public string CourseSection;
+        public string CourseSection { get; set; }
 
         //[Required]
         [Display(Name = "Campus Name")]

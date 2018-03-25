@@ -335,11 +335,12 @@ namespace JAGS.Controllers
 
                 ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
                 ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+                Console.Write(model.CourseSection);
                 var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
                     + "Data/Schedules/"
                     + model.sectionSemester
-                    + "/Test"
-                    //+ model.CourseSection
+                    + "/"
+                    + model.CourseSection
                     + ".csv";
 
                 if (System.IO.File.Exists(filepath))
@@ -348,6 +349,7 @@ namespace JAGS.Controllers
                 }
                 var csv = model.CourseSubject.ToString()
                     + "," + model.CourseID.ToString()
+                    + "," + model.CourseSection.ToString()
                     + "," + model.CourseName.ToString()
                     + "," + model.CreditHours
                     + "," + model.IntructorName.ToString()
