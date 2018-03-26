@@ -75,6 +75,7 @@
             <input type="submit" name="DeleteCourse" value="Delete Course" formaction=@Url.Action("DeleteCourse") formmethod="post" class="btn btn-primary" />
 
         </div>
+        <br /><br />
         <!-------------------------------------PAGE SEPARATION BREAK--------------------------------------->
 
 
@@ -88,26 +89,29 @@
                 @Html.TextBoxFor(a => a.sectionSemester, new { @id = "sectionSemester", @class = "hidden" })
                 @Html.DropDownListFor(a => a.sectionSemester, new SelectList(Model.Semester, "SemesterID", "SemesterNameFromDirectory"), "Select Semester", new { @class = "form-control", @id = "SemesterSelection" })
             </div>
-            <label for="InstructorName" class="col-md-3 text-right">Instructor Name</label>
-            <div class="col-md-3" id="CEInstructorName">
-                @Html.TextBoxFor(a => a.IntructorName, new { @id = "InstructorName", @class = "hidden" })
-                @Html.DropDownListFor(a => a.IntructorName, new SelectList(Model.ListOfInstructors, "InstructorListID", "InstructorName"), "Select Instructor", new { @class = "form-control", @id = "InstructorSelection" })
-            </div>
-        </div>
-
-        <br />
-        <!--
-        <label for="Section">Section</label>
-        <div class="text-center" id="Section">
-           @@Html.DropDownListFor(a => a.CourseSection, new SelectList(Model.CourseSection, "CourseSectionID", "SectionName"), "Select Section", new {@@class = "form-control" })
-        </div>
-            -->
-        <div class="row">
-
             <label for="CampusLocation" class="col-md-3 text-right">Campus Location</label>
             <div class="col-md-3" id="CECampus">
                 @Html.TextBoxFor(a => a.CampusLocation, new { @id = "CampusLocation", @class = "hidden" })
                 @Html.DropDownListFor(a => a.CampusLocation, new SelectList(Model.CampusNames, "CampusID", "CampusName"), "Select Campus", new { @class = "form-control", @id = "CampusSelection" })
+            </div>
+         </div>
+        <br />
+        <div class="row">
+            <label for = "Section" class="col-md-3 text-right">Section</label>
+            <div class="col-md-3" id="sectionDropDown">
+                @Html.DropDownListFor(a => a.CourseSectionList, new SelectList(Model.CourseSectionList, "CourseSectionID", "SectionName"), "Select Section", new {@class="form-control", @id="SectionSelection"})
+            </div>
+            <label for="SectionText" class="col-md-3 text-right">Section</label>
+            <div class="col-md-3" id="SectionText">
+                @Html.TextBoxFor(a=>a.CourseSection, new {@class="form-control", @id="SectionText"})
+            </div>
+            </div>
+        <br />
+        <div class="row">
+            <label for="InstructorName" class="col-md-3 text-right">Instructor Name</label>
+            <div class="col-md-3" id="CEInstructorName">
+                @Html.TextBoxFor(a => a.IntructorName, new { @id = "InstructorName", @class = "hidden" })
+                @Html.DropDownListFor(a => a.IntructorName, new SelectList(Model.ListOfInstructors, "InstructorListID", "InstructorName"), "Select Instructor", new { @class = "form-control", @id = "InstructorSelection" })
             </div>
             <label for="ScheduleType" class="col-md-3 text-right">Schedule Type</label>
             <div class="col-md-3" id="CEScheduleTpye">
@@ -115,9 +119,12 @@
                 @Html.DropDownListFor(a => a.ScheduleAtt, new SelectList(Model.ScheduleType, "ScheduleTypeID", "ScheduleTypeName"), "Select Schedule Type", new { @class = "form-control", @id = "ScheduleSelection" })
             </div>
         </div>
+
+        <br />
+
         <br />
         <input type="submit" name="submit" value="Save Section" formaction=@Url.Action("SaveSection") formmethod="post" class="btn btn-primary" />
-        <input type="button" value="Cancel" id="crsCancel" onclick="window.location.href='CreateEdit';" class="btn btn-pr" />
+        <input type="submit" name="submit" value="Delete Section" formaction=@Url.Action("DeleteSection") formmethod="post" class="btn btn-primary" />
 
 
     </fieldset>
@@ -139,7 +146,6 @@
             if ($('#CourseCreditHours option:selected').text() !== 'Select Subject') {
                 var selected = $('#CourseCreditHours option:selected').text();
                 $('#CreditHours').val(selected);
-                alert(selected);
             }
         });
 
@@ -173,7 +179,6 @@
             if ($('#SemesterSelection option:selected').text() !== 'Select Semester') {
                 var selected = $('#SemesterSelection option:selected').text();
                 $('#sectionSemester').val(selected);
-                alert(selected);
             }
 
         });
@@ -182,7 +187,6 @@
             if ($('#InstructorSelection option:selected').text() !== 'Select Instructor') {
                 var selected = $('#InstructorSelection option:selected').text();
                 $('#InstructorName').val(selected);
-                alert(selected);
             }
 
         });
@@ -192,7 +196,6 @@
             if ($('#ScheduleSelection option:selected').text() !== 'Select Schedule Type') {
                 var selected = $('#ScheduleSelection option:selected').text();
                 $('#ScheduleAtt').val(selected);
-                alert(selected);
             }
         });
 
@@ -201,7 +204,6 @@
             if ($('#CampusSelection option:selected').text() !== 'Select Campus') {
                 var selected = $('#CampusSelection option:selected').text();
                 $('#CampusLocation').val(selected);
-                alert(selected);
             }
         });
 
