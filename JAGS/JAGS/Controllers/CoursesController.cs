@@ -21,7 +21,7 @@ using Microsoft.AspNetCore.Session;
 
 namespace JAGS.Controllers
 {
-    public class CoursesController : HomeController
+    public class CoursesController : Microsoft.AspNetCore.Mvc.Controller
     {
         const string SessionUserName = "_Name";
         const string SessionUserPass = "_Pass";
