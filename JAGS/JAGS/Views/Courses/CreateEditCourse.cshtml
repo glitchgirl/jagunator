@@ -71,8 +71,8 @@
 
         <br />
         <div class="row">
-            <input type="submit" name="SaveCourse" value="Save Course" formaction=@Url.Action("SaveCourse") formmethod="post" class="btn btn-primary" />
-            <input type="submit" name="DeleteCourse" value="Delete Course" formaction=@Url.Action("DeleteCourse") formmethod="post" class="btn btn-primary" />
+            <input type="submit" name="command" value="Save Course" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
+            <input type="submit" name="command" value="Delete Course" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
 
         </div>
         <br /><br />
@@ -123,8 +123,8 @@
         <br />
 
         <br />
-        <input type="submit" name="submit" value="Save Section" formaction=@Url.Action("SaveSection") formmethod="post" class="btn btn-primary" />
-        <input type="submit" name="submit" value="Delete Section" formaction=@Url.Action("DeleteSection") formmethod="post" class="btn btn-primary" />
+        <input type="submit" name="command" value="Save Section" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
+        <input type="submit" name="command" value="Delete Section" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
 
 
     </fieldset>
@@ -142,8 +142,9 @@
             }
         });
 
+
         $('#CourseCreditHours').change(function () {
-            if ($('#CourseCreditHours option:selected').text() !== 'Select Subject') {
+            if ($('#CourseCreditHours option:selected').text() !== 'Select Credit Hours') {
                 var selected = $('#CourseCreditHours option:selected').text();
                 $('#CreditHours').val(selected);
             }
@@ -160,6 +161,7 @@
                         $('#CourseNameID').val(res.data.courseName);
                         $('#CourseCreditHours').val(res.data.courseCredit - 1).attr('selected', true);
                         $('#CourseIDText').val(res.data.courseID);
+                        $('#CreditHours').val(res.data.courseCredit);
                         //$('input[name = CampusLocation][value = ' + res.data.campusName + ']').prop('checked', true);
                         //$('input[name=ClassSize][value=' + res.data.classroomSize + ']').prop('checked', true);
                     }
@@ -205,6 +207,14 @@
                 var selected = $('#CampusSelection option:selected').text();
                 $('#CampusLocation').val(selected);
             }
+        });
+
+        $('#SectionSelection').change(function () {
+            if ($('#SectionSelection option:selected').text() !== 'Selection Section') {
+                var selected = $('#SectionSelection option:selected').text();
+                $('#SectionText').val(selected);
+            }
+
         });
 
     });
