@@ -183,48 +183,32 @@ namespace JAGS.Controllers
             return View(model);
         }
 
+
+
+
+
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
         /*-----------------------------------------------------------------------------------------------------------------*/
 
+
+
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------------------*/
+
+
         [HttpPost]
-        public ActionResult CreateEditCourse(CourseInfo model, string courseSave, string courseDelete, string sectionSave)
+        public ActionResult CreateEditCourse(CourseInfo model, string command)
         {
             //IF COURSE SAVE IS PRESSED
-            if (courseSave != null)
+            if (command.Equals("Save Course"))
             {
                 if (ModelState.IsValid)
                 {
 
                     ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
                     ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
-                    string[] courseList;
-                    var fileiteration = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24);
-                    var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
-                        + "Data/Courses/"
-                        + model.CourseID
-                        + ".csv";
-
-                    courseList = System.IO.Directory.GetFiles(fileiteration + "Data/Courses/");
-
-                    //if (System.IO.File.Exists(filepath))
-                    //{
-                    //    System.IO.File.Delete(filepath);
-                    //}
-                    if (System.IO.File.Exists(courseList[Convert.ToInt32(model.CourseIDList)]))
-                        System.IO.File.Delete(courseList[Convert.ToInt32(model.CourseIDList)]);
-                    var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;  //create csv string to write out
-                    System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
-
-                }
-            }
-            //ELSE SAVE SECTION IS PRESSED
-            else if (courseDelete != null)
-            {
-                if (ModelState.IsValid)
-                {
-
-                    ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
-                    ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
-
                     var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
                         + "Data/Courses/"
                         + model.CourseID
@@ -234,9 +218,83 @@ namespace JAGS.Controllers
                     {
                         System.IO.File.Delete(filepath);
                     }
+                    var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;  //create csv string to write out
+                    System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
                 }
-                else
-                    return RedirectToAction("CreateEditCourse", model);
+            }
+            //ELSE SAVE SECTION IS PRESSED
+            else if (command.Equals("Delete Course"))
+            {
+                ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+                ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+
+                var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
+                            + "Data/Courses/"
+                            + model.CourseID
+                            + ".csv";
+
+                if (System.IO.File.Exists(filepath))
+                {
+                    System.IO.File.Delete(filepath);
+                }
+            }
+            else if (command.Equals("Save Section"))
+            {
+                if (ModelState.IsValid)
+                {
+
+                    ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+                    ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+                    var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
+                        + "Data/Schedules/"
+                        + model.sectionSemester
+                        + "/"
+                        + model.CourseSubject
+                        + "_"
+                        + model.CourseID
+                        + "_"
+                        + model.CourseSection
+                        + ".csv";
+
+                    if (System.IO.File.Exists(filepath))
+                    {
+                        System.IO.File.Delete(filepath);
+                    }
+                    var csv = model.CourseSubject.ToString()
+                        + "," + model.CourseID.ToString()
+                        + "," + model.CourseSection.ToString()
+                        + "," + model.CourseName.ToString()
+                        + "," + model.CreditHours
+                        + "," + model.IntructorName.ToString()
+                        + "," + model.CampusLocation.ToString()
+                        + "," + model.ScheduleAtt.ToString();
+
+                    //create csv string to write out
+                    System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
+
+
+                }
+            }
+            else if (command.Equals("Delete Section"))
+            {
+                ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+                ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+
+                var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
+                        + "Data/Schedules/"
+                        + model.sectionSemester
+                        + "/"
+                        + model.CourseSubject
+                        + "_"
+                        + model.CourseID
+                        + "_"
+                        + model.CourseSection
+                        + ".csv";
+
+                if (System.IO.File.Exists(filepath))
+                {
+                    System.IO.File.Delete(filepath);
+                }
             }
             return RedirectToAction("CreateEditCourse", model);
         }
@@ -265,8 +323,9 @@ namespace JAGS.Controllers
 
 
             }
-                                
-            return RedirectToAction("CreateEditCourse", model);
+
+            return this.View(model);
+            //return RedirectToAction("CreateEditCourse", model);
         }
 
         [HttpPost]
