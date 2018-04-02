@@ -70,3 +70,28 @@
  <div class="scheduleErrors">
         Conflicts 
     </div>
+
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
+<script type="text/javascript">
+ $(function()
+ {
+      $("#Semester").change(function() 
+        {
+                alert("it works");
+                var u = $("#Semester option:selected").text()             
+                $.post("@Url.Action("GetSectionValues", "Home")?val=" + u, function(res) 
+                {
+                    var JSsections = '@ViewBag.sections'
+                    if (res.success === "true") 
+                    {
+                        alert(res.data);
+                        @*$("#").val(u);*@
+                    } 
+                    else 
+                    {
+                        alert("Error getting data!");
+                    }
+                });
+        });
+ });
+</script>

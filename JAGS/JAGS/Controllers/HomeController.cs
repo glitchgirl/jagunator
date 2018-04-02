@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using JAGS.Models;
 using Microsoft.AspNetCore.Razor;
 using System.Web.Optimization;
+using Newtonsoft.Json;
 //using System.Web
 //using static System.Web.Mvc.SelectListItem;
 //using System.Web.Hosting;
@@ -292,7 +293,24 @@ namespace JAGS.Controllers
 
         /*------------------------------------------------------------------------------------------------------------------*/
 
-        
+        [HttpPost]
+        public ActionResult GetSectionValues(string val)
+        {
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + val + "/";
+            var files = System.IO.Directory.GetFiles(filepath).Select(Path.GetFileName);
+            if (files.Count() > 0)   //check if user csv file exists
+            {
+                ViewBag.sections = files;
+                var sections = JsonConvert.SerializeObject(files);
+                return Json(new { Success = "true", Data = sections });
+            }
+            else
+            {
+                return Json(new { Success = "false" });
+            }
+            ViewBag.sections = files;
+            return Json(new { Success = "true" });
+        }
 
 
         /*------------------------------------------------------------------------------------------------------------------*/
