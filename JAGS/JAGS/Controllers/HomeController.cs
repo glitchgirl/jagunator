@@ -297,7 +297,7 @@ namespace JAGS.Controllers
         public ActionResult GetSectionValues(string val)
         {
             var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + val + "/";
-            var files = System.IO.Directory.GetFiles(filepath).Select(Path.GetFileName);
+            var files = System.IO.Directory.GetFiles(filepath).Select(Path.GetFileNameWithoutExtension);
             if (files.Count() > 0)   //check if user csv file exists
             {
                 ViewBag.sections = files;
