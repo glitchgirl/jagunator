@@ -27,6 +27,7 @@
 @*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>*@
 <script src="~/js/moment.min.js"></script>
 <script src="~/js/fullcalendar.js"></script>
+<script src="~/js/site.js"></script>
 @*<script src="http://underscorejs.org/underscore-min.js"</script>*@
 
 
@@ -78,23 +79,28 @@
  {
       $("#Semester").change(function() 
         {
-                alert("it works");
+                //alert("it works");
+                //get selected value from semester dropdown
                 var u = $("#Semester option:selected").text()             
+                //call getsectionvalues in homecontroller and pass value selected
                 $.post("@Url.Action("GetSectionValues", "Home")?val=" + u, function(res) 
                 {
-                    var JSsections = '@ViewBag.sections'
+                    //var JSsections = '@ViewBag.sections'
+                    //if function suceeds then do the following
                     if (res.success === "true") 
                     {
-                        alert(res.data);
-                        @*$("#").val(u);*@
+                        //alert(res.data);
+                        //parse data from return
                         var resultjson = JSON.parse(res.data);
 
-                        innerdiv = document.createElement("div");
-                        innerdiv.className = "fc-event";
-                        innerdiv.innerHTML = "innerdiv test";
-                        //document.body.appendChild(blockDiv);
-                        var externalevents = document.getElementById('external-events-listing')
-                        //externalevents.appendChild(innerdiv);
+                        //remove all external event divs
+                        var myNode = document.getElementById('external-events-listing');
+                        while (myNode.firstChild) {
+                            myNode.removeChild(myNode.firstChild);
+                        }
+                        //get element for which we are going to append div items
+                        var externalevents = document.getElementById('external-events-listing');
+                        //create div for each section
                         for(i in resultjson) {
                             var innerdiv = document.createElement("div");
                             innerdiv.className = "fc-event";
@@ -102,8 +108,6 @@
                             //alert(resultjson[i]);
                             var externalevents = document.getElementById('external-events-listing')
                             externalevents.appendChild(innerdiv);
-
-
                             };
 
                         $('#external-events .fc-event').each(function() {
@@ -122,8 +126,6 @@
                             });
 
                         });
-                        //var debugtext = Object.keys(res.data).length;
-                        //alert(res.data.length)
                     } 
                     else 
                     {
@@ -133,4 +135,3 @@
         });
  });
 </script>
-<script src="~/js/site.js"></script>
