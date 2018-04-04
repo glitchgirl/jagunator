@@ -27,6 +27,7 @@
 @*<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>*@
 <script src="~/js/moment.min.js"></script>
 <script src="~/js/fullcalendar.js"></script>
+@*<script src="http://underscorejs.org/underscore-min.js"</script>*@
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.2/fullcalendar.min.css">
@@ -86,29 +87,24 @@
                     {
                         alert(res.data);
                         @*$("#").val(u);*@
-                        var newDiv = document.createElement("div"); 
-                        // and give it some content 
-                        var newContent = document.createTextNode("Hi there and greetings!"); 
-                        // add the text node to the newly created div
-                        newDiv.appendChild(newContent);  
+                        var resultjson = JSON.parse(res.data);
 
-                        // add the newly created element and its content into the DOM 
-                        var currentDiv = document.getElementById("external-events-listing"); 
-                        document.body.appendChild(newDiv, currentDiv);
-
-                        blockDiv = document.createElement("div");
-                        blockDiv.className = "external-events";
-                        textSpan = document.createElement("span");
-                        textSpan.append("this is a test");  // see note about browser compatibility
-                        blockDiv.append(textSpan);
-                        blockDiv.innerHTML = "Test InnerHTML"
                         innerdiv = document.createElement("div");
                         innerdiv.className = "fc-event";
                         innerdiv.innerHTML = "innerdiv test";
-                        blockDiv.append(innerdiv);
                         //document.body.appendChild(blockDiv);
                         var externalevents = document.getElementById('external-events-listing')
-                        externalevents.appendChild(innerdiv);
+                        //externalevents.appendChild(innerdiv);
+                        for(i in resultjson) {
+                            var innerdiv = document.createElement("div");
+                            innerdiv.className = "fc-event";
+                            innerdiv.innerHTML = resultjson[i];
+                            //alert(resultjson[i]);
+                            var externalevents = document.getElementById('external-events-listing')
+                            externalevents.appendChild(innerdiv);
+
+
+                            };
 
                         $('#external-events .fc-event').each(function() {
 
@@ -126,6 +122,8 @@
                             });
 
                         });
+                        //var debugtext = Object.keys(res.data).length;
+                        //alert(res.data.length)
                     } 
                     else 
                     {
