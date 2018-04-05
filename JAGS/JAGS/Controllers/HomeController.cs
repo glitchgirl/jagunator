@@ -389,7 +389,7 @@ namespace JAGS.Controllers
 
             foreach (string s in listDetails)
             {
-                model.CampusNames.Add(new CourseCampusLocation { CampusID = counter, CampusName = s });
+                model.CampusNames.Add(new System.Web.Mvc.SelectListItem { Value = counter.ToString(), Text = s });
                 counter++;
             }
 
@@ -410,7 +410,7 @@ namespace JAGS.Controllers
 
             foreach (string s in listDetails)
             {
-                model.ScheduleType.Add(new CourseScheduleTypeList { ScheduleTypeID = counter, ScheduleTypeName = s });
+                model.ScheduleType.Add(new System.Web.Mvc.SelectListItem { Value = counter.ToString(), Text = s });
                 counter++;
             }
 
@@ -421,7 +421,7 @@ namespace JAGS.Controllers
             foreach (string s in directories)
             {
                 string[] tmp = s.Split("Schedules/");
-                model.Semester.Add(new ListOfSemesters { SemesterID = counter, SemesterNameFromDirectory = tmp[1] });
+                model.Semester.Add(new System.Web.Mvc.SelectListItem { Value = counter.ToString(), Text = tmp[1] });
                 counter++;
             }
 
@@ -435,7 +435,7 @@ namespace JAGS.Controllers
                 //<<<<<<< HEAD
                 //model.CourseList.Add(new ListOfCourses { CourseNumberID = fileCounter, CourseNameFromFile = path });//CourseNameFromFile = s.Remove(s.Length-4)});
                 //=======
-                model.CourseList.Add(new ListOfCourses { CourseNumberID = counter, CourseNameFromFile = path });//CourseNameFromFile = s.Remove(s.Length-4)});
+                //model.CourseList.Add(new ListOfCourses { CourseNumberID = counter, CourseNameFromFile = path });//CourseNameFromFile = s.Remove(s.Length-4)});
                                                                                                                 //>>>>>>> J-branch
             }
 

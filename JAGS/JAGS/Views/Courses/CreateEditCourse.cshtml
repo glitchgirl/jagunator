@@ -35,7 +35,7 @@
             <div class="col-md-3" id="CECourseSubject">
                 @Html.TextBoxFor(a => a.CourseSubject, new { @id = "textSubjectID", @class = "hidden" })
                 @Html.ValidationMessageFor(a => a.CourseSubject, null, new { @class = "text-danger" })
-                @Html.DropDownListFor(a => a.CourseSubject, new SelectList(Model.Subject, "CourseSubjectID", "SubjectCode"), "Select Subject", new { @id = "subjectID", @class = "form-control" })
+                @Html.DropDownListFor(a => a.CourseSubject, new SelectList(Model.SubjectList, "Value", "Text"), "Select Subject", new { @id = "subjectID", @class = "form-control" })
             </div>
             <label for="CourseName" class="col-md-3 text-right">Course Name</label>
             <div class="col-md-3" id="CECourseName">
@@ -49,7 +49,7 @@
         <div class="row">
             <label for="CourseIDDD" class="col-md-3 text-right">Course ID</label>
             <div class="col-md-3" id="CECourseSubject">
-                @Html.DropDownListFor(a => a.CourseIDList, new SelectList(Model.CourseIDList, "CourseListID", "CourseIDForSchedule"), "Select ID", new { @class = "form-control", @id = "CourseListID" })
+                @Html.DropDownListFor(a => a.CourseIDDummy, new SelectList(Model.CourseList, "Value", "Text"), "Select ID", new { @class = "form-control", @id = "CourseListID" })
             </div>
 
 
@@ -65,7 +65,7 @@
             <label for="CourseCreditHours" class="col-md-3 text-right">Credit Hours</label>
             <div class="col-md-3" id="CECourseCredit">
                 @Html.TextBoxFor(a => a.CreditHours, new { @id = "CreditHours", @class = "hidden" })
-                @Html.DropDownListFor(a => a.CreditHours, new SelectList(Model.CourseCreditList, "CreditID", "CreditAmount"), "Select Credit Hours", new { @class = "form-control", @id = "CourseCreditHours" })
+                @Html.DropDownListFor(a => a.CreditHours, new SelectList(Model.CourseCreditList, "Value", "Text"), "Select Credit Hours", new { @class = "form-control", @id = "CourseCreditHours" })
             </div>
         </div>
 
@@ -87,19 +87,19 @@
             <label for="Semester" class="col-md-3 text-right">Semester</label>
             <div class="col-md-3" id="Semester">
                 @Html.TextBoxFor(a => a.sectionSemester, new { @id = "sectionSemester", @class = "hidden" })
-                @Html.DropDownListFor(a => a.sectionSemester, new SelectList(Model.Semester, "SemesterID", "SemesterNameFromDirectory"), "Select Semester", new { @class = "form-control", @id = "SemesterSelection" })
+                @Html.DropDownListFor(a => a.sectionSemester, new SelectList(Model.Semester, "Value", "Text"), "Select Semester", new { @class = "form-control", @id = "SemesterSelection" })
             </div>
             <label for="CampusLocation" class="col-md-3 text-right">Campus Location</label>
             <div class="col-md-3" id="CECampus">
                 @Html.TextBoxFor(a => a.CampusLocation, new { @id = "CampusLocation", @class = "hidden" })
-                @Html.DropDownListFor(a => a.CampusLocation, new SelectList(Model.CampusNames, "CampusID", "CampusName"), "Select Campus", new { @class = "form-control", @id = "CampusSelection" })
+                @Html.DropDownListFor(a => a.CampusLocation, new SelectList(Model.CampusNames, "Value", "Text"), "Select Campus", new { @class = "form-control", @id = "CampusSelection" })
             </div>
          </div>
         <br />
         <div class="row">
             <label for = "Section" class="col-md-3 text-right">Section</label>
             <div class="col-md-3" id="sectionDropDown">
-                @Html.DropDownListFor(a => a.CourseSectionList, new SelectList(Model.CourseSectionList, "CourseSectionID", "SectionName"), "Select Section", new {@class="form-control", @id="SectionSelection"})
+                @Html.DropDownListFor(a => a.CourseSectionList, new SelectList(Model.CourseSectionList, "Value", "Text"), "Select Section", new {@class="form-control", @id="SectionSelection"})
             </div>
             <label for="SectionText" class="col-md-3 text-right">Section</label>
             <div class="col-md-3" id="SectionText">
@@ -111,12 +111,12 @@
             <label for="InstructorName" class="col-md-3 text-right">Instructor Name</label>
             <div class="col-md-3" id="CEInstructorName">
                 @Html.TextBoxFor(a => a.IntructorName, new { @id = "InstructorName", @class = "hidden" })
-                @Html.DropDownListFor(a => a.IntructorName, new SelectList(Model.ListOfInstructors, "InstructorListID", "InstructorName"), "Select Instructor", new { @class = "form-control", @id = "InstructorSelection" })
+                @Html.DropDownListFor(a => a.IntructorName, new SelectList(Model.ListOfInstructors, "Value", "Text"), "Select Instructor", new { @class = "form-control", @id = "InstructorSelection" })
             </div>
             <label for="ScheduleType" class="col-md-3 text-right">Schedule Type</label>
             <div class="col-md-3" id="CEScheduleTpye">
                 @Html.TextBoxFor(a => a.ScheduleAtt, new { @id = "ScheduleAtt", @class = "hidden" })
-                @Html.DropDownListFor(a => a.ScheduleAtt, new SelectList(Model.ScheduleType, "ScheduleTypeID", "ScheduleTypeName"), "Select Schedule Type", new { @class = "form-control", @id = "ScheduleSelection" })
+                @Html.DropDownListFor(a => a.ScheduleAtt, new SelectList(Model.ScheduleType, "Value", "Text"), "Select Schedule Type", new { @class = "form-control", @id = "ScheduleSelection" })
             </div>
         </div>
 
@@ -136,7 +136,20 @@
 <script type="text/javascript">
     $(function () {
         $('#subjectID').change(function () {
-            if ($('#subjectID option:selected').text() !== 'Select Subject') {
+            var val = ($("#subjectID option:selected").text());
+            var subItems = "<option value='0'>" + 'Select Course ID' + '</option>';
+
+            $.getJSON("@Url.Action("GetCourses","Courses")", { id: val }, function (res) {
+                $.each(res.data.items,function(index, item){
+                    subItems += "<option value='" + item.value + "'>" + item.text + "</option>"
+
+                });
+
+                $("#CourseListID").html(subItems);
+            });
+
+            if ($('#subjectID option:selected').text() !== 'Select Subject')
+            {
                 var selected = $('#subjectID option:selected').text();
                 $('#textSubjectID').val(selected);
             }
@@ -151,10 +164,9 @@
         });
 
         $('#CourseListID').change(function () {
-            if ($('#CourseListID option:selected').text() !== 'Select ID') {
+            if ($('#CourseListID option:selected').text() !== 'Select Course ID') {
                 //var selected = window.location.protocol + '//' + window.location.host + '/' + 'Home/Data/Courses/' + $('#CourseList option:selected').text() + '.csv';
-                var selected = $('#CourseListID option:selected').text();
-
+                var selected = $("#subjectID option:selected").text() + "_" + $('#CourseListID option:selected').text();
                 $.post("@Url.Action("GetCourseValues", "Courses")?val=" + selected, function (res) {
                     if (res.success === "true") {
 
@@ -175,7 +187,7 @@
                 //$('input[name=ClassSize][value=' + 0 + ']').prop('checked', true);
             }
         });
-            
+
 
         $('#SemesterSelection').change(function () {
             if ($('#SemesterSelection option:selected').text() !== 'Select Semester') {

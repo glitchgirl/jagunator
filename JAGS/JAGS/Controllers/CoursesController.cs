@@ -15,6 +15,8 @@ using System.Web.Optimization;
 //using Environment;
 using static Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment;
 using System.IO;
+using System.Web.Mvc;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Session;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -27,7 +29,7 @@ namespace JAGS.Controllers
         const string SessionUserPass = "_Pass";
         const string SessionUserType = "_Type";
 
-        [HttpGet]
+        [Microsoft.AspNetCore.Mvc.HttpGet]
         public IActionResult CreateEditCourse()
         {
 
@@ -40,6 +42,7 @@ namespace JAGS.Controllers
 
             //CampusLocation Load into model
             var model = new CourseInfo();
+
             var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/CampusLocations.csv";
             if (System.IO.File.Exists(filepath))
             {
@@ -58,7 +61,7 @@ namespace JAGS.Controllers
 
             foreach (string s in listDetails)
             {
-                model.CampusNames.Add(new CourseCampusLocation { CampusID = counter, CampusName = s });
+                model.CampusNames.Add(new SelectListItem { Value = counter.ToString(), Text = s });
                 counter++;
             }
 
@@ -83,7 +86,7 @@ namespace JAGS.Controllers
 
             foreach (string s in listDetails)
             {
-                model.ScheduleType.Add(new CourseScheduleTypeList { ScheduleTypeID = counter, ScheduleTypeName = s });
+                model.ScheduleType.Add(new SelectListItem { Value = counter.ToString(), Text = s });
                 counter++;
             }
 
@@ -94,7 +97,7 @@ namespace JAGS.Controllers
             foreach (string s in directories)
             {
                 string[] tmp = s.Split("Schedules/");
-                model.Semester.Add(new ListOfSemesters { SemesterID = counter, SemesterNameFromDirectory = tmp[1] });
+                model.Semester.Add(new SelectListItem { Value = counter.ToString(), Text = tmp[1] });
                 counter++;
             }
 
@@ -116,9 +119,17 @@ namespace JAGS.Controllers
             {
                 listDetails = new string[0];
             }
+
+            //THIS IS NEEDED HERE
+            model.SubjectList = new List<System.Web.Mvc.SelectListItem>();
             foreach (string s in listDetails)
             {
-                model.Subject.Add(new CourseSubjectModel { CourseSubjectID = counter, SubjectCode = s });
+                //TRYING NEW FOR DYNAMIC LOADING
+                model.SubjectList.Add(new System.Web.Mvc.SelectListItem { Value = counter.ToString(), Text = s });
+
+
+                //THIS IS OLD ONE
+                //model.Subject.Add(new CourseSubjectModel { CourseSubjectID = counter, SubjectCode = s });
                 counter++;
             }
 
@@ -142,7 +153,7 @@ namespace JAGS.Controllers
             }
             foreach (string s in listDetails)
             {
-                model.CourseCreditList.Add(new CourseCreditModel { CreditID = counter, CreditAmount = s });
+                model.CourseCreditList.Add(new SelectListItem { Value = counter.ToString(), Text = s });
                 counter++;
             }
 
@@ -153,30 +164,9 @@ namespace JAGS.Controllers
             pos = filepath.LastIndexOf("/") + 1;
             foreach (string s in listDetails)
             {
-                model.ListOfInstructors.Add(new CourseInstructorModel { InstructorListID = counter, InstructorName = s.Substring(pos, s.Length - pos - 4) });
+                model.ListOfInstructors.Add(new SelectListItem { Value = counter.ToString(), Text = s.Substring(pos, s.Length - pos - 4) });
                 counter++;
             }
-
-
-            //Load courses 
-
-            //* Trying a new way to load these,
-            //* this list can get very large so I would
-            //* rather only load what needs to be loaded
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/";
-            counter = 0;
-            listDetails = Directory.GetFiles(filepath);
-            pos = filepath.LastIndexOf("/") + 1;
-            foreach (string s in listDetails)
-            {
-                model.CourseIDList.Add(new CourseIDModel { CourseListID = counter, CourseIDForSchedule = s.Substring(pos, s.Length - pos - 4) });
-                counter++;
-            }
-
-
-            //test
-            //model.CourseIDList.Add(new CourseIDModel { CourseListID = 0, CourseIDForSchedule = "" });
-
 
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
             ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
@@ -188,18 +178,11 @@ namespace JAGS.Controllers
 
 
         /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
 
 
 
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-
-
-        [HttpPost]
-        public ActionResult CreateEditCourse(CourseInfo model, string command)
+        [Microsoft.AspNetCore.Mvc.HttpPost]
+        public Microsoft.AspNetCore.Mvc.ActionResult CreateEditCourse(CourseInfo model, string command)
         {
             //IF COURSE SAVE IS PRESSED
             if (command.Equals("Save Course"))
@@ -211,6 +194,8 @@ namespace JAGS.Controllers
                     ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
                     var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
                         + "Data/Courses/"
+                        + model.CourseSubject
+                        + "_"
                         + model.CourseID
                         + ".csv";
 
@@ -230,6 +215,8 @@ namespace JAGS.Controllers
 
                 var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
                             + "Data/Courses/"
+                            + model.CourseSubject
+                            + "_"
                             + model.CourseID
                             + ".csv";
 
@@ -299,58 +286,12 @@ namespace JAGS.Controllers
             return RedirectToAction("CreateEditCourse", model);
         }
 
-        [HttpPost]
-        public ActionResult SaveCourse(CourseInfo model)
-        {
-            //IF COURSE SAVE IS PRESSED
 
-            if (ModelState.IsValid)
-            {
-
-                ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
-                ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
-                var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
-                    + "Data/Courses/"
-                    + model.CourseID
-                    + ".csv";
-
-                if (System.IO.File.Exists(filepath))
-                {
-                    System.IO.File.Delete(filepath);
-                }
-                var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;  //create csv string to write out
-                System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
-
-
-            }
-
-            return this.View(model);
-            //return RedirectToAction("CreateEditCourse", model);
-        }
-
-        [HttpPost]
-        public ActionResult DeleteCourse(CourseInfo model)
-        {
-            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
-            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
-
-            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
-                        + "Data/Courses/"
-                        + model.CourseID
-                        + ".csv";
-
-            if (System.IO.File.Exists(filepath))
-            {
-                System.IO.File.Delete(filepath);
-            }
-
-            return RedirectToAction("CreateEditCourse", model);
-        }
 
         /*-----------------------------------------------------------------------------------------------------------------*/
 
-        [HttpPost]
-        public ActionResult GetCourseValues(string val)
+        [Microsoft.AspNetCore.Mvc.HttpPost]
+        public Microsoft.AspNetCore.Mvc.ActionResult GetCourseValues(string val)
         {
             String[] row;
             StreamReader readFile;
@@ -387,9 +328,11 @@ namespace JAGS.Controllers
         }
 
 
+        /*-----------------------------------------------------------------------------------------------------------------*/
 
-        [HttpPost]
-        public ActionResult SaveSection(CourseInfo model)
+
+        [Microsoft.AspNetCore.Mvc.HttpPost]
+        public Microsoft.AspNetCore.Mvc.ActionResult SaveSection(CourseInfo model)
         {
             if (ModelState.IsValid)
             {
@@ -429,8 +372,8 @@ namespace JAGS.Controllers
         }
 
         /*-----------------------------------------------------------------------------------------------------------------*/
-        [HttpPost]
-        public ActionResult DeleteSection(CourseInfo model)
+        [Microsoft.AspNetCore.Mvc.HttpPost]
+        public Microsoft.AspNetCore.Mvc.ActionResult DeleteSection(CourseInfo model)
         {
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
             ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
@@ -454,7 +397,38 @@ namespace JAGS.Controllers
             return RedirectToAction("CreateEditCourse", model);
         }
 
+        public Microsoft.AspNetCore.Mvc.ActionResult GetCourses(string id)
+        {
+            List<System.Web.Mvc.SelectListItem> items = new List<System.Web.Mvc.SelectListItem>();
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
+                + "/Data/Courses/";
+            string[] list = Directory.GetFiles(filepath);
+            int pos = filepath.LastIndexOf("/") + 1;
+            int counter = 0;
+            foreach (string s in list)
+            {
+                if (s.Contains(id))
+                {
+                    pos = s.LastIndexOf("_") + 1;
+                    items.Add(new System.Web.Mvc.SelectListItem() { Text = s.Substring(pos, s.Length - pos-4), Value = counter.ToString() });
+                    counter++;
+                }
+            }
 
+            //return new System.Web.Mvc.JsonResult() {Data = items, JsonRequestBehavior = JsonRequestBehavior.AllowGet };   
+
+
+
+            return Json(new
+            {
+                Success = "true",
+                Data = new
+                {
+                    items
+                },
+                JsonRequestBehavior.AllowGet
+            });
+        }
 
     }
 }
