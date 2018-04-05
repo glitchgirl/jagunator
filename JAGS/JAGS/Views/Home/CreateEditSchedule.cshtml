@@ -88,7 +88,10 @@
       $('#SaveButton').click(function()
         {
             alert("SUCCESS");
-            var Array = $('#calendar').fullCalendar(‘clientEvents’)
+            //var calNode = document.getElementByID('calendar');
+
+            var CalendarEvents = $("#calendar").fullCalendar("clientEvents");
+            alert(CalendarEvents[0].title);
         });
 
 
