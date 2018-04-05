@@ -28,6 +28,8 @@
 <script src="~/js/moment.min.js"></script>
 <script src="~/js/fullcalendar.js"></script>
 <script src="~/js/site.js"></script>
+@*<script src="http://underscorejs.org/underscore-min.js"</script>*@
+
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.2/fullcalendar.min.css">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -64,9 +66,91 @@
     </div>
         <br>
     <div class="scheduleButtons">
+        <input type="button" value="Save" id="SaveButton"><br>
         <input type="button" value="Clear"><br>
         <input type="button" value="Export schedule"><br>
     </div>
  <div class="scheduleErrors">
         Conflicts 
     </div>
+
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
+<script>
+  //function myFunction(){
+  //  alert("hello world");
+  //  var Array = $('#calendar').fullCalendar(‘clientEvents’);
+    //alert(Array[0].title);
+  //  };
+</script>            
+<script type="text/javascript">
+ $(function()
+ {    
+      $('#SaveButton').click(function()
+        {
+            alert("SUCCESS");
+            //var calNode = document.getElementByID('calendar');
+
+            var CalendarEvents = $("#calendar").fullCalendar("clientEvents");
+            alert(CalendarEvents[0].title);
+        });
+
+
+      //execute on change of semester drop down
+      $("#Semester").change(function() 
+        {
+                //alert("it works");
+                //get selected value from semester dropdown
+                var u = $("#Semester option:selected").text()             
+                //call getsectionvalues in homecontroller and pass value selected
+                $.post("@Url.Action("GetSectionValues", "Home")?val=" + u, function(res) 
+                {
+                    //var JSsections = '@ViewBag.sections'
+                    //if function suceeds then do the following
+                    if (res.success === "true") 
+                    {
+                        //alert(res.data);
+                        //parse data from return
+                        var resultjson = JSON.parse(res.data);
+
+                        //remove all external event divs
+                        var myNode = document.getElementById('external-events-listing');
+                        while (myNode.firstChild) {
+                            myNode.removeChild(myNode.firstChild);
+                        }
+                        //get element for which we are going to append div items
+                        var externalevents = document.getElementById('external-events-listing');
+                        //create div for each section
+                        for(i in resultjson) {
+                            var innerdiv = document.createElement("div");
+                            innerdiv.className = "fc-event";
+                            innerdiv.innerHTML = resultjson[i];
+                            //alert(resultjson[i]);
+                            var externalevents = document.getElementById('external-events-listing')
+                            externalevents.appendChild(innerdiv);
+                            };
+
+                        $('#external-events .fc-event').each(function() {
+
+                        // store data so the calendar knows to render an event upon drop
+                        $(this).data('event', {
+                            title: $.trim($(this).text()), // use the element's text as the event title
+                            stick: true // maintain when user navigates (see docs on the renderEvent method)
+                            });
+
+                        // make the event draggable using jQuery UI
+                        $(this).draggable({
+                        zIndex: 999,
+                        revert: true,      // will cause the event to go back to its
+                        revertDuration: 0  //  original position after the drag
+                            });
+
+                        });
+                    } 
+                    else 
+                    {
+                        alert("Error getting data!");
+                    }
+                });
+        });
+ });
+</script>

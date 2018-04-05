@@ -38,7 +38,7 @@
             </div>
             <div class="editor-field">
                 @Html.PasswordFor(model => model.Password)
-                @*Html.ValidationMessageFor(model => model.Password)*@
+                @Html.ValidationMessageFor(model => model.Password)
             </div>
             <div class="editor-label">
                 @Html.LabelFor(model => model.Type)
@@ -52,13 +52,9 @@
                 @Html.RadioButtonFor(model => model.Type, 2, new { id = "Option2", data_val = "true", data_val_required = "Please select one option." })
                 <label for="Option2">Viewer</label>
 
-
-                
-                @*Html.RadioButtonFor(model => model.Type, true) <text>Admin</text>
-                @Html.RadioButtonFor(model => model.Type, false) <text>Viewer</text>*@
             </div>
-            <input type="submit" name="CreateEdit" value="CreateEdit" formaction=@Url.Action("CreateEditUser") formmethod="post" class="btn btn-primary" />
-            <input type="submit" name="CreateEdit" value="Delete" formaction@Url.Action("CreateEditUser") formmethod="post" class="btn btn-primary" />
+            <input type="submit" name="CreateEdit" value="Create/Edit" formaction=@Url.Action("CreateEditUser") formmethod="post" class="btn btn-primary" />
+            <input type="submit" name="CreateEdit" value="Delete" formaction=@Url.Action("CreateEditUser") formmethod="post" class="btn btn-primary" />
         </fieldset>
     </div>
 </form>

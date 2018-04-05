@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using JAGS.Models;
 using Microsoft.AspNetCore.Razor;
 using System.Web.Optimization;
+using Newtonsoft.Json;
 //using System.Web
 //using static System.Web.Mvc.SelectListItem;
 //using System.Web.Hosting;
@@ -45,6 +46,7 @@ namespace JAGS.Controllers
         }
 
         /*------------------------------------------------------------------------------------------------------------------*/
+
 
 
         
@@ -100,52 +102,64 @@ namespace JAGS.Controllers
         [HttpPost("CreateEditUser")]
         public ActionResult CreateEditUser(UserModel model, string CreateEdit)
         {
+            String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
+            string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
+            int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
+            var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "user" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            ViewBag.listusers = listofusers;
             //ViewBag.debugtext = "Entered createedituser after button";
             switch (CreateEdit)
             {   
-                case "CreateEdit":
-                    //ViewBag.debugtext = "entered createedit case";
-                    ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
-                    ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
-                    var usertype = "";
-                            
-                    var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Username + ".csv";  //get absolute file path for possible user file
-                    if (System.IO.File.Exists(filepath))   //check if user csv file exists
+                case "Create/Edit":
+                    if (model.IsValid(model.Username,model.Password))
                     {
-                        System.IO.File.Delete(filepath);   //delete user file if it exists
-                    }
-                    if (model.Type == 0)  //get text value of user type
-                    {
-                        usertype = "0";
-                    }
-                    else if (model.Type == 1)
-                    {
-                        usertype = "1";
-                    }
-                    else
-                    {
-                        usertype = "2";
-                    }
+                        //ViewBag.debugtext = "entered createedit case";
+                        ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+                        ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+                        var usertype = "";
 
-                    var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype;  //create csv string to write out
-                    System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
-                        
-                    String filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
-                    string[] fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
-                    int pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
-                    var listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "user" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
-                    ViewBag.listusers = listofusers;
-                    return View();
+                        var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Username + ".csv";  //get absolute file path for possible user file
+                        if (System.IO.File.Exists(filepath))   //check if user csv file exists
+                        {
+                            System.IO.File.Delete(filepath);   //delete user file if it exists
+                        }
+                        if (model.Type == 0)  //get text value of user type
+                        {
+                            usertype = "0";
+                        }
+                        else if (model.Type == 1)
+                        {
+                            usertype = "1";
+                        }
+                        else
+                        {
+                            usertype = "2";
+                        }
+                        if (model.Password == null)
+                        {
+                            model.Password = "";
+                        }
+                        var csv = model.Username.ToString() + "," + model.Password.ToString() + "," + usertype;  //create csv string to write out
+                        System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
+
+                        filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
+                        fileEntries = Directory.GetFiles(filepathusers);  //get array of files in user directory
+                        pos = filepathusers.LastIndexOf("/") + 1;  //get position of last slash
+                        listofusers = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "user" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+                        ViewBag.listusers = listofusers;
+                        return View("CreateEditUser");
+                    }
+                    break;
 
                 case "Delete":
                     //ViewBag.debugtext = "entered delete case";
                     ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
                     ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
 
-                    filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Username + ".csv";  //get absolute file path for possible user file
-                    if (System.IO.File.Exists(filepath))   //check if user csv file exists
+                    filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/" + model.Username + ".csv";  //get absolute file path for possible user file
+                    if (System.IO.File.Exists(filepathusers))   //check if user csv file exists
                     {
-                        System.IO.File.Delete(filepath);   //delete user file if it exists
+                        System.IO.File.Delete(filepathusers);   //delete user file if it exists
                     }
 
                     filepathusers = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Users/";  //get file path for users folder
@@ -159,12 +173,17 @@ namespace JAGS.Controllers
                     return View();
 
              }
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
+            return View();
 
         }
 
         /*------------------------------------------------------------------------------------------------------------------*/
 
-        [HttpPost("CreateEditFaculty")]
+        //[HttpPost("Home/CreateEditFaculty")]
+        [HttpPost]
+        //[HttpGet("[controller]/[action]")]
         public ActionResult CreateEditFaculty(FacultyModel model, string CreateEdit)
         {
             ViewBag.debugtext = "entered createeditfacutly";
@@ -234,8 +253,9 @@ namespace JAGS.Controllers
 
         /*------------------------------------------------------------------------------------------------------------------*/
 
-        public IActionResult CreateEditFaculty()
+        public ActionResult CreateEditFaculty()
         {
+            //var model = new FacultyModel();
             ViewBag.debugtext = "create edit faculty";
             ViewBag.Jsonstr = "";
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
@@ -246,7 +266,7 @@ namespace JAGS.Controllers
             int pos = filepathfac.LastIndexOf("/") + 1;  //get position of last slash
             var listoffac = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "fac" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
             ViewBag.listfac = listoffac;
-            return View("CreateEditFaculty");
+            return View();
         }
 
         /*------------------------------------------------------------------------------------------------------------------*/
@@ -274,7 +294,24 @@ namespace JAGS.Controllers
 
         /*------------------------------------------------------------------------------------------------------------------*/
 
-        
+        [HttpPost]
+        public ActionResult GetSectionValues(string val)
+        {
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + val + "/";
+            var files = System.IO.Directory.GetFiles(filepath).Select(Path.GetFileNameWithoutExtension);
+            if (files.Count() > 0)   //check if user csv file exists
+            {
+                ViewBag.sections = files;
+                var sections = JsonConvert.SerializeObject(files);
+                return Json(new { Success = "true", Data = sections });
+            }
+            else
+            {
+                return Json(new { Success = "false" });
+            }
+            ViewBag.sections = files;
+            return Json(new { Success = "true" });
+        }
 
 
         /*------------------------------------------------------------------------------------------------------------------*/
@@ -408,247 +445,6 @@ namespace JAGS.Controllers
 
 
         }//createeditschedule
-
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*
-        [HttpGet]
-        public IActionResult CreateEditCourse()
-        {
-
-            string[] listDetails;
-            string data;
-            string[] directories;
-            int counter = 0;
-            int pos;
-            StreamReader readFile;
-
-            //CampusLocation Load into model
-            var model = new CourseInfo();
-            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/CampusLocations.csv";
-            if (System.IO.File.Exists(filepath))
-            {
-                readFile = new StreamReader(filepath);
-                data = readFile.ReadLine();
-                listDetails = data.Split(',');
-                readFile.Close();
-            }
-            else
-            {
-                listDetails = new string[0];
-            }
-
-            foreach (string s in listDetails)
-            {
-                model.CampusNames.Add(new CourseCampusLocation { CampusID = counter, CampusName = s });
-                counter++;
-            }
-
-            //ScheduleType Load into model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/ScheduleType.csv";
-            counter = 0;
-            if (System.IO.File.Exists(filepath))
-            {
-                readFile = new StreamReader(filepath);
-                data = readFile.ReadLine();
-                listDetails = data.Split(',');
-                readFile.Close();
-
-            }
-            else
-            {
-                listDetails = new string[0];
-            }
-
-            foreach (string s in listDetails)
-            {
-                model.ScheduleType.Add(new CourseScheduleTypeList { ScheduleTypeID = counter, ScheduleTypeName = s });
-                counter++;
-            }
-
-            //Semester Load into model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/";
-            directories = Directory.GetDirectories(filepath);
-            counter = 0;
-            foreach (string s in directories)
-            {
-                string[] tmp = s.Split("Schedules/");
-                model.Semester.Add(new ListOfSemesters { SemesterID = counter, SemesterNameFromDirectory = tmp[1] });
-                counter++;
-            }
-
-
-            //Course Subject Load into model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/Subject.csv";
-            counter = 0;
-            if (System.IO.File.Exists(filepath))
-            {
-                readFile = new StreamReader(filepath);
-                data = readFile.ReadLine();
-                listDetails = data.Split(',');
-                readFile.Close();
-            }
-            else
-            {
-                listDetails = new string[0];
-            }
-            foreach (string s in listDetails)
-            {
-                model.Subject.Add(new CourseSubjectModel { CourseSubjectID = counter, SubjectCode = s });
-                counter++;
-            }
-
-
-            //Course Credit Hours Load into model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/CreditHours.csv";
-            counter = 0;
-            if (System.IO.File.Exists(filepath))
-            {
-                readFile = new StreamReader(filepath);
-                data = readFile.ReadLine();
-                listDetails = data.Split(',');
-                readFile.Close();
-            }
-            else
-            {
-                listDetails = new string[0];
-            }
-            foreach (string s in listDetails)
-            {
-                model.CourseCreditList.Add(new CourseCreditModel { CreditID = counter, CreditAmount = s });
-                counter++;
-            }
-
-            //Load Faculty into Model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";
-            counter = 0;
-            listDetails = Directory.GetFiles(filepath);
-            pos = filepath.LastIndexOf("/") + 1;
-            foreach (string s in listDetails)
-            {
-                model.ListOfInstructors.Add(new CourseInstructorModel { InstructorListID = counter, InstructorName = s.Substring(pos, s.Length - pos-4)});
-                counter++;
-            }
-
-
-            //Load courses 
-             
-             //* Trying a new way to load these,
-             //* this list can get very large so I would
-             //* rather only load what needs to be loaded
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/";
-            counter = 0;
-            listDetails = Directory.GetFiles(filepath);
-            pos = filepath.LastIndexOf("/") + 1;
-            foreach (string s in listDetails)
-            {
-                model.CourseIDList.Add(new CourseIDModel { CourseListID = counter, CourseIDForSchedule = s.Substring(pos, s.Length - pos - 4) });
-                counter++;
-            }
-            
-
-            //test
-            //model.CourseIDList.Add(new CourseIDModel { CourseListID = 0, CourseIDForSchedule = "" });
-
-
-            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);
-            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
-            return View(model);
-        }
-        */
-
-        /*------------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-
-        /*
-        [HttpPost]
-        public ActionResult CreateEditCourse(CourseInfo model,string submit)
-        {
-            //IF COURSE SAVE IS PRESSED
-            if (string.IsNullOrEmpty(submit))
-            {
-                if (ModelState.IsValid)
-                {
-
-                    ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
-                    ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
-
-                    var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
-                        + "Data/Courses/"
-                        + model.CourseID
-                        + ".csv";
-
-                    if (System.IO.File.Exists(filepath))
-                    {
-                        System.IO.File.Delete(filepath);
-                    }
-
-                    var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;  //create csv string to write out
-                    System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
-
-                    return RedirectToAction("CreateEditCourse", model);
-                }
-                else
-                    return RedirectToAction("CreateEditCourse", model);
-            }
-            //ELSE SAVE SECTION IS PRESSED
-            else
-                return RedirectToAction("CreateEditCourse", model);
-        }
-
-        */
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-
-        /*------------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-
-        /*
-        [HttpPost]
-        public ActionResult GetCourseValues(string val)
-        {
-            String[] row;
-            StreamReader readFile;
-            string line;
-            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Courses/" + val + ".csv";
-            if (System.IO.File.Exists(filepath))   //check if user csv file exists
-            {
-                readFile = new StreamReader(filepath);
-                line = readFile.ReadLine();
-                row = line.Split(',');
-                readFile.Close();
-            }
-            else
-            {
-                return Json(new { Success = "false" });
-            }
-
-            //ViewBag.reached = 1;
-            return Json(new
-            {
-                Success = "true",
-                Data = new
-                {
-                    CourseSubject = row[0],
-                    CourseID = row[1],
-                    CourseName = row[2],
-                    CourseCredit = row[3],
-                }
-            });
-            
-        }
-        */
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------------------*/
 
     }//class
 }//namespace

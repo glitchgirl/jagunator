@@ -16,9 +16,7 @@
 @using Microsoft.AspNetCore.Mvc; 
 @using Microsoft.AspNetCore.Http;
 @model JAGS.Models.FacultyModel
-<p> Hello, @ViewBag.loginname</p>
-<h2>Create/Edit User</h2>
-<p>@ViewBag.debugtext</p>
+<h2>Create/Edit Faculty</h2>
 <form>
     <div class="userform">
         <fieldset>
@@ -38,7 +36,7 @@
             </div>
             <div class="editor-field">
                 @Html.TextBoxFor(model => model.Facultytitle)
-                @Html.ValidationMessageFor(model => model.Facultytitle)
+                @*@Html.ValidationMessageFor(model => model.Facultytitle)*@
             </div>
             <div class="editor-label">
                 @Html.LabelFor(model => model.Facultytype)
@@ -76,7 +74,7 @@
                 {
                     if (res.success === "true") 
                     {
-                        //alert(res.data.factype)
+                        alert(ViewBag.sections)
                         $("#Facultyname").val(u);
                         if (res.data.factype === "0")
                         {
