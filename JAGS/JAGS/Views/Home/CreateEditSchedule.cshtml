@@ -66,6 +66,7 @@
     </div>
         <br>
     <div class="scheduleButtons">
+        <input type="button" value="Save" id="SaveButton"><br>
         <input type="button" value="Clear"><br>
         <input type="button" value="Export schedule"><br>
     </div>
@@ -74,9 +75,24 @@
     </div>
 
 @*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
+<script>
+  //function myFunction(){
+  //  alert("hello world");
+  //  var Array = $('#calendar').fullCalendar(‘clientEvents’);
+    //alert(Array[0].title);
+  //  };
+</script>            
 <script type="text/javascript">
  $(function()
- {
+ {    
+      $('#SaveButton').click(function()
+        {
+            alert("SUCCESS");
+            var Array = $('#calendar').fullCalendar(‘clientEvents’)
+        });
+
+
+      //execute on change of semester drop down
       $("#Semester").change(function() 
         {
                 //alert("it works");

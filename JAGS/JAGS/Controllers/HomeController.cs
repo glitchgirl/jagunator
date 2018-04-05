@@ -181,7 +181,8 @@ namespace JAGS.Controllers
 
         /*------------------------------------------------------------------------------------------------------------------*/
 
-        [HttpPost("Home/CreateEditFaculty")]
+        //[HttpPost("Home/CreateEditFaculty")]
+        [HttpPost]
         //[HttpGet("[controller]/[action]")]
         public ActionResult CreateEditFaculty(FacultyModel model, string CreateEdit)
         {
@@ -252,7 +253,7 @@ namespace JAGS.Controllers
 
         /*------------------------------------------------------------------------------------------------------------------*/
 
-        public IActionResult CreateEditFaculty()
+        public ActionResult CreateEditFaculty()
         {
             //var model = new FacultyModel();
             ViewBag.debugtext = "create edit faculty";
@@ -265,7 +266,7 @@ namespace JAGS.Controllers
             int pos = filepathfac.LastIndexOf("/") + 1;  //get position of last slash
             var listoffac = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "fac" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
             ViewBag.listfac = listoffac;
-            return View("CreateEditFaculty");
+            return View();
         }
 
         /*------------------------------------------------------------------------------------------------------------------*/
