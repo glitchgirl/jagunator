@@ -40,7 +40,7 @@
     <div class="SemesterAndLabel">
     <label for="Semester">Semester</label>
         <div class="text-center" id="Semester">
-            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "SemesterID","SemesterNameFromDirectory"), "Select Semester", new {@class="form-control"})
+            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "Value","Text"), "Select Semester", new {@class="form-control"})
         </div>
          <!--TODO: Add dropdown for subject-->     
                 <div id='wrap'>
