@@ -27,6 +27,7 @@
 
         $('#calendar').fullCalendar({
             header: false,
+            defaultDate: moment("2018-07-01"),
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar
             dragRevertDuration: 0,
