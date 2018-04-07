@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+//using System.Web.Script.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -315,6 +316,22 @@ namespace JAGS.Controllers
 
 
         /*------------------------------------------------------------------------------------------------------------------*/
+
+
+        [HttpPost]
+        public ActionResult SaveSemesterValues(string val)
+        {
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/";
+            Debug.WriteLine(val);
+            var semesterevents = JsonConvert.DeserializeObject(val);
+            Debug.WriteLine(semesterevents);
+            return Json(new { Success = "true" });
+        }
+
+
+        /*------------------------------------------------------------------------------------------------------------------*/
+
+
 
 
         [HttpPost]

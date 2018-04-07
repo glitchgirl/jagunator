@@ -87,12 +87,24 @@
  {    
       $('#SaveButton').click(function()
         {
-            alert("SUCCESS");
+            //alert("SUCCESS");
             //var calNode = document.getElementByID('calendar');
-
-            var CalendarEvents = $("#calendar").fullCalendar("clientEvents");
-            alert(CalendarEvents[0].title);
-            alert(CalendarEvents[0].start);
+            var name = $("#Semester option:selected").text();
+            //var semester = {
+                SEMname = $("#Semester option:selected").text();
+                calendarevents = $("#calendar").fullCalendar("clientEvents")
+                //alert(JSON.stringify(calendarevents[0]))
+                //};
+            let json = JSON.stringify($("#calendar").fullCalendar("clientEvents").map(e => ({
+                start: e.start,
+                end: e.end,
+                title: e.title,
+                name: SEMname
+            })));
+            //var CalendarEvents = $("#calendar").fullCalendar("clientEvents");
+            $.post("@Url.Action("SaveSemesterValues", "Home")?val=" + json, function(res){});
+            //alert(CalendarEvents[0].title);
+            //alert(CalendarEvents[0].start);
         });
 
 
@@ -135,7 +147,7 @@
                         // store data so the calendar knows to render an event upon drop
                         $(this).data('event', {
                             title: $.trim($(this).text()), // use the element's text as the event title
-                            stick: true // maintain when user navigates (see docs on the renderEvent method)
+                            stick: true, // maintain when user navigates (see docs on the renderEvent method)
                             });
 
                         // make the event draggable using jQuery UI
