@@ -53,6 +53,16 @@ namespace JAGS.Models
         public string ScheduleAtt { get; set; }
         public List<SelectListItem> ScheduleType { get; set; }
 
+        [Display(Name ="Cross-List")]
+        public string CrossListWith { get; set; }
+
+        [Display(Name ="Classroom Size")]
+        public string ClassroomSize { get; set; }
+        public List<SelectListItem> ClassroomSizeList { get; set; }
+
+        [Display(Name = "Classroom Type")]
+        public string ClassroomType;
+        public List<SelectListItem> ClassroomTypeList { get; set; }
 
         //[Display(Name = "Crosslist")]
         //public string CrossList_With { get; set; }
@@ -61,7 +71,6 @@ namespace JAGS.Models
         //Since no math is required for this and it is only for a visual representation, 
         //Credits are being made into a string so nop converstions are requried
 
-        public List<SelectListItem> ClassroomStudentSize { get; set; }
         public List<SelectListItem> Subject { get; set; }
         public List<SelectListItem> CourseSectionList { get; set; }
 
@@ -73,7 +82,8 @@ namespace JAGS.Models
             Semester = new List<SelectListItem>();
             Subject = new List<SelectListItem>();
             ListOfInstructors = new List<SelectListItem>();
-            ClassroomStudentSize = new List<SelectListItem>();
+            ClassroomSizeList = new List<SelectListItem>();
+            ClassroomTypeList = new List<SelectListItem>();
             CampusNames = new List<SelectListItem>();
             CourseSectionList = new List<SelectListItem>();
         }

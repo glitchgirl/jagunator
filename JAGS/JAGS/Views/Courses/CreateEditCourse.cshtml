@@ -67,6 +67,11 @@
                 @Html.TextBoxFor(a => a.CreditHours, new { @id = "CreditHours", @class = "hidden" })
                 @Html.DropDownListFor(a => a.CreditHours, new SelectList(Model.CourseCreditList, "Value", "Text"), "Select Credit Hours", new { @class = "form-control", @id = "CourseCreditHours" })
             </div>
+
+            <label for="CrossList" class="col-md-3 text-right">Cross-List</label>
+            <div class="col-md-3" id="CrossListWith">
+                @Html.TextBoxFor(a => a.CrossListWith, new { @class = "form-control", @id = "CrossListText" })
+            </div>
         </div>
 
         <br />
@@ -119,6 +124,19 @@
                 @Html.DropDownListFor(a => a.ScheduleAtt, new SelectList(Model.ScheduleType, "Value", "Text"), "Select Schedule Type", new { @class = "form-control", @id = "ScheduleSelection" })
             </div>
         </div>
+        <br />
+        <div class="row">
+            <label for="ClassRoomSize" class="col-md-3 text-right">Classroom Size</label>
+            <div class="col-md-3" id="CRSize">
+                @Html.TextBoxFor(a => a.ClassroomSize, new { @id = "ClassroomSizeText", @class = "hidden" })
+                @Html.DropDownListFor(a => a.ClassroomSize, new SelectList(Model.ClassroomSizeList, "Value", "Text"), "Select Classroom Size", new { @class = "form-control", @id = "ClassroomSize" })
+            </div>
+            <label for="ClassRoomType" class="col-md-3 text-right">Classroom Size</label>
+            <div class="col-md-3" id="CRType">
+                @Html.TextBoxFor(a => a.ClassroomType, new { @id = "ClassroomTypeText", @class = "hidden" })
+                @Html.DropDownListFor(a => a.ClassroomType, new SelectList(Model.ClassroomTypeList, "Value", "Text"), "Select Classroom Type", new { @class = "form-control", @id = "ClassroomType" })
+            </div>
+        </div>
 
         <br />
 
@@ -135,7 +153,12 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#subjectID').change(function () {
+        $('#subjectID').change(function ()
+        {
+            $('#CourseNameID').val("");
+            $('#CourseCreditHours').val("").attr('selected', false);
+            $('#CourseIDText').val("");
+            $('#CrossListText').val("");
             var val = ($("#subjectID option:selected").text());
             var subItems = "<option value='0'>" + 'Select Course ID' + '</option>';
 
@@ -165,31 +188,44 @@
 
         $('#CourseListID').change(function () {
             if ($('#CourseListID option:selected').text() !== 'Select Course ID') {
-                //var selected = window.location.protocol + '//' + window.location.host + '/' + 'Home/Data/Courses/' + $('#CourseList option:selected').text() + '.csv';
                 var selected = $("#subjectID option:selected").text() + "_" + $('#CourseListID option:selected').text();
                 $.post("@Url.Action("GetCourseValues", "Courses")?val=" + selected, function (res) {
-                    if (res.success === "true") {
-
+                    if (res.success === "true")
+                    {
                         $('#CourseNameID').val(res.data.courseName);
                         $('#CourseCreditHours').val(res.data.courseCredit - 1).attr('selected', true);
                         $('#CourseIDText').val(res.data.courseID);
                         $('#CreditHours').val(res.data.courseCredit);
-                        //$('input[name = CampusLocation][value = ' + res.data.campusName + ']').prop('checked', true);
-                        //$('input[name=ClassSize][value=' + res.data.classroomSize + ']').prop('checked', true);
+                        $('#CrossListText').val(res.data.crossList);
                     }
                 })
             }
-            else {
+            else
+            {
                 $('#CourseNameID').val("");
                 $('#CourseCreditHours').val("").attr('selected', false);
                 $('#CourseIDText').val("");
-                //$('input[name = CampusLocation][value = ' + 0 + ']').prop('checked', true);
-                //$('input[name=ClassSize][value=' + 0 + ']').prop('checked', true);
+                $('#CrossListText').val("");
             }
         });
 
 
         $('#SemesterSelection').change(function () {
+            var val = ($("#SemesterSelection option:selected").text())
+                + "?"
+                + ($("#subjectID option:selected").text())
+                + "_"
+                + ($('#CourseIDText').val());
+            var subItems = "<option value='0'>" + 'Select Semester' + '</option>';
+
+            $.getJSON("@Url.Action("GetSection","Courses")", { id: val }, function (res) {
+                $.each(res.data.items,function(index, item){
+                    subItems += "<option value='" + item.value + "'>" + item.text + "</option>"
+
+                });
+
+                $("#CourseSectionList").html(subItems);
+            });
             if ($('#SemesterSelection option:selected').text() !== 'Select Semester') {
                 var selected = $('#SemesterSelection option:selected').text();
                 $('#sectionSemester').val(selected);

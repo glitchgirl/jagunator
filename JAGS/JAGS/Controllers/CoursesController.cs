@@ -157,6 +157,55 @@ namespace JAGS.Controllers
                 counter++;
             }
 
+            //Load Classroom Size into Model
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/ClassroomSize.csv";
+            counter = 0;
+            if (System.IO.File.Exists(filepath))
+            {
+                readFile = new StreamReader(filepath);
+                data = readFile.ReadLine();
+                if (data != null && data.Contains(','))
+                    listDetails = data.Split(',');
+                else
+                    listDetails = new string[0];
+                readFile.Close();
+            }
+            else
+            {
+                listDetails = new string[0];
+            }
+
+            foreach (string s in listDetails)
+            {
+                model.ClassroomSizeList.Add(new SelectListItem { Value = counter.ToString(), Text = s });
+                counter++;
+            }
+
+            //Load Classroom Type into Model
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/ClassroomType.csv";
+            counter = 0;
+            if (System.IO.File.Exists(filepath))
+            {
+                readFile = new StreamReader(filepath);
+                data = readFile.ReadLine();
+                if (data != null && data.Contains(','))
+                    listDetails = data.Split(',');
+                else
+                    listDetails = new string[0];
+                readFile.Close();
+            }
+            else
+            {
+                listDetails = new string[0];
+            }
+
+            foreach (string s in listDetails)
+            {
+                model.ClassroomTypeList.Add(new SelectListItem { Value = counter.ToString(), Text = s });
+                counter++;
+            }
+
+
             //Load Faculty into Model
             filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";
             counter = 0;
@@ -203,7 +252,9 @@ namespace JAGS.Controllers
                     {
                         System.IO.File.Delete(filepath);
                     }
-                    var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;  //create csv string to write out
+                    var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;
+                    if (model.CrossListWith.ToString() != null)
+                        csv += "," + model.CrossListWith.ToString(); //create csv string to write out
                     System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
                 }
             }
@@ -313,17 +364,36 @@ namespace JAGS.Controllers
             }
 
             //ViewBag.reached = 1;
-            return Json(new
+
+            if (row.Length == 4)
             {
-                Success = "true",
-                Data = new
+                return Json(new
                 {
-                    CourseSubject = row[0],
-                    CourseID = row[1],
-                    CourseName = row[2],
-                    CourseCredit = row[3],
-                }
-            });
+                    Success = "true",
+                    Data = new
+                    {
+                        CourseSubject = row[0],
+                        CourseID = row[1],
+                        CourseName = row[2],
+                        CourseCredit = row[3]
+                    }
+                });
+            }
+            else
+            {
+                return Json(new
+                {
+                    Success = "true",
+                    Data = new
+                    {
+                        CourseSubject = row[0],
+                        CourseID = row[1],
+                        CourseName = row[2],
+                        CourseCredit = row[3],
+                        CrossList = row[4]
+                    }
+                });
+            }
 
         }
 
