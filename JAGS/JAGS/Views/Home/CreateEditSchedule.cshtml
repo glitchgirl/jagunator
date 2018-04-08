@@ -158,6 +158,39 @@
                             });
 
                         });
+                        $.post("@Url.Action("GetSemesterEvents", "Home")?val=" + u, function(res) 
+                        {
+                            alert(res.data);
+                            var retevents = JSON.parse(res.data);
+                            alert(retevents);
+                        });
+                        $('#calendar').fullCalendar({
+                            header: false,
+                            defaultDate: moment("2018-07-01"),
+                            editable: true,
+                            droppable: true, // this allows things to be dropped onto the calendar
+                            dragRevertDuration: 0,
+                            drop: function() {
+                                // is the "remove after drop" checkbox checked?
+                                if ($('#drop-remove').is(':checked')) {
+                                // if so, remove the element from the "Draggable Events" list
+                                $(this).remove();
+                                }
+                            },
+                        eventDragStop: function( event, jsEvent, ui, view ) {
+                
+                            if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
+                                $('#calendar').fullCalendar('removeEvents', event._id);
+                                var el = $( "<div class='fc-event'>" ).appendTo( '#external-events-listing' ).text( event.title );
+                                el.draggable({
+                                    zIndex: 999,
+                                    revert: true, 
+                                    revertDuration: 0 
+                                    });
+                                el.data('event', { title: event.title, id :event.id, stick: true });
+                                }
+                            }
+                        });
                     } 
                     else 
                     {
@@ -165,5 +198,7 @@
                     }
                 });
         });
+
+
  });
 </script>

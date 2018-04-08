@@ -21,6 +21,20 @@ using Microsoft.AspNetCore.Session;
 
 namespace JAGS.Controllers
 {
+    public class ReturnData
+    {
+        public string Success { get; set; }
+        public List<EventObject> Data { get; set; }
+    }
+    public class EventObject
+    {
+        public DateTime start { get; set; }
+        public DateTime end { get; set; }
+        public string title { get; set; }
+        public string name { get; set; }
+    }
+
+
     public class HomeController : Microsoft.AspNetCore.Mvc.Controller
     {
         const string SessionUserName = "_Name";
@@ -310,7 +324,7 @@ namespace JAGS.Controllers
             {
                 return Json(new { Success = "false" });
             }
-            ViewBag.sections = files;
+            //ViewBag.sections = files;
             return Json(new { Success = "true" });
         }
 
@@ -323,15 +337,43 @@ namespace JAGS.Controllers
         {
             var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/";
             Debug.WriteLine(val);
-            var semesterevents = JsonConvert.DeserializeObject(val);
-            Debug.WriteLine(semesterevents);
+            var semesterevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
+            Debug.WriteLine(semesterevents[0].name);
+            filepath = filepath + semesterevents[0].name + ".csv";
+            System.IO.File.WriteAllText(filepath, val);   //write csv file
+
             return Json(new { Success = "true" });
         }
 
 
         /*------------------------------------------------------------------------------------------------------------------*/
 
+        [HttpPost]
+        public ActionResult GetSemesterEvents(string val)
+        {
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/" + val + ".csv";
+            Debug.WriteLine(val);
+            String line = "";
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            {
+                StreamReader readFile = new StreamReader(filepath);
+                line = readFile.ReadLine();
+            }
+            else
+            {
+                return Json(new { Success = "false" });
+            }
+            var retevents = JsonConvert.DeserializeObject<List<EventObject>>(line);
+            //var semesterevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
+            Debug.WriteLine(retevents[0].name);
+            //filepath = filepath + semesterevents[0].name + ".csv";
+            //System.IO.File.WriteAllText(filepath, val);   //write csv file
 
+            return Json(new { Success = "true" , Data = retevents});
+        }
+
+
+        /*------------------------------------------------------------------------------------------------------------------*/
 
 
         [HttpPost]

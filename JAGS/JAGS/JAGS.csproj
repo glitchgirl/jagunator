@@ -26,6 +26,9 @@
     <PackageReference Include="Microsoft.AspNet.Web.Optimization" Version="1.1.3" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Vse.Web.Serialization.ControlledSerializationJsonConverter" Version="1.0.4" />
+    <PackageReference Include="GracefulExpandoObject" Version="1.6.0" />
+    <PackageReference Include="GracefulExpandoObject.Json" Version="1.6.0" />
+    <PackageReference Include="DictionaryToExpandoObject" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
