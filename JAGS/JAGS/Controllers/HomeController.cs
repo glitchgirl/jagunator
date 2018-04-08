@@ -340,6 +340,10 @@ namespace JAGS.Controllers
             var semesterevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
             Debug.WriteLine(semesterevents[0].name);
             filepath = filepath + semesterevents[0].name + ".csv";
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            {
+                System.IO.File.Delete(filepath);   //delete user file if it exists
+            }
             System.IO.File.WriteAllText(filepath, val);   //write csv file
 
             return Json(new { Success = "true" });

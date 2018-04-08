@@ -87,13 +87,13 @@
  {    
       $('#SaveButton').click(function()
         {
-            //alert("SUCCESS");
+            alert("SUCCESS");
             //var calNode = document.getElementByID('calendar');
             var name = $("#Semester option:selected").text();
             //var semester = {
                 SEMname = $("#Semester option:selected").text();
                 calendarevents = $("#calendar").fullCalendar("clientEvents")
-                //alert(JSON.stringify(calendarevents[0]))
+                alert(JSON.stringify(calendarevents[0].title))
                 //};
             let json = JSON.stringify($("#calendar").fullCalendar("clientEvents").map(e => ({
                 start: e.start,
@@ -101,8 +101,8 @@
                 title: e.title,
                 name: SEMname
             })));
-            //var CalendarEvents = $("#calendar").fullCalendar("clientEvents");
-            $.post("@Url.Action("SaveSemesterValues", "Home")?val=" + json, function(res){});
+            alert(json);
+            $.post("@Url.Action("SaveSemesterValues", "Home")?val=" + json, function(ressave){});
             //alert(CalendarEvents[0].title);
             //alert(CalendarEvents[0].start);
         });
@@ -161,21 +161,12 @@
                         });
                         $.post("@Url.Action("GetSemesterEvents", "Home")?val=" + u, function(result) 
                         {
-                            //alert(result.data);
-                            //var retevents = JSON.parse(result.data);
-                            //alert(result.data[0].title);
+                            $('#calendar').fullCalendar('removeEvents');
+                            for (let i = 0; i <= result.data.length; i++) {
 
-                            //alert(result.data.length);
-                            var mytitle = '';
-                            var mystart = Date();
-                            var myend = Date();
-                            for (let i = 0; i <= 1; i++) {
-                                alert(result.data[i].title);
-                                alert(result.data[i].start);
-                                alert(result.data[i].);
                                 mytitle = String(result.data[i].title);
-                                mystart = Date(result.data[i].start);
-                                myend = Date(result.data[i].end);
+                                mystart = moment(result.data[i].start);
+                                myend = moment(result.data[i].end);
                                 var myevent = {
                                 //loadevents.push({
                                     title: mytitle,
@@ -196,14 +187,7 @@
                         alert("Error getting data!");
                     }
                     });
-                //var calendarevents1 = $("#calendar").fullCalendar("clientEvents")
-                let json = JSON.stringify($("#calendar").fullCalendar("clientEvents").map(e => ({
-                start: e.start,
-                end: e.end,
-                title: e.title,
-                name: SEMname
-                    })));
-                alert(json[0].start)
+
                     
         });
 
