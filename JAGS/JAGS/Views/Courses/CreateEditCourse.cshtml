@@ -99,18 +99,18 @@
                 @Html.TextBoxFor(a => a.CampusLocation, new { @id = "CampusLocation", @class = "hidden" })
                 @Html.DropDownListFor(a => a.CampusLocation, new SelectList(Model.CampusNames, "Value", "Text"), "Select Campus", new { @class = "form-control", @id = "CampusSelection" })
             </div>
-         </div>
+        </div>
         <br />
         <div class="row">
-            <label for = "Section" class="col-md-3 text-right">Section</label>
+            <label for="Section" class="col-md-3 text-right">Section</label>
             <div class="col-md-3" id="sectionDropDown">
-                @Html.DropDownListFor(a => a.CourseSectionList, new SelectList(Model.CourseSectionList, "Value", "Text"), "Select Section", new {@class="form-control", @id="SectionSelection"})
+                @Html.DropDownListFor(a => a.CourseSectionList, new SelectList(Model.CourseSectionList, "Value", "Text"), "Select Section", new { @class = "form-control", @id = "SectionSelection" })
             </div>
             <label for="SectionText" class="col-md-3 text-right">Section</label>
             <div class="col-md-3" id="SectionText">
-                @Html.TextBoxFor(a=>a.CourseSection, new {@class="form-control", @id="SectionText"})
+                @Html.TextBoxFor(a => a.CourseSection, new { @class = "form-control", @id = "SectionText" })
             </div>
-            </div>
+        </div>
         <br />
         <div class="row">
             <label for="InstructorName" class="col-md-3 text-right">Instructor Name</label>
@@ -131,7 +131,7 @@
                 @Html.TextBoxFor(a => a.ClassroomSize, new { @id = "ClassroomSizeText", @class = "hidden" })
                 @Html.DropDownListFor(a => a.ClassroomSize, new SelectList(Model.ClassroomSizeList, "Value", "Text"), "Select Classroom Size", new { @class = "form-control", @id = "ClassroomSize" })
             </div>
-            <label for="ClassRoomType" class="col-md-3 text-right">Classroom Size</label>
+            <label for="ClassRoomType" class="col-md-3 text-right">Classroom Type</label>
             <div class="col-md-3" id="CRType">
                 @Html.TextBoxFor(a => a.ClassroomType, new { @id = "ClassroomTypeText", @class = "hidden" })
                 @Html.DropDownListFor(a => a.ClassroomType, new SelectList(Model.ClassroomTypeList, "Value", "Text"), "Select Classroom Type", new { @class = "form-control", @id = "ClassroomType" })
@@ -153,8 +153,7 @@
 
 <script type="text/javascript">
     $(function () {
-        $('#subjectID').change(function ()
-        {
+        $('#subjectID').change(function () {
             $('#CourseNameID').val("");
             $('#CourseCreditHours').val("").attr('selected', false);
             $('#CourseIDText').val("");
@@ -163,7 +162,7 @@
             var subItems = "<option value='0'>" + 'Select Course ID' + '</option>';
 
             $.getJSON("@Url.Action("GetCourses","Courses")", { id: val }, function (res) {
-                $.each(res.data.items,function(index, item){
+                $.each(res.data.items, function (index, item) {
                     subItems += "<option value='" + item.value + "'>" + item.text + "</option>"
 
                 });
@@ -171,8 +170,7 @@
                 $("#CourseListID").html(subItems);
             });
 
-            if ($('#subjectID option:selected').text() !== 'Select Subject')
-            {
+            if ($('#subjectID option:selected').text() !== 'Select Subject') {
                 var selected = $('#subjectID option:selected').text();
                 $('#textSubjectID').val(selected);
             }
@@ -216,16 +214,18 @@
                 + ($("#subjectID option:selected").text())
                 + "_"
                 + ($('#CourseIDText').val());
-            var subItems = "<option value='0'>" + 'Select Semester' + '</option>';
+            var subItems = "<option value='0'>" + 'Select Section' + '</option>';
 
-            $.getJSON("@Url.Action("GetSection","Courses")", { id: val }, function (res) {
-                $.each(res.data.items,function(index, item){
-                    subItems += "<option value='" + item.value + "'>" + item.text + "</option>"
+            if ($('#SemesterSelection option:selected').text() !== 'Select Semester') {
+                $.getJSON("@Url.Action("GetSections","Courses")", { id: val }, function (res) {
+                    $.each(res.data.items, function (index, item) {
+                        subItems += "<option value='" + item.value + "'>" + item.text + "</option>"
 
+                    });
+
+                    $("#SectionSelection").html(subItems);
                 });
-
-                $("#CourseSectionList").html(subItems);
-            });
+            }
             if ($('#SemesterSelection option:selected').text() !== 'Select Semester') {
                 var selected = $('#SemesterSelection option:selected').text();
                 $('#sectionSemester').val(selected);
@@ -257,12 +257,97 @@
             }
         });
 
-        $('#SectionSelection').change(function () {
-            if ($('#SectionSelection option:selected').text() !== 'Selection Section') {
-                var selected = $('#SectionSelection option:selected').text();
-                $('#SectionText').val(selected);
-            }
+        $('#SectionSelection').change(function ()
+        {
+            if ($('#SectionSelection option:selected').text() !== 'Select Section')
+            {
+                $.post("@Url.Action("GetSectionValues", "Courses")?val="
+                    + $('#SemesterSelection option:selected').text()
+                    + "/"
+                    + $('#textSubjectID').val()
+                    + "_"
+                    + $('#CourseIDText').val()
+                    + "_"
+                    + $('#SectionSelection option:selected').text(), function (res) 
+                    {
+                        if (res.success === "true") {
+                            $('#CourseNameID').val(res.data.courseName);
+                            $('#CourseCreditHours').val(res.data.courseCredit - 1).attr('selected', true);
+                            $('#CourseIDText').val(res.data.courseID);
+                            $('#CreditHours').val(res.data.courseCredit);
+                            $('#CrossListText').val(res.data.crossList);
+                            $('#SectionText').val(res.data.courseSection);
+                            $('#ClassroomSizeText').val(res.data.sectionClassroomSize);
+                            $('#ClassroomTypeText').val(res.data.sectionClassroomType);
 
+
+                            var ddlArray = new Array();
+                            var ddl = document.getElementById('ClassroomSize');
+                            for (i = 0; i < ddl.options.length; i++) {
+                                ddlArray[i] = ddl.options[i].text;
+                            }
+                            for (i = 1; i < ddlArray.length; i++) {
+                                if (ddlArray[i] === res.data.sectionClassroomSize) {
+                                    $('#ClassroomSize').val(i - 1).attr('selected', true);
+                                }
+                            }
+                            ddl = document.getElementById('ClassroomType');
+                            for (i = 0; i < ddl.options.length; i++) {
+                                ddlArray[i] = ddl.options[i].text;
+                            }
+                            for (i = 1; i < ddlArray.length; i++) {
+                                if (ddlArray[i] === res.data.sectionClassroomType) {
+                                    $('#ClassroomType').val(i - 1).attr('selected', true);
+                                }
+                            }
+                            ddl = document.getElementById('InstructorSelection');
+                            for (i = 0; i < ddl.options.length; i++) {
+                                ddlArray[i] = ddl.options[i].text;
+                            }
+                            for (i = 1; i < ddlArray.length; i++) {
+                                if (ddlArray[i] === res.data.sectionInstructor) {
+                                    $('#InstructorSelection').val(i - 1).attr('selected', true);
+                                }
+                            }
+                            ddl = document.getElementById('CampusSelection');
+                            for (i = 0; i < ddl.options.length; i++) {
+                                ddlArray[i] = ddl.options[i].text;
+                            }
+                            for (i = 1; i < ddlArray.length; i++) {
+                                if (ddlArray[i] === res.data.sectionCampus) {
+                                    $('#CampusSelection').val(i - 1).attr('selected', true);
+                                }
+                            }
+                            ddl = document.getElementById('ScheduleSelection');
+                            for (i = 0; i < ddl.options.length; i++) {
+                                ddlArray[i] = ddl.options[i].text;
+                            }
+                            for (i = 1; i < ddlArray.length; i++) {
+                                if (ddlArray[i] === res.data.sectionScheduleType) {
+                                    $('#ScheduleSelection').val(i - 1).attr('selected', true);
+                                }
+                            }
+                           
+                        }
+                        var selected = $('#SectionSelection option:selected').text();
+                        $('#SectionText').value = selected;
+                        alert($('#SectionText').val());
+                    }
+            )}
+        });
+
+
+        $('#ClassroomSize').change(function () {
+            if ($('#ClassroomSize option:selected').text() !== 'Select Classroom Size') {
+                var selected = $('#ClassroomSize option:selected').text();
+                $('#ClassroomSizeText').val(selected);
+            }
+        });
+        $('#ClassroomType').change(function () {
+            if ($('#ClassroomType option:selected').text() !== 'Select Classroom Type') {
+                var selected = $('#ClassroomType option:selected').text();
+                $('#ClassroomTypeText').val(selected);
+            }
         });
 
     });

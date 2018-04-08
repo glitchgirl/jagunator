@@ -61,7 +61,7 @@ namespace JAGS.Models
         public List<SelectListItem> ClassroomSizeList { get; set; }
 
         [Display(Name = "Classroom Type")]
-        public string ClassroomType;
+        public string ClassroomType { get; set; }
         public List<SelectListItem> ClassroomTypeList { get; set; }
 
         //[Display(Name = "Crosslist")]
