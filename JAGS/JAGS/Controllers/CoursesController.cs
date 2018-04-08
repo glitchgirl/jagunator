@@ -298,14 +298,36 @@ namespace JAGS.Controllers
                     {
                         System.IO.File.Delete(filepath);
                     }
-                    var csv = model.CourseSubject.ToString()
-                        + "," + model.CourseID.ToString()
-                        + "," + model.CourseSection.ToString()
-                        + "," + model.CourseName.ToString()
-                        + "," + model.CreditHours
-                        + "," + model.IntructorName.ToString()
-                        + "," + model.CampusLocation.ToString()
-                        + "," + model.ScheduleAtt.ToString();
+                    var csv = "";
+                    if (model.CrossListWith == null)
+                    {
+                            csv = model.CourseSubject.ToString()
+                            + "," + model.CourseID.ToString()
+                            + "," + model.CourseSection.ToString()
+                            + "," + model.CourseName.ToString()
+                            + "," + model.CreditHours
+                            + "," + model.IntructorName.ToString()
+                            + "," + model.CampusLocation.ToString()
+                            + "," + model.ScheduleAtt.ToString()
+                            + "," + model.ClassroomSize.ToString()
+                            + "," + model.ClassroomType.ToString();
+                    }
+
+                    else
+                    {
+                            csv = model.CourseSubject.ToString()
+                            + "," + model.CourseID.ToString()
+                            + "," + model.CourseSection.ToString()
+                            + "," + model.CourseName.ToString()
+                            + "," + model.CreditHours
+                            + "," + model.IntructorName.ToString()
+                            + "," + model.CampusLocation.ToString()
+                            + "," + model.ScheduleAtt.ToString()
+                            + "," + model.ClassroomSize.ToString()
+                            + "," + model.ClassroomType.ToString()
+                            + "," + model.CrossListWith.ToString();
+
+                    }
 
                     //create csv string to write out
                     System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
@@ -400,6 +422,77 @@ namespace JAGS.Controllers
 
         /*-----------------------------------------------------------------------------------------------------------------*/
 
+        [Microsoft.AspNetCore.Mvc.HttpPost]
+        public Microsoft.AspNetCore.Mvc.ActionResult GetSectionValues(string val)
+        {
+            String[] row;
+            StreamReader readFile;
+            string line;
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + val + ".csv";
+            if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            {
+                readFile = new StreamReader(filepath);
+                line = readFile.ReadLine();
+                if (line != null && line.Contains(','))
+                    row = line.Split(',');
+                else
+                    return Json(new { Success = "false" });
+                readFile.Close();
+            }
+            else
+            {
+                return Json(new { Success = "false" });
+            }
+
+            //ViewBag.reached = 1;
+
+            if (row.Length == 10)
+            {
+                return Json(new
+                {
+                    Success = "true",
+                    Data = new
+                    {
+                        CourseSubject = row[0],
+                        CourseID = row[1],
+                        CourseSection = row[2],
+                        CourseName = row[3],
+                        CourseCredit = row[4],
+                        SectionInstructor = row[5],
+                        SectionCampus = row[6],
+                        SectionScheduleType = row[7],
+                        SectionClassroomSize = row[8],
+                        SectionClassroomType = row[9]
+                    }
+                });
+            }
+            else
+            {
+                return Json(new
+                {
+                    Success = "true",
+                    Data = new
+                    {
+                        CourseSubject = row[0],
+                        CourseID = row[1],
+                        CourseSection = row[2],
+                        CourseName = row[3],
+                        CourseCredit = row[4],
+                        SectionInstructor = row[5],
+                        SectionCampus = row[6],
+                        SectionScheduleType = row[7],
+                        SectionClassroomSize = row[8],
+                        SectionClassroomType = row[9],
+                        CrossList = row[10]
+                    }
+                });
+            }
+
+        }
+
+
+        /*-----------------------------------------------------------------------------------------------------------------*/
+
 
         [Microsoft.AspNetCore.Mvc.HttpPost]
         public Microsoft.AspNetCore.Mvc.ActionResult SaveSection(CourseInfo model)
@@ -481,6 +574,41 @@ namespace JAGS.Controllers
                 {
                     pos = s.LastIndexOf("_") + 1;
                     items.Add(new System.Web.Mvc.SelectListItem() { Text = s.Substring(pos, s.Length - pos-4), Value = counter.ToString() });
+                    counter++;
+                }
+            }
+
+            //return new System.Web.Mvc.JsonResult() {Data = items, JsonRequestBehavior = JsonRequestBehavior.AllowGet };   
+
+
+
+            return Json(new
+            {
+                Success = "true",
+                Data = new
+                {
+                    items
+                },
+                JsonRequestBehavior.AllowGet
+            });
+        }
+
+        public Microsoft.AspNetCore.Mvc.ActionResult GetSections(string id)
+        {
+            List<System.Web.Mvc.SelectListItem> items = new List<System.Web.Mvc.SelectListItem>();
+            string[] parseID = id.Split("?");
+            //parseID[0] is the semester, parseID[1] is the Subject and courseID "Subj_CourseID"
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
+                + "/Data/Schedules/" + parseID[0] + "/";
+            string[] list = Directory.GetFiles(filepath);
+            int pos = filepath.LastIndexOf("/") + 1;
+            int counter = 0;
+            foreach (string s in list)
+            {
+                if (s.Contains(parseID[1]))
+                {
+                    pos = s.LastIndexOf("_") + 1;
+                    items.Add(new System.Web.Mvc.SelectListItem() { Text = s.Substring(pos, s.Length - pos - 4), Value = counter.ToString() });
                     counter++;
                 }
             }
