@@ -113,6 +113,7 @@
         {
                 //alert("it works");
                 //get selected value from semester dropdown
+                var loadevents = [];
                 var u = $("#Semester option:selected").text()             
                 //call getsectionvalues in homecontroller and pass value selected
                 $.post("@Url.Action("GetSectionValues", "Home")?val=" + u, function(res) 
@@ -158,45 +159,51 @@
                             });
 
                         });
-                        $.post("@Url.Action("GetSemesterEvents", "Home")?val=" + u, function(res) 
+                        $.post("@Url.Action("GetSemesterEvents", "Home")?val=" + u, function(result) 
                         {
-                            alert(res.data);
-                            var retevents = JSON.parse(res.data);
-                            alert(retevents);
-                        });
-                        $('#calendar').fullCalendar({
-                            header: false,
-                            defaultDate: moment("2018-07-01"),
-                            editable: true,
-                            droppable: true, // this allows things to be dropped onto the calendar
-                            dragRevertDuration: 0,
-                            drop: function() {
-                                // is the "remove after drop" checkbox checked?
-                                if ($('#drop-remove').is(':checked')) {
-                                // if so, remove the element from the "Draggable Events" list
-                                $(this).remove();
-                                }
-                            },
-                        eventDragStop: function( event, jsEvent, ui, view ) {
-                
-                            if(isEventOverDiv(jsEvent.clientX, jsEvent.clientY)) {
-                                $('#calendar').fullCalendar('removeEvents', event._id);
-                                var el = $( "<div class='fc-event'>" ).appendTo( '#external-events-listing' ).text( event.title );
-                                el.draggable({
-                                    zIndex: 999,
-                                    revert: true, 
-                                    revertDuration: 0 
-                                    });
-                                el.data('event', { title: event.title, id :event.id, stick: true });
-                                }
+                            //alert(result.data);
+                            //var retevents = JSON.parse(result.data);
+                            //alert(result.data[0].title);
+
+                            //alert(result.data.length);
+                            var mytitle = '';
+                            var mystart = Date();
+                            var myend = Date();
+                            for (let i = 0; i <= 1; i++) {
+                                alert(result.data[i].title);
+                                alert(result.data[i].start);
+                                alert(result.data[i].);
+                                mytitle = String(result.data[i].title);
+                                mystart = Date(result.data[i].start);
+                                myend = Date(result.data[i].end);
+                                var myevent = {
+                                //loadevents.push({
+                                    title: mytitle,
+                                    start: mystart,
+                                    end: myend,
+                                    allDay: false
+                                };
+                                $('#calendar').fullCalendar( 'renderEvent', myevent, true);
+                            //$('#calendar').fullCalendar({
+                            //    events: loadevents
+                            //    });
                             }
                         });
+
                     } 
                     else 
                     {
                         alert("Error getting data!");
                     }
                     });
+                //var calendarevents1 = $("#calendar").fullCalendar("clientEvents")
+                let json = JSON.stringify($("#calendar").fullCalendar("clientEvents").map(e => ({
+                start: e.start,
+                end: e.end,
+                title: e.title,
+                name: SEMname
+                    })));
+                alert(json[0].start)
                     
         });
 
