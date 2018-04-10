@@ -50,7 +50,8 @@ namespace JAGS.Controllers
 
         public IActionResult Logout()
         {
-            return View("Index");
+            ViewBag.sessiontype = "none";
+            return RedirectToAction("", "");
         }
 
         /*------------------------------------------------------------------------------------------------------------------*/
