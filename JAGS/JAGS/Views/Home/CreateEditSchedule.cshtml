@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Http;
 @using System.Linq;
 @using System.Collections.Generic;
+//@using System.Web;
 @model CourseInfo
 @{
     ViewData["Title"] = "Create/Edit Schedule";
@@ -16,10 +17,6 @@
     else if (ViewBag.sessiontype == "Viewer")
     {
     Layout = "_LayoutViewer";
-    }
-    else if (ViewBag.sessiontype == "none")
-    {
-    //Html.RenderAction("", "");
     }
 }
 

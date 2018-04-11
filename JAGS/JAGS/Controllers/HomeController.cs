@@ -100,6 +100,10 @@ namespace JAGS.Controllers
 
         public IActionResult CreateEditUser()
         {
+            if (HttpContext.Session.GetString(SessionUserType) != "Admin")
+            {
+                return View("Index");
+            }
             ViewBag.debugtext = "test";
             ViewBag.Jsonstr = "";
             ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
@@ -203,6 +207,7 @@ namespace JAGS.Controllers
         public ActionResult CreateEditFaculty(FacultyModel model, string CreateEdit)
         {
             ViewBag.debugtext = "entered createeditfacutly";
+
             switch (CreateEdit)
             {
                 case "CreateEdit":
@@ -271,6 +276,10 @@ namespace JAGS.Controllers
 
         public ActionResult CreateEditFaculty()
         {
+            if (HttpContext.Session.GetString(SessionUserType) != "Admin" || HttpContext.Session.GetString(SessionUserType) != "Editor")
+            {
+                return View("Index");
+            }
             //var model = new FacultyModel();
             ViewBag.debugtext = "create edit faculty";
             ViewBag.Jsonstr = "";
