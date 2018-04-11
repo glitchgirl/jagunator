@@ -51,6 +51,7 @@ namespace JAGS.Controllers
         public IActionResult Logout()
         {
             ViewBag.sessiontype = "none";
+            HttpContext.Session.SetString(SessionUserType, "");
             return RedirectToAction("", "");
         }
 
