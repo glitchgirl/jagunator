@@ -2,7 +2,6 @@
 @using Microsoft.AspNetCore.Http;
 @using System.Linq;
 @using System.Collections.Generic;
-//@using System.Web;
 @model CourseInfo
 @{
     ViewData["Title"] = "Create/Edit Schedule";
@@ -70,7 +69,7 @@
     <div class="scheduleButtons">
         <input type="button" value="Save" id="SaveButton"><br>
         <input type="button" value="Clear"><br>
-        <input type="button" value="Export schedule"><br>
+        <input type="button" value="Export schedule" id="ExportButton"><br>
     </div>
  <div class="scheduleErrors">
         Conflicts 
@@ -107,6 +106,30 @@
             $.post("@Url.Action("SaveSemesterValues", "Home")?val=" + json, function(ressave){});
             //alert(CalendarEvents[0].title);
             //alert(CalendarEvents[0].start);
+        });
+
+      $('#ExportButton').click(function()
+        {
+            alert("SUCCESS");
+            var name = $("#Semester option:selected").text();
+            SEMname = $("#Semester option:selected").text();
+            calendarevents = $("#calendar").fullCalendar("clientEvents")
+
+            let json = JSON.stringify($("#calendar").fullCalendar("clientEvents").map(e => ({
+                start: e.start,
+                end: e.end,
+                title: e.title,
+                name: SEMname
+            })));
+            alert(json);
+            $.post("@Url.Action("ExportCalendar", "Home")?val=" + json, function(ressave){
+                   //var jsonpath = JSON.parse(ressave.Filepath);
+                   alert(ressave.Filepath);
+
+                   window.open(ressave.Filepath);
+                });
+
+
         });
 
 
@@ -164,7 +187,7 @@
                         $.post("@Url.Action("GetSemesterEvents", "Home")?val=" + u, function(result) 
                         {
                             $('#calendar').fullCalendar('removeEvents');
-                            for (let i = 0; i <= result.data.length; i++) {
+                            for (let i = 0; i < result.data.length; i++) {
 
                                 mytitle = String(result.data[i].title);
                                 mystart = moment(result.data[i].start);

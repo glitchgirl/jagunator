@@ -342,6 +342,27 @@ namespace JAGS.Controllers
 
         /*------------------------------------------------------------------------------------------------------------------*/
 
+        [HttpPost]
+        public ActionResult ExportCalendar(string val)
+        {
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/";
+            Debug.WriteLine(val);
+            var semesterevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
+            Debug.WriteLine(semesterevents[0].name);
+            filepath = filepath + semesterevents[0].name + ".csv";
+            //if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            //{
+            //    var mimeType = "text/csv";
+            //    FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read);
+            //    return File(fileStream, mimeType, "Export.csv");   //delete user file if it exists
+            //}
+            //var retfilepath = JsonConvert.DeserializeObject(filepath);
+            var returnvalue = Json(new { Success = "true", Filepath = filepath });
+            return Json(new { Success = "true", Filepath = filepath });
+        }
+
+
+        /*------------------------------------------------------------------------------------------------------------------*/
 
         [HttpPost]
         public ActionResult SaveSemesterValues(string val)
