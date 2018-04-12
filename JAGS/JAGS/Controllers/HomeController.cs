@@ -345,11 +345,12 @@ namespace JAGS.Controllers
         [HttpPost]
         public ActionResult ExportCalendar(string val)
         {
-            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/";
-            Debug.WriteLine(val);
-            var semesterevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
-            Debug.WriteLine(semesterevents[0].name);
-            filepath = filepath + semesterevents[0].name + ".csv";
+            //string filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/";
+            //Debug.WriteLine(val);
+            //var semesterevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
+            //Debug.WriteLine(semesterevents[0].name);
+            //filepath = filepath + val + ".csv";
+            string filepath = "Export/" + val + ".csv";
             //if (System.IO.File.Exists(filepath))   //check if user csv file exists
             //{
             //    var mimeType = "text/csv";
@@ -357,7 +358,7 @@ namespace JAGS.Controllers
             //    return File(fileStream, mimeType, "Export.csv");   //delete user file if it exists
             //}
             //var retfilepath = JsonConvert.DeserializeObject(filepath);
-            var returnvalue = Json(new { Success = "true", Filepath = filepath });
+            var returnvalue = Json(new { Success = "true", Filepath = JsonConvert.SerializeObject(filepath) });
             return Json(new { Success = "true", Filepath = filepath });
         }
 

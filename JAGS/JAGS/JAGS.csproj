@@ -40,6 +40,7 @@
     <Folder Include="Data\Faculty\" />
     <Folder Include="Views\Home\images\" />
     <Folder Include="Data\Semesters\" />
+    <Folder Include="wwwroot\Export\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Controllers\test.csv" />

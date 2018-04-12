@@ -114,19 +114,21 @@
             var name = $("#Semester option:selected").text();
             SEMname = $("#Semester option:selected").text();
             calendarevents = $("#calendar").fullCalendar("clientEvents")
-
+            var u = $("#Semester option:selected").text()
             let json = JSON.stringify($("#calendar").fullCalendar("clientEvents").map(e => ({
                 start: e.start,
                 end: e.end,
                 title: e.title,
                 name: SEMname
             })));
-            alert(json);
-            $.post("@Url.Action("ExportCalendar", "Home")?val=" + json, function(ressave){
-                   //var jsonpath = JSON.parse(ressave.Filepath);
-                   alert(ressave.Filepath);
+            //alert(json);
+            $.post("@Url.Action("ExportCalendar", "Home")?val=" + u, function(resexport){
+                   //var jsonpath = JSON.parse(resexport[0]);
+                   //alert(resexport[0]);
+                   //alert(resexport.filepath);
+                   //alert(resexport.success);
 
-                   window.open(ressave.Filepath);
+                   window.open(resexport.filepath);
                 });
 
 
@@ -147,7 +149,7 @@
                     //if function suceeds then do the following
                     if (res.success === "true") 
                     {
-                        //alert(res.data);
+                        alert(res.data);
                         //parse data from return
                         var resultjson = JSON.parse(res.data);
 
