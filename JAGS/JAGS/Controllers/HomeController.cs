@@ -369,15 +369,22 @@ namespace JAGS.Controllers
         public ActionResult SaveSemesterValues(string val)
         {
             var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/";
-            Debug.WriteLine(val);
+            //Debug.WriteLine(val);
             var semesterevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
-            Debug.WriteLine(semesterevents[0].name);
+            //Debug.WriteLine(semesterevents[0].name);
             filepath = filepath + semesterevents[0].name + ".csv";
             if (System.IO.File.Exists(filepath))   //check if user csv file exists
             {
                 System.IO.File.Delete(filepath);   //delete user file if it exists
             }
             System.IO.File.WriteAllText(filepath, val);   //write csv file
+
+            //create export file (csv that opens in excel)
+            var expfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Export/" + semesterevents[0].name + ".csv";
+            if (System.IO.File.Exists(expfilepath))   //check if user csv file exists
+            {
+                System.IO.File.Delete(expfilepath);   //delete user file if it exists
+            }
 
             return Json(new { Success = "true" });
         }
