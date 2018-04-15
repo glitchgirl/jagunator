@@ -69,6 +69,7 @@
     <None Remove="Views\Home\images\banner4.svg" />
     <None Remove="Views\Home\images\logorev-1.png" />
     <None Remove="Data\Faculty\-Select Faculty to Edit-.csv" />
+    <None Remove="Data\Semesters\Fall2018.csv" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="demos\json\events.json" />
@@ -91,6 +92,9 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="Views\Home\images\logorev-1.png">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Data\Semesters\Fall2018.csv">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>

@@ -9,6 +9,7 @@
             // store data so the calendar knows to render an event upon drop
             $(this).data('event', {
                 title: $.trim($(this).text()), // use the element's text as the event title
+                forceEventDuration:true,
                 stick: true // maintain when user navigates (see docs on the renderEvent method)
             });
 
@@ -27,7 +28,9 @@
 
         $('#calendar').fullCalendar({
             header: false,
+            forceEventDuration:true,
             defaultDate: moment("2018-07-01"),
+            defaultTimedEventDuration: '02:00:00',
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar
             dragRevertDuration: 0,

@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 //using Environment;
 using static Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment;
 using System.IO;
+using System.Text;
 using Microsoft.AspNetCore.Session;
 
 namespace JAGS.Controllers
@@ -372,20 +373,36 @@ namespace JAGS.Controllers
             //Debug.WriteLine(val);
             var semesterevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
             //Debug.WriteLine(semesterevents[0].name);
-            filepath = filepath + semesterevents[0].name + ".csv";
-            if (System.IO.File.Exists(filepath))   //check if user csv file exists
+            if (semesterevents.Count > 0)
             {
-                System.IO.File.Delete(filepath);   //delete user file if it exists
-            }
-            System.IO.File.WriteAllText(filepath, val);   //write csv file
+                filepath = filepath + semesterevents[0].name + ".csv";
+                if (System.IO.File.Exists(filepath))   //check if user csv file exists
+                {
+                    System.IO.File.Delete(filepath);   //delete user file if it exists
+                }
+                System.IO.File.WriteAllText(filepath, val);   //write csv file
 
-            //create export file (csv that opens in excel)
-            var expfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Export/" + semesterevents[0].name + ".csv";
-            if (System.IO.File.Exists(expfilepath))   //check if user csv file exists
-            {
-                System.IO.File.Delete(expfilepath);   //delete user file if it exists
+                //create export file (csv that opens in excel)
+                List<string> export = new List<string>();
+                export.Add("Subject,ID,Section,Title,Hours,Professor,Campus,Type,Size,Classroom Type,Crosslist,Day of Week, Time of Day,");
+                String current_input = "";
+                var expfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "wwwroot/Export/" + semesterevents[0].name + ".csv";
+                if (System.IO.File.Exists(expfilepath))   //check if user csv file exists
+                {
+                    System.IO.File.Delete(expfilepath);   //delete user file if it exists
+                }
+                for (int i = 0; i < semesterevents.Count; i++)
+                {
+                    String current_file_path = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + semesterevents[0].name + "/" + semesterevents[i].title + ".csv";
+                    if (System.IO.File.Exists(current_file_path))
+                    {
+                        StreamReader readFile = new StreamReader(current_file_path);
+                        current_input = readFile.ReadLine() + "," + semesterevents[i].start.DayOfWeek + "," + semesterevents[i].start.TimeOfDay + ",";
+                        export.Add(current_input);
+                    }
+                }
+                System.IO.File.WriteAllLines(expfilepath, export);   //write csv file
             }
-
             return Json(new { Success = "true" });
         }
 
