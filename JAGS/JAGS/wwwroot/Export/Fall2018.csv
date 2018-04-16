@@ -1,1 +1,4 @@
-Subject,ID,Section,Title,Hours,Professor,Campus,Type,Size,Classroom Type,Crosslist,Day of Week, Time of Day,
+Subject,ID,Section,Title,Credit Hours,Professor,Campus,Type,Size,Classroom Type,Crosslist,Day of Week, Start Time of Day, End Time of Day,
+AGDR,1101,A,Testing,3,test,Summerville,Lecture/Supervised Lab/Clinic,36 to 65,Computer Lab,CSCI_1301,Sunday,10:00:00,12:00:00,
+AIST,1726,A,this is a test,2,Bob,Riverfront,Lecture/Supervised Lab/Clinic,66 or more,Physics Lab,,Monday,10:00:00,12:00:00,
+ACCT,1101,A,Accounting Principles,3,name,Summerville,Lecture,1 to 35,Classroom,CSCI_1301,Tuesday,10:00:00,12:00:00,

@@ -565,10 +565,6 @@ namespace JAGS.Controllers
 
         public Microsoft.AspNetCore.Mvc.ActionResult GetCourses(string id)
         {
-            if (HttpContext.Session.GetString(SessionUserType) != "Admin" || HttpContext.Session.GetString(SessionUserType) != "Editor")
-            {
-                return View("Index");
-            }
             List<System.Web.Mvc.SelectListItem> items = new List<System.Web.Mvc.SelectListItem>();
             var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24)
                 + "/Data/Courses/";
