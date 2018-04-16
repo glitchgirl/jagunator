@@ -88,7 +88,7 @@
  {    
       $('#SaveButton').click(function()
         {
-            alert("SUCCESS");
+            //alert("SUCCESS");
             //var calNode = document.getElementByID('calendar');
             var name = $("#Semester option:selected").text();
             //var semester = {
@@ -102,7 +102,7 @@
                 title: e.title,
                 name: SEMname
             })));
-            alert(json);
+            //alert(json);
             $.post("@Url.Action("SaveSemesterValues", "Home")?val=" + json, function(ressave){});
             //alert(CalendarEvents[0].title);
             //alert(CalendarEvents[0].start);
@@ -149,7 +149,7 @@
                     //if function suceeds then do the following
                     if (res.success === "true") 
                     {
-                        alert(res.data);
+                        //alert(res.data);
                         //parse data from return
                         var resultjson = JSON.parse(res.data);
 

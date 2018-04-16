@@ -107,7 +107,7 @@
                 @Html.DropDownListFor(a => a.CourseSectionList, new SelectList(Model.CourseSectionList, "Value", "Text"), "Select Section", new { @class = "form-control", @id = "SectionSelection" })
             </div>
             <label for="SectionText" class="col-md-3 text-right">Section</label>
-            <div class="col-md-3" id="SectionText">
+            <div class="col-md-3" id="SectionText1">
                 @Html.TextBoxFor(a => a.CourseSection, new { @class = "form-control", @id = "SectionText" })
             </div>
         </div>
@@ -115,8 +115,8 @@
         <div class="row">
             <label for="InstructorName" class="col-md-3 text-right">Instructor Name</label>
             <div class="col-md-3" id="CEInstructorName">
-                @Html.TextBoxFor(a => a.IntructorName, new { @id = "InstructorName", @class = "hidden" })
-                @Html.DropDownListFor(a => a.IntructorName, new SelectList(Model.ListOfInstructors, "Value", "Text"), "Select Instructor", new { @class = "form-control", @id = "InstructorSelection" })
+                @Html.TextBoxFor(a => a.InstructorName, new { @id = "InstructorName", @class = "hidden" })
+                @Html.DropDownListFor(a => a.InstructorName, new SelectList(Model.ListOfInstructors, "Value", "Text"), "Select Instructor", new { @class = "form-control", @id = "InstructorSelection" })
             </div>
             <label for="ScheduleType" class="col-md-3 text-right">Schedule Type</label>
             <div class="col-md-3" id="CEScheduleTpye">
@@ -230,6 +230,23 @@
                 var selected = $('#SemesterSelection option:selected').text();
                 $('#sectionSemester').val(selected);
             }
+            else
+            { 
+                $('#SectionText').val("");
+                $('#ClassroomSizeText').val("");
+                $('#ClassroomSizeType').val("");
+                $('#sectionSemester').val("");
+                $('#CampusLocation').val("");
+                $('#ScheduleAtt').val("");
+                $('#InstructorName').val("");
+                $('#SectionSelection').val("").attr('selected', true);
+                $('#CampusSelection').val('').attr('selected', true);
+                $('#InstructorSelection').val('').attr('selected', true);
+                $('#ClassroomSize').val('').attr('selected', true);
+                $('#ScheduleSelection').val('').attr('selected', true);
+                $('#ClassroomType').val('').attr('selected', true);
+                $('#InstructorSelection').val("").attr('selected', true);
+            }
 
         });
 
@@ -259,8 +276,7 @@
 
         $('#SectionSelection').change(function ()
         {
-            if ($('#SectionSelection option:selected').text() !== 'Select Section')
-            {
+            if ($('#SectionSelection option:selected').text() !== 'Select Section') {
                 $.post("@Url.Action("GetSectionValues", "Courses")?val="
                     + $('#SemesterSelection option:selected').text()
                     + "/"
@@ -268,8 +284,7 @@
                     + "_"
                     + $('#CourseIDText').val()
                     + "_"
-                    + $('#SectionSelection option:selected').text(), function (res) 
-                    {
+                    + $('#SectionSelection option:selected').text(), function (res) {
                         if (res.success === "true") {
                             $('#CourseNameID').val(res.data.courseName);
                             $('#CourseCreditHours').val(res.data.courseCredit - 1).attr('selected', true);
@@ -279,6 +294,9 @@
                             $('#SectionText').val(res.data.courseSection);
                             $('#ClassroomSizeText').val(res.data.sectionClassroomSize);
                             $('#ClassroomTypeText').val(res.data.sectionClassroomType);
+                            $('#ScheduleAtt').val(res.data.sectionScheduleType);
+                            $('#CampusLocation').val(res.data.sectionCampus);
+                            $('#InstructorName').val(res.data.sectionInstructor);
 
 
                             var ddlArray = new Array();
@@ -327,13 +345,30 @@
                                     $('#ScheduleSelection').val(i - 1).attr('selected', true);
                                 }
                             }
-                           
+
                         }
                         var selected = $('#SectionSelection option:selected').text();
-                        $('#SectionText').value = selected;
-                        alert($('#SectionText').val());
+                        $('#SectionText').val(selected);
                     }
-            )}
+                )
+            }
+            else
+            {
+                $('#SectionText').val("");
+                $('#ClassroomSizeText').val("");
+                $('#ClassroomSizeType').val("");
+                $('#sectionSemester').val("");
+                $('#CampusLocation').val("");
+                $('#ScheduleAtt').val("");
+                $('#InstructorName').val("");
+                $('#CampusSelection').val('').attr('selected', true);
+                $('#InstructorSelection').val('').attr('selected', true);
+                $('#ClassroomSize').val('').attr('selected', true);
+                $('#ScheduleSelection').val('').attr('selected', true);
+                $('#ClassroomType').val('').attr('selected', true);
+                $('#InstructorSelection').val("").attr('selected', true);
+            }
+
         });
 
 

@@ -253,8 +253,10 @@ namespace JAGS.Controllers
                         System.IO.File.Delete(filepath);
                     }
                     var csv = model.CourseSubject.ToString() + "," + model.CourseID.ToString() + "," + model.CourseName.ToString() + "," + model.CreditHours;
-                    if (model.CrossListWith.ToString() != null)
+                    if (model.CrossListWith != null)
                         csv += "," + model.CrossListWith.ToString(); //create csv string to write out
+                    else
+                        csv += ",";
                     System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
                 }
             }
@@ -301,16 +303,17 @@ namespace JAGS.Controllers
                     var csv = "";
                     if (model.CrossListWith == null)
                     {
-                            csv = model.CourseSubject.ToString()
-                            + "," + model.CourseID.ToString()
-                            + "," + model.CourseSection.ToString()
-                            + "," + model.CourseName.ToString()
-                            + "," + model.CreditHours
-                            + "," + model.IntructorName.ToString()
-                            + "," + model.CampusLocation.ToString()
-                            + "," + model.ScheduleAtt.ToString()
-                            + "," + model.ClassroomSize.ToString()
-                            + "," + model.ClassroomType.ToString();
+                        csv = model.CourseSubject.ToString()
+                        + "," + model.CourseID.ToString()
+                        + "," + model.CourseSection.ToString()
+                        + "," + model.CourseName.ToString()
+                        + "," + model.CreditHours
+                        + "," + model.InstructorName.ToString()
+                        + "," + model.CampusLocation.ToString()
+                        + "," + model.ScheduleAtt.ToString()
+                        + "," + model.ClassroomSize.ToString()
+                        + "," + model.ClassroomType.ToString()
+                        + ","; //Empty Crosslist With
                     }
 
                     else
@@ -320,7 +323,7 @@ namespace JAGS.Controllers
                             + "," + model.CourseSection.ToString()
                             + "," + model.CourseName.ToString()
                             + "," + model.CreditHours
-                            + "," + model.IntructorName.ToString()
+                            + "," + model.InstructorName.ToString()
                             + "," + model.CampusLocation.ToString()
                             + "," + model.ScheduleAtt.ToString()
                             + "," + model.ClassroomSize.ToString()
@@ -522,7 +525,7 @@ namespace JAGS.Controllers
                     + "," + model.CourseSection.ToString()
                     + "," + model.CourseName.ToString()
                     + "," + model.CreditHours
-                    + "," + model.IntructorName.ToString()
+                    + "," + model.InstructorName.ToString()
                     + "," + model.CampusLocation.ToString()
                     + "," + model.ScheduleAtt.ToString();
                     

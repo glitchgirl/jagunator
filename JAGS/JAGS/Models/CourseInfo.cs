@@ -11,7 +11,7 @@ namespace JAGS.Models
     {
         //[Required]
         [Display(Name = "Instructor Name")]
-        public string IntructorName { get; set; }
+        public string InstructorName { get; set; }
         public List<SelectListItem> ListOfInstructors { get; set; }
 
         [Required(ErrorMessage = "*Required*")]
@@ -76,6 +76,17 @@ namespace JAGS.Models
 
         public CourseInfo()
         {
+            CourseName = "";
+            ClassroomSize = "";
+            ClassroomType = "";
+            CrossListWith = "";
+            sectionSemester = "";
+            CampusLocation = "";
+            CourseSection = "";
+            CreditHours = "";
+            CourseSubject = "";
+            InstructorName = "";
+
             CourseCreditList = new List<SelectListItem>();
             CourseList = new List<SelectListItem> ();
             ScheduleType = new List<SelectListItem>();
