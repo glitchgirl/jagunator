@@ -278,10 +278,10 @@ namespace JAGS.Controllers
 
         public ActionResult CreateEditFaculty()
         {
-            if (HttpContext.Session.GetString(SessionUserType) != "Admin" || HttpContext.Session.GetString(SessionUserType) != "Editor")
-            {
-                return View("Index");
-            }
+            //if (HttpContext.Session.GetString(SessionUserType) != "Admin" || HttpContext.Session.GetString(SessionUserType) != "Editor")
+            //{
+            //    return View("Index");
+            //}
             //var model = new FacultyModel();
             ViewBag.debugtext = "create edit faculty";
             ViewBag.Jsonstr = "";

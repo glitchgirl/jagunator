@@ -94,7 +94,7 @@
             //var semester = {
                 SEMname = $("#Semester option:selected").text();
                 calendarevents = $("#calendar").fullCalendar("clientEvents")
-                alert(JSON.stringify(calendarevents[0].title))
+                //alert(JSON.stringify(calendarevents[0].title))
                 //};
             let json = JSON.stringify($("#calendar").fullCalendar("clientEvents").map(e => ({
                 start: e.start,

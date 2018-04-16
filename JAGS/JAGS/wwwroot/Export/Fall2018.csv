@@ -1,8 +1,1 @@
 Subject,ID,Section,Title,Hours,Professor,Campus,Type,Size,Classroom Type,Crosslist,Day of Week, Time of Day,
-AGDR,1101,A,Testing,3,test,Riverfront,Lecture/Supervised Lab/Clinic,1-35,Computer Lab,CSCI_1301,Monday,00:00:00,
-AGDR,1101,A,Testing,3,test,Riverfront,Lecture/Supervised Lab/Clinic,1-35,Computer Lab,CSCI_1301,Tuesday,00:00:00,
-AGDR,1101,A,Testing,3,test,Riverfront,Lecture/Supervised Lab/Clinic,1-35,Computer Lab,CSCI_1301,Wednesday,00:00:00,
-AGDR,1101,A,Testing,3,test,Riverfront,Lecture/Supervised Lab/Clinic,1-35,Computer Lab,CSCI_1301,Thursday,00:00:00,
-AGDR,1101,A,Testing,3,test,Riverfront,Lecture/Supervised Lab/Clinic,1-35,Computer Lab,CSCI_1301,Friday,00:00:00,
-AGDR,1101,A,Testing,3,test,Riverfront,Lecture/Supervised Lab/Clinic,1-35,Computer Lab,CSCI_1301,Saturday,00:00:00,
-AGDR,1101,A,Testing,3,test,Riverfront,Lecture/Supervised Lab/Clinic,1-35,Computer Lab,CSCI_1301,Sunday,00:00:00,
