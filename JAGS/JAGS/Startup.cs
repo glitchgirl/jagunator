@@ -61,8 +61,10 @@ namespace JAGS
                     defaults: new { controller = "Home", action = "CreateEditSchedule" });
                 routes.MapRoute("CreateEditCourse", "CreateEditCourse",
                     defaults: new { controller = "Courses", action = "CreateEditCourse" });
-                routes.MapRoute("Logout", "Logout",
-                    defaults: new { Controllers = "", Action = "Index" });
+                //routes.MapRoute("Logout", "Logout",
+                //    defaults: new { Controllers = "", Action = "Index" });
+                //routes.MapRoute("GetCourses", "GetCourses",
+                //                defaults: new { Controllers = "Courses", action = "GetCourses" });
                 
                 routes.MapRoute(
                     name: "default",
