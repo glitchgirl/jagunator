@@ -328,11 +328,6 @@ namespace JAGS.Controllers
                 var sections = JsonConvert.SerializeObject(files);
                 return Json(new { Success = "true", Data = sections });
             }
-            else
-            {
-                return Json(new { Success = "false" });
-            }
-            //ViewBag.sections = files;
             return Json(new { Success = "true" });
         }
 
@@ -357,6 +352,23 @@ namespace JAGS.Controllers
             //var retfilepath = JsonConvert.DeserializeObject(filepath);
             var returnvalue = Json(new { Success = "true", Filepath = JsonConvert.SerializeObject(filepath) });
             return Json(new { Success = "true", Filepath = filepath });
+        }
+
+
+        /*------------------------------------------------------------------------------------------------------------------*/
+
+        [HttpPost]
+        public ActionResult AddSemester(string val)
+        {
+            var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + val;
+            System.IO.Directory.CreateDirectory(filepath);
+            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/" + val + ".csv";
+            if (System.IO.File.Exists(filepath))
+            {
+                return Json(new { Success = "true" });
+            }
+            System.IO.File.WriteAllText(filepath, "");
+            return Json(new { Success = "true" });
         }
 
 

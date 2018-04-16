@@ -42,17 +42,17 @@
     <label for="Semester">Semester</label>
         <div class="text-center" id="Semester">
             @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "Value","Text"), "Select Semester", new {@class="form-control"})
+
+        </div>
+        <div class="text-center" id="Add Semester">
+            <input type="text" name="SemesterName" id="SemesterName">
+            <input type="button" value="AddSemester" id="AddSemButton"><br>
         </div>
          <!--TODO: Add dropdown for subject-->     
                 <div id='wrap'>
         <div id='external-events'>
             <div id='external-events-listing'>
                 <h4>Courses</h4>
-                <div class='fc-event'>My Event 1</div>
-                <div class='fc-event'>My Event 2</div>
-                <div class='fc-event'>My Event 3</div>
-                <div class='fc-event'>My Event 4</div>
-                <div class='fc-event'>My Event 5</div>
             </div>
             <p>
                 <input type='checkbox' id='drop-remove'  checked='checked'/>
@@ -68,88 +68,61 @@
         <br>
     <div class="scheduleButtons">
         <input type="button" value="Save" id="SaveButton"><br>
-        <input type="button" value="Clear"><br>
         <input type="button" value="Export schedule" id="ExportButton"><br>
     </div>
  <div class="scheduleErrors">
         Conflicts 
     </div>
 
-@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
-<script>
-  //function myFunction(){
-  //  alert("hello world");
-  //  var Array = $('#calendar').fullCalendar(‘clientEvents’);
-    //alert(Array[0].title);
-  //  };
-</script>            
+@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@          
 <script type="text/javascript">
  $(function()
  {    
+      $('#AddSemButton').click(function()
+       {
+            alert("SUC");
+            var t = document.getElementById('SemesterName').value.toString();
+            alert(t);
+            $.post("@Url.Action("AddSemester", "Home")?val=" + t, function(ressem){});
+            location.reload();
+       });
       $('#SaveButton').click(function()
         {
-            //alert("SUCCESS");
-            //var calNode = document.getElementByID('calendar');
+
             var name = $("#Semester option:selected").text();
-            //var semester = {
-                SEMname = $("#Semester option:selected").text();
-                calendarevents = $("#calendar").fullCalendar("clientEvents")
-                //alert(JSON.stringify(calendarevents[0].title))
-                //};
+            SEMname = $("#Semester option:selected").text();
+            calendarevents = $("#calendar").fullCalendar("clientEvents")
+
             let json = JSON.stringify($("#calendar").fullCalendar("clientEvents").map(e => ({
                 start: e.start,
                 end: e.end,
                 title: e.title,
                 name: SEMname
             })));
-            //alert(json);
             $.post("@Url.Action("SaveSemesterValues", "Home")?val=" + json, function(ressave){});
-            //alert(CalendarEvents[0].title);
-            //alert(CalendarEvents[0].start);
         });
 
       $('#ExportButton').click(function()
         {
-            //alert("SUCCESS");
-            var name = $("#Semester option:selected").text();
-            SEMname = $("#Semester option:selected").text();
-            calendarevents = $("#calendar").fullCalendar("clientEvents")
             var u = $("#Semester option:selected").text()
-            let json = JSON.stringify($("#calendar").fullCalendar("clientEvents").map(e => ({
-                start: e.start,
-                end: e.end,
-                title: e.title,
-                name: SEMname
-            })));
-            //alert(json);
             $.post("@Url.Action("ExportCalendar", "Home")?val=" + u, function(resexport){
-                   //var jsonpath = JSON.parse(resexport[0]);
-                   //alert(resexport[0]);
-                   //alert(resexport.filepath);
-                   //alert(resexport.success);
-
                    window.open(resexport.filepath);
-                });
-
-
+             });
         });
 
 
       //execute on change of semester drop down
       $("#Semester").change(function() 
         {
-                //alert("it works");
-                //get selected value from semester dropdown
                 var loadevents = [];
                 var u = $("#Semester option:selected").text()             
                 //call getsectionvalues in homecontroller and pass value selected
                 $.post("@Url.Action("GetSectionValues", "Home")?val=" + u, function(res) 
                 {
-                    //var JSsections = '@ViewBag.sections'
                     //if function suceeds then do the following
-                    if (res.success === "true") 
+                    if (res.success === "true" && res.data !== undefined) 
                     {
-                        //alert(res.data);
+                        alert(res.data);
                         //parse data from return
                         var resultjson = JSON.parse(res.data);
 
@@ -165,7 +138,6 @@
                             var innerdiv = document.createElement("div");
                             innerdiv.className = "fc-event";
                             innerdiv.innerHTML = resultjson[i];
-                            //alert(resultjson[i]);
                             var externalevents = document.getElementById('external-events-listing')
                             externalevents.appendChild(innerdiv);
                             };
@@ -195,25 +167,26 @@
                                 mystart = moment(result.data[i].start);
                                 myend = moment(result.data[i].end);
                                 var myevent = {
-                                //loadevents.push({
                                     title: mytitle,
                                     start: mystart,
                                     end: myend,
                                     allDay: false
                                 };
                                 $('#calendar').fullCalendar( 'renderEvent', myevent, true);
-                            //$('#calendar').fullCalendar({
-                            //    events: loadevents
-                            //    });
                             }
                         });
 
                     } 
-                    else 
+                    else if (res.success === "true")
+                    {
+                        alert("There is No Calendar Data for this Semester!");
+                    }
+                    else
                     {
                         alert("Error getting data!");
                     }
-                    });
+
+                });
 
                     
         });
