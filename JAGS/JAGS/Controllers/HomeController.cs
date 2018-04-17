@@ -375,6 +375,27 @@ namespace JAGS.Controllers
         /*------------------------------------------------------------------------------------------------------------------*/
 
         [HttpPost]
+        public ActionResult LoadSemester(string val, string val2)
+        {
+            var destfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + val + "/";
+            var sourcefilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + val2 + "/";
+            var destsched = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/" + val + ".csv";
+            var sourcesched = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/" + val2 + ".csv";
+            foreach (string files in Directory.GetFiles(sourcefilepath, "*.*", SearchOption.AllDirectories))
+                System.IO.File.Copy(files, files.Replace(sourcefilepath, destfilepath), true);
+            if (System.IO.File.Exists(destsched))
+            {
+                System.IO.File.Delete(destsched);
+                System.IO.File.Copy(sourcesched, destsched);
+            }
+            //System.IO.File.WriteAllText(filepath, "");
+            return Json(new { Success = "true" });
+        }
+
+
+        /*------------------------------------------------------------------------------------------------------------------*/
+
+        [HttpPost]
         public ActionResult SaveSemesterValues(string val)
         {
             var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/";

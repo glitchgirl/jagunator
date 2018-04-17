@@ -48,6 +48,10 @@
             <input type="text" name="SemesterName" id="SemesterName">
             <input type="button" value="AddSemester" id="AddSemButton"><br>
         </div>
+        <div class="text-center" id="LoadSemester">
+            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "Value","Text"), "Select Semester", new {@class="form-control"})
+            <input type="button" value="LoadSemester" id="LoadSemesterButton"><br>
+        </div>
          <!--TODO: Add dropdown for subject-->     
                 <div id='wrap'>
         <div id='external-events'>
@@ -78,11 +82,34 @@
 <script type="text/javascript">
  $(function()
  {    
+      $('#LoadSemesterButton').click(function()
+       {
+            var currentsemester = $("#Semester option:selected").text();
+            var newsemester = $("#LoadSemester option:selected").text();
+            if (currentsemester === "Select Semester" && newsemester === "Select Semester")
+                {
+                    alert("You have not selected a semester to load or one to load into!");
+                }
+            else if (currentsemester === "Select Semester")
+                {
+                    alert("You have not selected a semester to load into!");
+                }
+            else if (newsemester === "Select Semester")
+                {
+                    alert("You have not selected a semester to load!");
+                }
+            else
+                {
+                    //alert(currentsemester);
+                    //alert(newsemester);
+                    $.post("@Url.Action("LoadSemester", "Home")?val=" + currentsemester + "&val2=" + newsemester, function(resloadsem){});
+                    location.reload();
+                }
+
+       });
       $('#AddSemButton').click(function()
        {
-            alert("SUC");
             var t = document.getElementById('SemesterName').value.toString();
-            alert(t);
             $.post("@Url.Action("AddSemester", "Home")?val=" + t, function(ressem){});
             location.reload();
        });
@@ -122,7 +149,6 @@
                     //if function suceeds then do the following
                     if (res.success === "true" && res.data !== undefined) 
                     {
-                        alert(res.data);
                         //parse data from return
                         var resultjson = JSON.parse(res.data);
 
