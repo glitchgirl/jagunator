@@ -34,6 +34,24 @@ namespace JAGS.Controllers
         public string title { get; set; }
         public string name { get; set; }
     }
+    public class SectionObject
+    {
+        public DateTime start { get; set; }
+        public DateTime end { get; set; }
+        public string title { get; set; }
+        public string teacher { get; set; }
+        public int maxteacherclasses { get; set; }
+        public string campus { get; set; }
+        public string crosslist { get; set; }
+    }
+    public class ErrorObject
+    {
+        public DateTime startclass1 { get; set; }
+        public DateTime startclass2 { get; set; }
+        public string class1title { get; set; }
+        public string class2title { get; set; }
+        public string errordesc { get; set; }
+    }
 
 
     public class HomeController : Microsoft.AspNetCore.Mvc.Controller
@@ -432,6 +450,77 @@ namespace JAGS.Controllers
                 }
                 System.IO.File.WriteAllLines(expfilepath, export);   //write csv file
             }
+            return Json(new { Success = "true" });
+        }
+
+
+        /*------------------------------------------------------------------------------------------------------------------*/
+
+        [HttpPost]
+        public ActionResult CheckConflicts(string val)
+        {
+            //schedule file path
+            var schedfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/" + val + ".csv";
+            //read in the schedule and convert to list of eventobjects
+            var schedevents = JsonConvert.DeserializeObject<List<EventObject>>(new StreamReader(schedfilepath).ReadLine());
+            //section file path
+            var sectionfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + val + "/";
+            //create list of SectionObject for checking
+            List<SectionObject> SchedSections = new List<SectionObject>();
+            List<ErrorObject> Errorlist = new List<ErrorObject>();
+            foreach (EventObject schedevent in schedevents)
+            {
+                string[] currentsection = new StreamReader(sectionfilepath + schedevent.title + ".csv").ReadLine().Split(",");
+                string[] currentteacher = new StreamReader(ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + currentsection[5] + ".csv").ReadLine().Split(",");
+                SectionObject tempsect = new SectionObject();
+                tempsect.start = schedevent.start;
+                tempsect.end = schedevent.end;
+                tempsect.title = schedevent.title;
+                tempsect.teacher = currentsection[5];
+                switch (currentteacher[2])
+                {
+                    case "0":
+                        tempsect.maxteacherclasses = 2;
+                        break;
+                    case "1":
+                        tempsect.maxteacherclasses = 4;
+                        break;
+                    case "2":
+                        tempsect.maxteacherclasses = 5;
+                        break;
+                }
+                //tempsect.maxteacherclasses = currentteacher[2];
+                tempsect.campus = currentsection[6];
+                tempsect.crosslist = currentsection[10];
+                SchedSections.Add(tempsect);
+            }
+            for (int i = 0; i < SchedSections.Count; i++)
+            {
+                for (int j = 0; j < SchedSections.Count; j++)
+                {
+                    if (i == j)
+                    {
+                        continue;
+                    }
+                    //check for same teacher teaching at same time
+                    if (SchedSections[i].start == SchedSections[j].start && SchedSections[i].teacher == SchedSections[j].teacher)
+                    {
+                        Errorlist.Add(new ErrorObject 
+                        {
+                            startclass1 = SchedSections[i].start, 
+                            startclass2 = SchedSections[j].start,
+                            class1title = SchedSections[i].title,
+                            class2title = SchedSections[j].title,
+                            errordesc = "Teacher is the same for these classes at the same time"    
+                        });
+                    }
+                    //
+
+                }
+
+
+            }
+
             return Json(new { Success = "true" });
         }
 

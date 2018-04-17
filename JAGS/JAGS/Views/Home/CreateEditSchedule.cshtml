@@ -127,6 +127,7 @@
                 name: SEMname
             })));
             $.post("@Url.Action("SaveSemesterValues", "Home")?val=" + json, function(ressave){});
+            $.post("@Url.Action("CheckConflicts", "Home")?val=" + name, function(resconflict){});
         });
 
       $('#ExportButton').click(function()
