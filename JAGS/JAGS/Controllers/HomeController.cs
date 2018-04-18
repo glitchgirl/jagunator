@@ -50,6 +50,7 @@ namespace JAGS.Controllers
         public DateTime startclass2 { get; set; }
         public string class1title { get; set; }
         public string class2title { get; set; }
+        public string teacher { get; set; }
         public string errordesc { get; set; }
     }
 
@@ -462,12 +463,13 @@ namespace JAGS.Controllers
             //schedule file path
             var schedfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/" + val + ".csv";
             //read in the schedule and convert to list of eventobjects
-            var schedevents = JsonConvert.DeserializeObject<List<EventObject>>(new StreamReader(schedfilepath).ReadLine());
+            var schedevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
             //section file path
-            var sectionfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + val + "/";
+            var sectionfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + schedevents[0].name + "/";
             //create list of SectionObject for checking
             List<SectionObject> SchedSections = new List<SectionObject>();
             List<ErrorObject> Errorlist = new List<ErrorObject>();
+            var ProfCount = new Dictionary<string, int>();
             foreach (EventObject schedevent in schedevents)
             {
                 string[] currentsection = new StreamReader(sectionfilepath + schedevent.title + ".csv").ReadLine().Split(",");
@@ -493,35 +495,69 @@ namespace JAGS.Controllers
                 tempsect.campus = currentsection[6];
                 tempsect.crosslist = currentsection[10];
                 SchedSections.Add(tempsect);
+                //maintain count of classes taught by teachers
+                if (ProfCount.ContainsKey(tempsect.teacher))
+                {
+                    ProfCount[tempsect.teacher] += 1;
+                }
+                else
+                {
+                    ProfCount.Add(tempsect.teacher, 1);
+                }
             }
             for (int i = 0; i < SchedSections.Count; i++)
             {
                 for (int j = 0; j < SchedSections.Count; j++)
                 {
-                    if (i == j)
+                    if (i != j)
                     {
-                        continue;
-                    }
-                    //check for same teacher teaching at same time
-                    if (SchedSections[i].start == SchedSections[j].start && SchedSections[i].teacher == SchedSections[j].teacher)
-                    {
-                        Errorlist.Add(new ErrorObject 
+                        //check for same teacher teaching at same time and classes aren't crosslisted
+                        Debug.Write("we are in the loop");
+                        if (SchedSections[i].start == SchedSections[j].start && SchedSections[i].teacher == SchedSections[j].teacher && SchedSections[i].title.IndexOf(SchedSections[j].crosslist, StringComparison.OrdinalIgnoreCase) >= 0)
                         {
-                            startclass1 = SchedSections[i].start, 
-                            startclass2 = SchedSections[j].start,
-                            class1title = SchedSections[i].title,
-                            class2title = SchedSections[j].title,
-                            errordesc = "Teacher is the same for these classes at the same time"    
-                        });
+                            Errorlist.Add(new ErrorObject
+                            {
+                                startclass1 = SchedSections[i].start,
+                                startclass2 = SchedSections[j].start,
+                                class1title = SchedSections[i].title,
+                                class2title = SchedSections[j].title,
+                                teacher = SchedSections[i].teacher,
+                                errordesc = "Teacher is the same for these classes at the same time"
+                            });
+                        }
                     }
                     //
-
                 }
-
+                if (ProfCount[SchedSections[i].teacher] > SchedSections[i].maxteacherclasses)
+                {
+                    var currenterror = new ErrorObject
+                    {
+                        startclass1 = new DateTime(),
+                        startclass2 = new DateTime(),
+                        class1title = null,
+                        class2title = null,
+                        teacher = SchedSections[i].teacher,
+                        errordesc = SchedSections[i].teacher + " is teaching more than " + SchedSections[i].maxteacherclasses + " classes"
+                    };
+                    var counterror = Errorlist.IndexOf(currenterror);
+                    if (Errorlist.IndexOf(currenterror) == -1)
+                    {
+                        Errorlist.Add(new ErrorObject
+                        {
+                            startclass1 = new DateTime(),
+                            startclass2 = new DateTime(),
+                            class1title = null,
+                            class2title = null,
+                            teacher = SchedSections[i].teacher,
+                            errordesc = SchedSections[i].teacher + " is teaching more than " + SchedSections[i].maxteacherclasses + " classes"
+                        });
+                    }
+                }
+                SchedSections.RemoveAt(i);
 
             }
-
-            return Json(new { Success = "true" });
+            var returnjson = JsonConvert.SerializeObject(Errorlist);
+            return Json(new { Success = "true", Data = returnjson});
         }
 
 
