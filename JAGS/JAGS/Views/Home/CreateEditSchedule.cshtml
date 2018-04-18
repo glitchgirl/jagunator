@@ -131,13 +131,14 @@
             var errordata = JSON.parse(res.data);
             var myerrornode = document.getElementById('Errors');
             for(i in errordata) {
+                //alert(i);
                var innerdiv = document.createElement("div");
                innerdiv.className = "errordatapoint";
                innerdiv.innerHTML = errordata[i].errordesc;
                myerrornode.appendChild(innerdiv);
                };
-            alert(errordata);
-                });
+            //alert(errordata);
+             });
         });
 
       $('#ExportButton').click(function()

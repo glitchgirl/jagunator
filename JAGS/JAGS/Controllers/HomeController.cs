@@ -513,7 +513,7 @@ namespace JAGS.Controllers
                     {
                         //check for same teacher teaching at same time and classes aren't crosslisted
                         Debug.Write("we are in the loop");
-                        if (SchedSections[i].start == SchedSections[j].start && SchedSections[i].teacher == SchedSections[j].teacher && SchedSections[i].title.IndexOf(SchedSections[j].crosslist, StringComparison.OrdinalIgnoreCase) >= 0)
+                        if (SchedSections[i].start == SchedSections[j].start && SchedSections[i].teacher == SchedSections[j].teacher) //&& SchedSections[i].title.IndexOf(SchedSections[j].crosslist, StringComparison.OrdinalIgnoreCase) >= 0)
                         {
                             Errorlist.Add(new ErrorObject
                             {
@@ -530,17 +530,16 @@ namespace JAGS.Controllers
                 }
                 if (ProfCount[SchedSections[i].teacher] > SchedSections[i].maxteacherclasses)
                 {
-                    var currenterror = new ErrorObject
+                    int errorfound = 0;
+                    for (int k = 0; k < Errorlist.Count(); k++)
                     {
-                        startclass1 = new DateTime(),
-                        startclass2 = new DateTime(),
-                        class1title = null,
-                        class2title = null,
-                        teacher = SchedSections[i].teacher,
-                        errordesc = SchedSections[i].teacher + " is teaching more than " + SchedSections[i].maxteacherclasses + " classes"
-                    };
-                    var counterror = Errorlist.IndexOf(currenterror);
-                    if (Errorlist.IndexOf(currenterror) == -1)
+                        if (Errorlist[k].errordesc == SchedSections[i].teacher + " is teaching more than " + SchedSections[i].maxteacherclasses + " classes")
+                        {
+                            errorfound = 1;
+                            break;
+                        }
+                    }
+                    if (errorfound == 0)
                     {
                         Errorlist.Add(new ErrorObject
                         {
@@ -554,7 +553,6 @@ namespace JAGS.Controllers
                     }
                 }
                 SchedSections.RemoveAt(i);
-
             }
             var returnjson = JsonConvert.SerializeObject(Errorlist);
             return Json(new { Success = "true", Data = returnjson});
