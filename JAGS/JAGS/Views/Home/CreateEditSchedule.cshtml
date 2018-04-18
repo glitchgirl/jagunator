@@ -127,16 +127,17 @@
                 name: SEMname
             })));
             $.post("@Url.Action("SaveSemesterValues", "Home")?val=" + json, function(ressave){});
-            $.post("@Url.Action("CheckConflicts", "Home")?val=" + json, function(res){});
+            $.post("@Url.Action("CheckConflicts", "Home")?val=" + json, function(res){
             var errordata = JSON.parse(res.data);
             var myerrornode = document.getElementById('Errors');
             for(i in errordata) {
                var innerdiv = document.createElement("div");
                innerdiv.className = "errordatapoint";
-               innerdiv.innerHTML = errordata[i];
+               innerdiv.innerHTML = errordata[i].errordesc;
                myerrornode.appendChild(innerdiv);
                };
             alert(errordata);
+                });
         });
 
       $('#ExportButton').click(function()
