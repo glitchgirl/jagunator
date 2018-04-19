@@ -233,7 +233,7 @@ namespace JAGS.Controllers
                     ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
                     var factype = "";
 
-                    var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + model.Facultyname + ".csv";  //get absolute file path for possible user file
+                    var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + model.Facultylname + "," + model.Facultyfname + ".csv";  //get absolute file path for possible user file
                     if (System.IO.File.Exists(filepath))   //check if user csv file exists
                     {
                         System.IO.File.Delete(filepath);   //delete user file if it exists
@@ -251,7 +251,7 @@ namespace JAGS.Controllers
                         factype = "2";
                     }
 
-                    var csv = model.Facultyname.ToString() + "," + model.Facultytitle.ToString() + "," + factype;  //create csv string to write out
+                    var csv = model.Facultyfname.ToString() + "," + model.Facultylname + "," + model.Facultytitle.ToString() + "," + factype;  //create csv string to write out
                     System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
 
                     String filepathfac = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";  //get file path for faculty folder
@@ -265,7 +265,7 @@ namespace JAGS.Controllers
                     ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
                     ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
 
-                    filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + model.Facultyname + ".csv";  //get absolute file path for possible user file
+                    filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + model.Facultylname + "," + model.Facultyfname + ".csv";  //get absolute file path for possible user file
                     if (System.IO.File.Exists(filepath))   //check if user csv file exists
                     {
                         System.IO.File.Delete(filepath);   //delete user file if it exists
@@ -330,7 +330,7 @@ namespace JAGS.Controllers
                 return Json(new { Success = "false" });
             }
             ViewBag.Jsonstr = Json(new { Success = "true", Data = new { factype = row[2] } });
-            return Json(new { Success = "true", Data = new { factype = row[2] } });
+            return Json(new { Success = "true", Data = new { fname = row[0], lname = row[1], factype = row[3], title = row[2] } });
         }
 
 
@@ -356,19 +356,7 @@ namespace JAGS.Controllers
         [HttpPost]
         public ActionResult ExportCalendar(string val)
         {
-            //string filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/";
-            //Debug.WriteLine(val);
-            //var semesterevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
-            //Debug.WriteLine(semesterevents[0].name);
-            //filepath = filepath + val + ".csv";
             string filepath = "Export/" + val + ".csv";
-            //if (System.IO.File.Exists(filepath))   //check if user csv file exists
-            //{
-            //    var mimeType = "text/csv";
-            //    FileStream fileStream = new FileStream(filepath, FileMode.Open, FileAccess.Read);
-            //    return File(fileStream, mimeType, "Export.csv");   //delete user file if it exists
-            //}
-            //var retfilepath = JsonConvert.DeserializeObject(filepath);
             var returnvalue = Json(new { Success = "true", Filepath = JsonConvert.SerializeObject(filepath) });
             return Json(new { Success = "true", Filepath = filepath });
         }
@@ -444,12 +432,40 @@ namespace JAGS.Controllers
                     String current_file_path = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + semesterevents[0].name + "/" + semesterevents[i].title + ".csv";
                     if (System.IO.File.Exists(current_file_path))
                     {
+                        //correct time zone difference
+                        semesterevents[i].start = semesterevents[i].start.AddHours(-4);
+                        semesterevents[i].end = semesterevents[i].end.AddHours(-4);
+                        //DateTime test = semesterevents[i].start.AddHours(-4);
                         StreamReader readFile = new StreamReader(current_file_path);
-                        current_input = readFile.ReadLine() + "," + semesterevents[i].start.DayOfWeek + "," + semesterevents[i].start.TimeOfDay + "," + semesterevents[i].end.TimeOfDay + ",";
+                        current_input = readFile.ReadLine() + "," + semesterevents[i].start.DayOfWeek + "," + semesterevents[i].start.TimeOfDay + "," + semesterevents[i].end.TimeOfDay;
+                        int indexofclass = export.FindIndex(x => x.StartsWith(current_input.Substring(0, 12)));
+                        if (indexofclass >= 0)
+                        {
+
+                            //
+                            export[indexofclass] = export[indexofclass] + "," + semesterevents[i].start.DayOfWeek + "," + semesterevents[i].start.TimeOfDay + "," + semesterevents[i].end.TimeOfDay;
+                            continue;
+                        }
                         export.Add(current_input);
                     }
                 }
                 System.IO.File.WriteAllLines(expfilepath, export);   //write csv file
+            }
+            else
+            {
+                filepath = filepath + semesterevents[0].name + ".csv";
+                if (System.IO.File.Exists(filepath))   //check if user csv file exists
+                {
+                    System.IO.File.Delete(filepath);   //delete user file if it exists
+                }
+                System.IO.File.WriteAllText(filepath, val);   //write csv file
+                var expfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "wwwroot/Export/" + semesterevents[0].name + ".csv";
+                if (System.IO.File.Exists(expfilepath))   //check if user csv file exists
+                {
+                    System.IO.File.Delete(expfilepath);   //delete user file if it exists
+                }
+                System.IO.File.WriteAllText(expfilepath, val);
+
             }
             return Json(new { Success = "true" });
         }
@@ -460,102 +476,106 @@ namespace JAGS.Controllers
         [HttpPost]
         public ActionResult CheckConflicts(string val)
         {
-            //schedule file path
-            var schedfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/" + val + ".csv";
-            //read in the schedule and convert to list of eventobjects
-            var schedevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
-            //section file path
-            var sectionfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + schedevents[0].name + "/";
-            //create list of SectionObject for checking
-            List<SectionObject> SchedSections = new List<SectionObject>();
-            List<ErrorObject> Errorlist = new List<ErrorObject>();
-            var ProfCount = new Dictionary<string, int>();
-            foreach (EventObject schedevent in schedevents)
+            if (val != "[]")
             {
-                string[] currentsection = new StreamReader(sectionfilepath + schedevent.title + ".csv").ReadLine().Split(",");
-                string[] currentteacher = new StreamReader(ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + currentsection[5] + ".csv").ReadLine().Split(",");
-                SectionObject tempsect = new SectionObject();
-                tempsect.start = schedevent.start;
-                tempsect.end = schedevent.end;
-                tempsect.title = schedevent.title;
-                tempsect.teacher = currentsection[5];
-                switch (currentteacher[2])
+                //schedule file path
+                var schedfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/" + val + ".csv";
+                //read in the schedule and convert to list of eventobjects
+                var schedevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
+                //section file path
+                var sectionfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + schedevents[0].name + "/";
+                //create list of SectionObject for checking
+                List<SectionObject> SchedSections = new List<SectionObject>();
+                List<ErrorObject> Errorlist = new List<ErrorObject>();
+                var ProfCount = new Dictionary<string, int>();
+                foreach (EventObject schedevent in schedevents)
                 {
-                    case "0":
-                        tempsect.maxteacherclasses = 2;
-                        break;
-                    case "1":
-                        tempsect.maxteacherclasses = 4;
-                        break;
-                    case "2":
-                        tempsect.maxteacherclasses = 5;
-                        break;
-                }
-                //tempsect.maxteacherclasses = currentteacher[2];
-                tempsect.campus = currentsection[6];
-                tempsect.crosslist = currentsection[10];
-                SchedSections.Add(tempsect);
-                //maintain count of classes taught by teachers
-                if (ProfCount.ContainsKey(tempsect.teacher))
-                {
-                    ProfCount[tempsect.teacher] += 1;
-                }
-                else
-                {
-                    ProfCount.Add(tempsect.teacher, 1);
-                }
-            }
-            for (int i = 0; i < SchedSections.Count; i++)
-            {
-                for (int j = 0; j < SchedSections.Count; j++)
-                {
-                    if (i != j)
+                    string[] currentsection = new StreamReader(sectionfilepath + schedevent.title + ".csv").ReadLine().Split(",");
+                    string[] currentteacher = new StreamReader(ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + currentsection[5] + "," + currentsection[6] + ".csv").ReadLine().Split(",");
+                    SectionObject tempsect = new SectionObject();
+                    tempsect.start = schedevent.start;
+                    tempsect.end = schedevent.end;
+                    tempsect.title = schedevent.title;
+                    tempsect.teacher = currentsection[5] + "," + currentsection[6];
+                    switch (currentteacher[3])
                     {
-                        //check for same teacher teaching at same time and classes aren't crosslisted
-                        Debug.Write("we are in the loop");
-                        if (SchedSections[i].start == SchedSections[j].start && SchedSections[i].teacher == SchedSections[j].teacher) //&& SchedSections[i].title.IndexOf(SchedSections[j].crosslist, StringComparison.OrdinalIgnoreCase) >= 0)
+                        case "0":
+                            tempsect.maxteacherclasses = 2;
+                            break;
+                        case "1":
+                            tempsect.maxteacherclasses = 4;
+                            break;
+                        case "2":
+                            tempsect.maxteacherclasses = 5;
+                            break;
+                    }
+                    //tempsect.maxteacherclasses = currentteacher[2];
+                    tempsect.campus = currentsection[6];
+                    tempsect.crosslist = currentsection[10];
+                    SchedSections.Add(tempsect);
+                    //maintain count of classes taught by teachers
+                    if (ProfCount.ContainsKey(tempsect.teacher))
+                    {
+                        ProfCount[tempsect.teacher] += 1;
+                    }
+                    else
+                    {
+                        ProfCount.Add(tempsect.teacher, 1);
+                    }
+                }
+                for (int i = 0; i < SchedSections.Count; i++)
+                {
+                    for (int j = 0; j < SchedSections.Count; j++)
+                    {
+                        if (i != j)
+                        {
+                            //check for same teacher teaching at same time and classes aren't crosslisted
+                            Debug.Write("we are in the loop");
+                            if (SchedSections[i].start == SchedSections[j].start && SchedSections[i].teacher == SchedSections[j].teacher) //&& SchedSections[i].title.IndexOf(SchedSections[j].crosslist, StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                Errorlist.Add(new ErrorObject
+                                {
+                                    startclass1 = SchedSections[i].start,
+                                    startclass2 = SchedSections[j].start,
+                                    class1title = SchedSections[i].title,
+                                    class2title = SchedSections[j].title,
+                                    teacher = SchedSections[i].teacher,
+                                    errordesc = "Teacher is the same for these classes at the same time"
+                                });
+                            }
+                        }
+                        //
+                    }
+                    if (ProfCount[SchedSections[i].teacher] > SchedSections[i].maxteacherclasses)
+                    {
+                        int errorfound = 0;
+                        for (int k = 0; k < Errorlist.Count(); k++)
+                        {
+                            if (Errorlist[k].errordesc == SchedSections[i].teacher + " is teaching more than " + SchedSections[i].maxteacherclasses + " classes")
+                            {
+                                errorfound = 1;
+                                break;
+                            }
+                        }
+                        if (errorfound == 0)
                         {
                             Errorlist.Add(new ErrorObject
                             {
-                                startclass1 = SchedSections[i].start,
-                                startclass2 = SchedSections[j].start,
-                                class1title = SchedSections[i].title,
-                                class2title = SchedSections[j].title,
+                                startclass1 = new DateTime(),
+                                startclass2 = new DateTime(),
+                                class1title = null,
+                                class2title = null,
                                 teacher = SchedSections[i].teacher,
-                                errordesc = "Teacher is the same for these classes at the same time"
+                                errordesc = SchedSections[i].teacher + " is teaching more than " + SchedSections[i].maxteacherclasses + " classes"
                             });
                         }
                     }
-                    //
+                    SchedSections.RemoveAt(i);
                 }
-                if (ProfCount[SchedSections[i].teacher] > SchedSections[i].maxteacherclasses)
-                {
-                    int errorfound = 0;
-                    for (int k = 0; k < Errorlist.Count(); k++)
-                    {
-                        if (Errorlist[k].errordesc == SchedSections[i].teacher + " is teaching more than " + SchedSections[i].maxteacherclasses + " classes")
-                        {
-                            errorfound = 1;
-                            break;
-                        }
-                    }
-                    if (errorfound == 0)
-                    {
-                        Errorlist.Add(new ErrorObject
-                        {
-                            startclass1 = new DateTime(),
-                            startclass2 = new DateTime(),
-                            class1title = null,
-                            class2title = null,
-                            teacher = SchedSections[i].teacher,
-                            errordesc = SchedSections[i].teacher + " is teaching more than " + SchedSections[i].maxteacherclasses + " classes"
-                        });
-                    }
-                }
-                SchedSections.RemoveAt(i);
+                var returnjson = JsonConvert.SerializeObject(Errorlist);
+                return Json(new { Success = "true", Data = returnjson });
             }
-            var returnjson = JsonConvert.SerializeObject(Errorlist);
-            return Json(new { Success = "true", Data = returnjson});
+            return Json(new { Success = "true" });
         }
 
 

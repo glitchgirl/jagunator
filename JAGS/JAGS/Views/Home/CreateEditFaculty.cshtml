@@ -25,11 +25,18 @@
                 @Html.DropDownListFor(m => m.selectedfac, new SelectList(ViewBag.listfac, "Value", "Text"), "-Select Faculty to Edit-")
             </div>
             <div class="editor-label">
-                @Html.LabelFor(model => model.Facultyname)
+                @Html.LabelFor(model => model.Facultyfname)
             </div>
             <div class="editor-field">
-                @Html.TextBoxFor(model => model.Facultyname)
-                @Html.ValidationMessageFor(model => model.Facultyname)
+                @Html.TextBoxFor(model => model.Facultyfname)
+                @Html.ValidationMessageFor(model => model.Facultyfname)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Facultylname)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Facultylname)
+                @Html.ValidationMessageFor(model => model.Facultylname)
             </div>
             <div class="editor-label">
                 @Html.LabelFor(model => model.Facultytitle)
@@ -75,7 +82,10 @@
                     if (res.success === "true") 
                     {
                         //alert(ViewBag.sections)
-                        $("#Facultyname").val(u);
+                        //var facdata = JSON.parse(res.data);
+                        $("#Facultyfname").val(res.data.fname);
+                        $("#Facultylname").val(res.data.lname);
+                        $("#Facultytitle").val(res.data.title);
                         if (res.data.factype === "0")
                         {
                             $("#Option0").prop("checked",true);

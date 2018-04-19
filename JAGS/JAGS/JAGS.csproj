@@ -40,6 +40,7 @@
     <Folder Include="Views\Home\images\" />
     <Folder Include="Data\Semesters\" />
     <Folder Include="wwwroot\Export\" />
+    <Folder Include="Data\Courses\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Controllers\test.csv" />
@@ -68,7 +69,9 @@
     <None Remove="Views\Home\images\banner4.svg" />
     <None Remove="Views\Home\images\logorev-1.png" />
     <None Remove="Data\Faculty\-Select Faculty to Edit-.csv" />
-    <None Remove="Data\Semesters\Fall2018.csv" />
+    <None Remove="Data\Schedules\Fall2018\ACCT_1101_A.csv" />
+    <None Remove="Data\Schedules\Fall2018\AGDR_1101_A.csv" />
+    <None Remove="Data\Schedules\Fall2018\AIST_1726_A.csv" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="demos\json\events.json" />
@@ -91,9 +94,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="Views\Home\images\logorev-1.png">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Data\Semesters\Fall2018.csv">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>

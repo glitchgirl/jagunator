@@ -13,8 +13,11 @@ namespace JAGS.Models
         public List<string> facultylist { get; set; }
         public string selectedfac { get; set; }
 
-        [Required(ErrorMessage = "Name is required")]
-        public string Facultyname { get; set; }
+        [Required(ErrorMessage = "First Name is required")]
+        public string Facultyfname { get; set; }
+
+        [Required(ErrorMessage = "Last Name is required")]
+        public string Facultylname { get; set; }
 
         [Required(ErrorMessage = "Title is required")]
         public string Facultytitle { get; set; }
