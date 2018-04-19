@@ -74,6 +74,7 @@
         <input type="button" value="Save" id="SaveButton"><br>
         <input type="button" value="Export schedule" id="ExportButton"><br>
     </div>
+ <label for="Errors">Conflicts</label>
  <div class="scheduleErrors" id="Errors">
         Conflicts 
     </div>
@@ -129,17 +130,27 @@
                 title: e.title,
                 name: SEMname
             })));
-            $.post("@Url.Action("SaveSemesterValues", "Home")?val=" + json, function(ressave){});
+            $.post("@Url.Action("SaveSemesterValues", "Home")?val=" + json + "&val2=" + name, function(ressave){});
             $.post("@Url.Action("CheckConflicts", "Home")?val=" + json, function(res){
-            var errordata = JSON.parse(res.data);
+            if (res.data != "")
+                {
+                    var errordata = JSON.parse(res.data);
+                }
             var myerrornode = document.getElementById('Errors');
-            for(i in errordata) {
-                //alert(i);
-               var innerdiv = document.createElement("div");
-               innerdiv.className = "errordatapoint";
-               innerdiv.innerHTML = errordata[i].errordesc;
-               myerrornode.appendChild(innerdiv);
-               };
+            if (res.data != "")
+                {
+                //var myNode = document.getElementById('external-events-listing');
+                while (myerrornode.firstChild) {
+                    myerrornode.removeChild(myerrornode.firstChild);
+                    }
+                for(i in errordata) {
+                    //alert(i);
+                    var innerdiv = document.createElement("div");
+                    innerdiv.className = "errordatapoint";
+                    innerdiv.innerHTML = errordata[i].errordesc + " Classes: " + errordata[i].class1title + " : " + errordata[i].class2title;
+                    myerrornode.appendChild(innerdiv);
+                    };
+                }
             //alert(errordata);
              });
         });

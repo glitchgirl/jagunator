@@ -403,12 +403,28 @@ namespace JAGS.Controllers
         /*------------------------------------------------------------------------------------------------------------------*/
 
         [HttpPost]
-        public ActionResult SaveSemesterValues(string val)
+        public ActionResult SaveSemesterValues(string val, string val2)
         {
             var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/";
             //Debug.WriteLine(val);
             var semesterevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
             //Debug.WriteLine(semesterevents[0].name);
+            if (val == "[]")
+            {
+                filepath = filepath + val2 + ".csv";
+                if (System.IO.File.Exists(filepath))   //check if user csv file exists
+                {
+                    System.IO.File.Delete(filepath);   //delete user file if it exists
+                }
+                System.IO.File.WriteAllText(filepath, val);   //write csv file
+                var expfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "wwwroot/Export/" + val2 + ".csv";
+                if (System.IO.File.Exists(expfilepath))   //check if user csv file exists
+                {
+                    System.IO.File.Delete(expfilepath);   //delete user file if it exists
+                }
+                System.IO.File.WriteAllText(expfilepath, "");
+
+            }
             if (semesterevents.Count > 0)
             {
                 filepath = filepath + semesterevents[0].name + ".csv";
@@ -451,22 +467,7 @@ namespace JAGS.Controllers
                 }
                 System.IO.File.WriteAllLines(expfilepath, export);   //write csv file
             }
-            else
-            {
-                filepath = filepath + semesterevents[0].name + ".csv";
-                if (System.IO.File.Exists(filepath))   //check if user csv file exists
-                {
-                    System.IO.File.Delete(filepath);   //delete user file if it exists
-                }
-                System.IO.File.WriteAllText(filepath, val);   //write csv file
-                var expfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "wwwroot/Export/" + semesterevents[0].name + ".csv";
-                if (System.IO.File.Exists(expfilepath))   //check if user csv file exists
-                {
-                    System.IO.File.Delete(expfilepath);   //delete user file if it exists
-                }
-                System.IO.File.WriteAllText(expfilepath, val);
 
-            }
             return Json(new { Success = "true" });
         }
 
@@ -540,7 +541,7 @@ namespace JAGS.Controllers
                                     class1title = SchedSections[i].title,
                                     class2title = SchedSections[j].title,
                                     teacher = SchedSections[i].teacher,
-                                    errordesc = "Teacher is the same for these classes at the same time"
+                                    errordesc = SchedSections[i].teacher + " is the same for these classes at the same time"
                                 });
                             }
                         }
@@ -575,7 +576,7 @@ namespace JAGS.Controllers
                 var returnjson = JsonConvert.SerializeObject(Errorlist);
                 return Json(new { Success = "true", Data = returnjson });
             }
-            return Json(new { Success = "true" });
+            return Json(new { Success = "true", Data = "" });
         }
 
 
@@ -598,7 +599,7 @@ namespace JAGS.Controllers
             }
             var retevents = JsonConvert.DeserializeObject<List<EventObject>>(line);
             //var semesterevents = JsonConvert.DeserializeObject<List<EventObject>>(val);
-            Debug.WriteLine(retevents[0].name);
+            //Debug.WriteLine(retevents[0].name);
             //filepath = filepath + semesterevents[0].name + ".csv";
             //System.IO.File.WriteAllText(filepath, val);   //write csv file
 
