@@ -128,8 +128,7 @@
         <div class="row">
             <label for="ClassRoomSize" class="col-md-3 text-right">Classroom Size</label>
             <div class="col-md-3" id="CRSize">
-                @Html.TextBoxFor(a => a.ClassroomSize, new { @id = "ClassroomSizeText", @class = "hidden" })
-                @Html.DropDownListFor(a => a.ClassroomSize, new SelectList(Model.ClassroomSizeList, "Value", "Text"), "Select Classroom Size", new { @class = "form-control", @id = "ClassroomSize" })
+                @Html.TextBoxFor(a => a.ClassroomSize, new { @id = "ClassroomSizeText", @class = "form-control" })
             </div>
             <label for="ClassRoomType" class="col-md-3 text-right">Classroom Type</label>
             <div class="col-md-3" id="CRType">
@@ -242,7 +241,6 @@
                 $('#SectionSelection').val("").attr('selected', true);
                 $('#CampusSelection').val('').attr('selected', true);
                 $('#InstructorSelection').val('').attr('selected', true);
-                $('#ClassroomSize').val('').attr('selected', true);
                 $('#ScheduleSelection').val('').attr('selected', true);
                 $('#ClassroomType').val('').attr('selected', true);
                 $('#InstructorSelection').val("").attr('selected', true);
@@ -300,16 +298,7 @@
 
 
                             var ddlArray = new Array();
-                            var ddl = document.getElementById('ClassroomSize');
-                            for (i = 0; i < ddl.options.length; i++) {
-                                ddlArray[i] = ddl.options[i].text;
-                            }
-                            for (i = 1; i < ddlArray.length; i++) {
-                                if (ddlArray[i] === res.data.sectionClassroomSize) {
-                                    $('#ClassroomSize').val(i - 1).attr('selected', true);
-                                }
-                            }
-                            ddl = document.getElementById('ClassroomType');
+                            var ddl = document.getElementById('ClassroomType');
                             for (i = 0; i < ddl.options.length; i++) {
                                 ddlArray[i] = ddl.options[i].text;
                             }
@@ -363,7 +352,6 @@
                 $('#InstructorName').val("");
                 $('#CampusSelection').val('').attr('selected', true);
                 $('#InstructorSelection').val('').attr('selected', true);
-                $('#ClassroomSize').val('').attr('selected', true);
                 $('#ScheduleSelection').val('').attr('selected', true);
                 $('#ClassroomType').val('').attr('selected', true);
                 $('#InstructorSelection').val("").attr('selected', true);
@@ -371,13 +359,6 @@
 
         });
 
-
-        $('#ClassroomSize').change(function () {
-            if ($('#ClassroomSize option:selected').text() !== 'Select Classroom Size') {
-                var selected = $('#ClassroomSize option:selected').text();
-                $('#ClassroomSizeText').val(selected);
-            }
-        });
         $('#ClassroomType').change(function () {
             if ($('#ClassroomType option:selected').text() !== 'Select Classroom Type') {
                 var selected = $('#ClassroomType option:selected').text();

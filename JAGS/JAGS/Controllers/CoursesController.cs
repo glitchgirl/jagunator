@@ -157,29 +157,6 @@ namespace JAGS.Controllers
                 counter++;
             }
 
-            //Load Classroom Size into Model
-            filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/ClassroomSize.csv";
-            counter = 0;
-            if (System.IO.File.Exists(filepath))
-            {
-                readFile = new StreamReader(filepath);
-                data = readFile.ReadLine();
-                if (data != null && data.Contains(','))
-                    listDetails = data.Split(',');
-                else
-                    listDetails = new string[0];
-                readFile.Close();
-            }
-            else
-            {
-                listDetails = new string[0];
-            }
-
-            foreach (string s in listDetails)
-            {
-                model.ClassroomSizeList.Add(new SelectListItem { Value = counter.ToString(), Text = s });
-                counter++;
-            }
 
             //Load Classroom Type into Model
             filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/ClassroomData/ClassroomType.csv";
