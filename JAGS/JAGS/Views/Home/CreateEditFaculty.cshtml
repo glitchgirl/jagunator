@@ -17,6 +17,8 @@
 @using Microsoft.AspNetCore.Http;
 @model JAGS.Models.FacultyModel
 <h2>Create/Edit Faculty</h2>
+@if (ViewBag.sessiontype == "Admin" || ViewBag.sessiontype == "Editor")
+{
 <form>
     <div class="userform">
         <fieldset>
@@ -60,6 +62,7 @@
         </fieldset>
     </div>
 </form>
+}
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
  $(function()

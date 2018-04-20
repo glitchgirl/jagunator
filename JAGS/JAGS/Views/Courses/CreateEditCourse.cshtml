@@ -23,7 +23,8 @@
 <hr />
 <h2>@ViewBag.Title</h2>
 <hr />
-
+@if (ViewBag.sessiontype == "Admin" || ViewBag.sessiontype == "Editor")
+{
 <form>
     <fieldset>
         <div class="row">
@@ -146,7 +147,7 @@
 
     </fieldset>
 </form>
-
+}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <!--         <script src="~/js/LoadCourse.js" type="text/javascript"></script>  -->
 
