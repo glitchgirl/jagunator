@@ -223,69 +223,80 @@ namespace JAGS.Controllers
         //[HttpGet("[controller]/[action]")]
         public ActionResult CreateEditFaculty(FacultyModel model, string CreateEdit)
         {
+            String filepathfac = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";  //get file path for faculty folder
+            string[] fileEntries = Directory.GetFiles(filepathfac);  //get array of files in user directory
+            int pos = filepathfac.LastIndexOf("/") + 1;  //get position of last slash
+            var listoffac = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "fac" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+            ViewBag.listfac = listoffac;
+            ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+            ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);
             ViewBag.debugtext = "entered createeditfacutly";
-
-            switch (CreateEdit)
+            if (model.IsValid(model.Facultyfname,model.Facultylname,model.Facultytitle,model.Facultytype))
             {
-                case "CreateEdit":
-                    ViewBag.debugtext = "entered create case";
-                    ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
-                    ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
-                    var factype = "";
+                switch (CreateEdit)
+                {
+                    case "CreateEdit":
+                        ViewBag.debugtext = "entered create case";
+                        ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+                        ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+                        var factype = "";
 
-                    var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + model.Facultylname + "," + model.Facultyfname + ".csv";  //get absolute file path for possible user file
-                    if (System.IO.File.Exists(filepath))   //check if user csv file exists
-                    {
-                        System.IO.File.Delete(filepath);   //delete user file if it exists
-                    }
-                    if (model.Facultytype == 0)  //get text value of user type
-                    {
-                        factype = "0";
-                    }
-                    else if (model.Facultytype == 1)
-                    {
-                        factype = "1";
-                    }
-                    else
-                    {
-                        factype = "2";
-                    }
+                        var filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + model.Facultylname + "," + model.Facultyfname + ".csv";  //get absolute file path for possible user file
+                        if (System.IO.File.Exists(filepath))   //check if user csv file exists
+                        {
+                            System.IO.File.Delete(filepath);   //delete user file if it exists
+                        }
+                        if (model.Facultytype == 0)  //get text value of user type
+                        {
+                            factype = "0";
+                        }
+                        else if (model.Facultytype == 1)
+                        {
+                            factype = "1";
+                        }
+                        else
+                        {
+                            factype = "2";
+                        }
 
-                    var csv = model.Facultyfname.ToString() + "," + model.Facultylname + "," + model.Facultytitle.ToString() + "," + factype;  //create csv string to write out
-                    System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
+                        var csv = model.Facultyfname.ToString() + "," + model.Facultylname + "," + model.Facultytitle.ToString() + "," + factype;  //create csv string to write out
+                        System.IO.File.WriteAllText(filepath, csv.ToString());   //write csv file
 
-                    String filepathfac = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";  //get file path for faculty folder
-                    string[] fileEntries = Directory.GetFiles(filepathfac);  //get array of files in user directory
-                    int pos = filepathfac.LastIndexOf("/") + 1;  //get position of last slash
-                    var listoffac = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "fac" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
-                    ViewBag.listfac = listoffac;
-                    return View();
-                case "Delete":
-                    ViewBag.debugtext = "entered delete case";
-                    ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
-                    ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
+                        filepathfac = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";  //get file path for faculty folder
+                        fileEntries = Directory.GetFiles(filepathfac);  //get array of files in user directory
+                        pos = filepathfac.LastIndexOf("/") + 1;  //get position of last slash
+                        listoffac = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "fac" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+                        ViewBag.listfac = listoffac;
+                        return View();
+                    case "Delete":
+                        ViewBag.debugtext = "entered delete case";
+                        ViewBag.sessiontype = HttpContext.Session.GetString(SessionUserType);  //get type of user from session
+                        ViewBag.loginname = HttpContext.Session.GetString(SessionUserName);    //get username from session
 
-                    filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + model.Facultylname + "," + model.Facultyfname + ".csv";  //get absolute file path for possible user file
-                    if (System.IO.File.Exists(filepath))   //check if user csv file exists
-                    {
-                        System.IO.File.Delete(filepath);   //delete user file if it exists
-                    }
+                        filepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/" + model.Facultylname + "," + model.Facultyfname + ".csv";  //get absolute file path for possible user file
+                        if (System.IO.File.Exists(filepath))   //check if user csv file exists
+                        {
+                            System.IO.File.Delete(filepath);   //delete user file if it exists
+                        }
 
-                    filepathfac = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";  //get file path for faculty folder
-                    fileEntries = Directory.GetFiles(filepathfac);  //get array of files in user directory
-                    pos = filepathfac.LastIndexOf("/") + 1;  //get position of last slash
-                    listoffac = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "fac" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
-                    ViewBag.listfac = listoffac;
-                    return View();
-                default:
-                    ViewBag.debugtext = "entered default case";
-                    filepathfac = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";  //get file path for faculty folder
-                    fileEntries = Directory.GetFiles(filepathfac);  //get array of files in user directory
-                    pos = filepathfac.LastIndexOf("/") + 1;  //get position of last slash
-                    listoffac = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "fac" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
-                    ViewBag.listfac = listoffac;
-                    return View();
+                        filepathfac = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";  //get file path for faculty folder
+                        fileEntries = Directory.GetFiles(filepathfac);  //get array of files in user directory
+                        pos = filepathfac.LastIndexOf("/") + 1;  //get position of last slash
+                        listoffac = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "fac" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+                        ViewBag.listfac = listoffac;
+                        return View();
+                    default:
+                        ViewBag.debugtext = "entered default case";
+                        filepathfac = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Faculty/";  //get file path for faculty folder
+                        fileEntries = Directory.GetFiles(filepathfac);  //get array of files in user directory
+                        pos = filepathfac.LastIndexOf("/") + 1;  //get position of last slash
+                        listoffac = fileEntries.Select((r, index) => new System.Web.Mvc.SelectListItem { Text = r.Substring(pos, r.Length - pos - 4), Value = "fac" }).ToList();  //populate drop down with list that automatically strips out .csv and the leading directories
+                        ViewBag.listfac = listoffac;
+                        return View();
+                }
             }
+
+            return View();
 
         }
 
@@ -511,8 +522,8 @@ namespace JAGS.Controllers
                             break;
                     }
                     //tempsect.maxteacherclasses = currentteacher[2];
-                    tempsect.campus = currentsection[6];
-                    tempsect.crosslist = currentsection[10];
+                    tempsect.campus = currentsection[7];
+                    tempsect.crosslist = currentsection[11];
                     SchedSections.Add(tempsect);
                     //maintain count of classes taught by teachers
                     if (ProfCount.ContainsKey(tempsect.teacher))
@@ -532,7 +543,7 @@ namespace JAGS.Controllers
                         {
                             //check for same teacher teaching at same time and classes aren't crosslisted
                             Debug.Write("we are in the loop");
-                            if (SchedSections[i].start == SchedSections[j].start && SchedSections[i].teacher == SchedSections[j].teacher) //&& SchedSections[i].title.IndexOf(SchedSections[j].crosslist, StringComparison.OrdinalIgnoreCase) >= 0)
+                            if ((SchedSections[i].start >= SchedSections[j].start && SchedSections[i].start <= SchedSections[j].end && SchedSections[i].teacher == SchedSections[j].teacher && !SchedSections[i].title.ToUpper().Contains(SchedSections[j].crosslist.ToUpper()) && !SchedSections[j].title.ToUpper().Contains(SchedSections[i].crosslist.ToUpper())) || (SchedSections[j].start >= SchedSections[i].start && SchedSections[j].start <= SchedSections[i].end && SchedSections[i].teacher == SchedSections[j].teacher && !SchedSections[i].title.ToUpper().Contains(SchedSections[j].crosslist.ToUpper()) && !SchedSections[j].title.ToUpper().Contains(SchedSections[i].crosslist.ToUpper())))// || (SchedSections[i].start >= SchedSections[j].start && SchedSections[i].teacher == SchedSections[j].teacher)) //&& SchedSections[i].title.IndexOf(SchedSections[j].crosslist, StringComparison.OrdinalIgnoreCase) >= 0)
                             {
                                 Errorlist.Add(new ErrorObject
                                 {

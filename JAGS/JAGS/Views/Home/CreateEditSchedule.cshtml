@@ -46,7 +46,7 @@
         </div>
         <div class="text-center" id="Add Semester">
             <input type="text" name="SemesterName" id="SemesterName">
-            <input type="button" value="AddSemester" id="AddSemButton"><br>
+            <input type="button" value="AddSemester" id="AddSemButton">
         </div>
         <div class="text-center" id="LoadSemester">
             @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "Value","Text"), "Select Semester", new {@class="form-control"})

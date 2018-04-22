@@ -24,5 +24,19 @@ namespace JAGS.Models
 
         [Required(ErrorMessage = "Type is required")]
         public int Facultytype { get; set; }
+
+        public bool IsValid(string _Facultyfname, string _Facultylname, string _Facultytitle, int _Facultytype)
+        {
+            if (_Facultyfname != null && _Facultylname != null && Facultytitle != null && Facultytype != null)
+            {
+                return true;
+            }
+            else
+            {
+                //[ErrorMessage = "Login or Password is incorrect"]
+                return false;
+            }
+
+        }
     }
 }
