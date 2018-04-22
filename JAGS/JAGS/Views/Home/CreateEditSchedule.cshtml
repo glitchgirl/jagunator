@@ -38,12 +38,19 @@
 <h2>Create Edit Schedule</h2>
 <div id='wrap'>
     <div class="form-inline">
-    <div class="SemesterAndLabel">
-    <label for="Semester">Semester</label>
-        <div class="text-center" id="Semester">
+    <div class="SemesterAndLabel" >
+            <div class="row">
+        <label for="Semester" class="col-lg-6">Semester</label>
+                </div>
+            
+            <div class="row">
+        <div class="col-lg-6" id="Semester">
             @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "Value","Text"), "Select Semester", new {@class="form-control"})
 
         </div>
+                </div>
+@if (ViewBag.sessiontype == "Admin" || ViewBag.sessiontype == "Editor")
+{
         <div class="text-center" id="Add Semester">
             <input type="text" name="SemesterName" id="SemesterName">
             <input type="button" value="AddSemester" id="AddSemButton">
@@ -63,7 +70,7 @@
                 <label for='drop-remove'>remove after drop</label>
             </p>
         </div>
-
+            
         <div id='calendar' class="pull-left"></div>
 
         <div style='clear:both'></div>
@@ -78,7 +85,20 @@
  <div class="scheduleErrors" id="Errors">
         Conflicts 
     </div>
-
+            }
+            @if (ViewBag.sessiontype == "Viewer")
+            {
+            <div id='calendar' class="pull-left"></div>
+                    <div id='external-events'>
+            <div id='external-events-listing'>
+                <h4>Courses</h4>
+            </div>
+            <p>
+                <input type='checkbox' id='drop-remove'  checked='checked'/>
+                <label for='drop-remove'>remove after drop</label>
+            </p>
+        </div>
+            }
 @*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@          
 <script type="text/javascript">
  $(function()
