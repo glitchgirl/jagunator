@@ -46,7 +46,7 @@
         <div class="semesterLoad">
             <input type="text" name="SemesterName" id="SemesterName">
             <input type="button" value="AddSemester" id="AddSemButton">
-            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "Value", "Text"), "Select Semester", new { @class = "form-control" })
+            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "Value", "Text"), "Select Semester", new { @class = "form-control", @id = "LoadSemester" })
             <input type="button" value="LoadSemester" id="LoadSemesterButton"><br>
         </div>
                 <div id='wrap'>
@@ -80,10 +80,6 @@
                         <div id='external-events-listing' style="display: none;">
                             <h4>Courses</h4>
                         </div>
-                        <p>
-                            <input type='checkbox' id='drop-remove' checked='checked' />
-                            <label for='drop-remove'>remove after drop</label>
-                        </p>
                     </div>
                     <div id='calendar' class="pull-left"></div>
                     <div style='clear:both'></div>

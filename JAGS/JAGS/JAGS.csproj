@@ -72,6 +72,7 @@
     <None Remove="Data\Schedules\Fall2018\ACCT_1101_A.csv" />
     <None Remove="Data\Schedules\Fall2018\AGDR_1101_A.csv" />
     <None Remove="Data\Schedules\Fall2018\AIST_1726_A.csv" />
+    <None Remove="wwwroot\Export\Fall2018.csv" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="demos\json\events.json" />

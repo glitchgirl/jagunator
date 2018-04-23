@@ -399,6 +399,7 @@ namespace JAGS.Controllers
             var sourcefilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Schedules/" + val2 + "/";
             var destsched = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/" + val + ".csv";
             var sourcesched = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "Data/Semesters/" + val2 + ".csv";
+            string[] debugstring = Directory.GetFiles(sourcefilepath, "*.*", SearchOption.AllDirectories);
             foreach (string files in Directory.GetFiles(sourcefilepath, "*.*", SearchOption.AllDirectories))
                 System.IO.File.Copy(files, files.Replace(sourcefilepath, destfilepath), true);
             if (System.IO.File.Exists(destsched))
