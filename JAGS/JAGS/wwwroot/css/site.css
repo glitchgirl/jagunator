@@ -112,6 +112,10 @@ body {
     border: 1px solid #333;
     width:1050px;
 }
+
+.errordatapoint{
+    width:1050px;
+}
 .scheduleErrors button{
     padding:3px;
 }
