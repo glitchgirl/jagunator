@@ -447,7 +447,7 @@ namespace JAGS.Controllers
 
                 //create export file (csv that opens in excel)
                 List<string> export = new List<string>();
-                export.Add("Subject,ID,Section,Title,Credit Hours,Professor,Campus,Type,Size,Classroom Type,Crosslist,Day of Week, Start Time of Day, End Time of Day,");
+                export.Add("Subject,ID,Section,Title,Credit Hours,Professor Last Name,Professor First Name,Campus,Type,Size,Classroom Type,Crosslist,Day of Week, Start Time of Day, End Time of Day,");
                 String current_input = "";
                 var expfilepath = ApplicationBasePath.ToString().Substring(0, ApplicationBasePath.ToString().Length - 24) + "wwwroot/Export/" + semesterevents[0].name + ".csv";
                 if (System.IO.File.Exists(expfilepath))   //check if user csv file exists

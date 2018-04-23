@@ -439,10 +439,10 @@ namespace JAGS.Controllers
                         CourseName = row[3],
                         CourseCredit = row[4],
                         SectionInstructor = row[5],
-                        SectionCampus = row[6],
-                        SectionScheduleType = row[7],
-                        SectionClassroomSize = row[8],
-                        SectionClassroomType = row[9]
+                        SectionCampus = row[7],
+                        SectionScheduleType = row[8],
+                        SectionClassroomSize = row[9],
+                        SectionClassroomType = row[10]
                     }
                 });
             }
@@ -459,11 +459,11 @@ namespace JAGS.Controllers
                         CourseName = row[3],
                         CourseCredit = row[4],
                         SectionInstructor = row[5],
-                        SectionCampus = row[6],
-                        SectionScheduleType = row[7],
-                        SectionClassroomSize = row[8],
-                        SectionClassroomType = row[9],
-                        CrossList = row[10]
+                        SectionCampus = row[7],
+                        SectionScheduleType = row[8],
+                        SectionClassroomSize = row[9],
+                        SectionClassroomType = row[10],
+                        CrossList = row[11]
                     }
                 });
             }
