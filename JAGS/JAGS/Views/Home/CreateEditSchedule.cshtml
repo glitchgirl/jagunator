@@ -7,15 +7,15 @@
     ViewData["Title"] = "Create/Edit Schedule";
     if (ViewBag.sessiontype == "Admin")
     {
-    Layout = "_Layout";
+        Layout = "_Layout";
     }
     else if (ViewBag.sessiontype == "Editor")
     {
-    Layout = "_LayoutEditor";
+        Layout = "_LayoutEditor";
     }
     else if (ViewBag.sessiontype == "Viewer")
     {
-    Layout = "_LayoutViewer";
+        Layout = "_LayoutViewer";
     }
 }
 
@@ -37,72 +37,57 @@
 
 <h2>Create Edit Schedule</h2>
 <div id='wrap'>
-    <div class="form-inline">
-    <div class="SemesterAndLabel" >
-            <div class="row">
-        <label for="Semester" class="col-lg-6">Semester</label>
-                </div>
-            
-            <div class="row">
-        <div class="col-lg-6" id="Semester">
-            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "Value","Text"), "Select Semester", new {@class="form-control"})
-
+    <div class="form-inline"> 
+        <div class="semesterSelect">
+        @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "Value", "Text"), "Select Semester", new { @class = "form-control" })
         </div>
-                </div>
-@if (ViewBag.sessiontype == "Admin" || ViewBag.sessiontype == "Editor")
-{
-        <div class="text-center" id="Add Semester">
+    @if (ViewBag.sessiontype == "Admin" || ViewBag.sessiontype == "Editor")
+            {  
+        <div class="semesterLoad">
             <input type="text" name="SemesterName" id="SemesterName">
             <input type="button" value="AddSemester" id="AddSemButton">
-        </div>
-        <div class="text-center" id="LoadSemester">
-            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "Value","Text"), "Select Semester", new {@class="form-control"})
+            @Html.DropDownListFor(a => a.Semester, new SelectList(Model.Semester, "Value", "Text"), "Select Semester", new { @class = "form-control" })
             <input type="button" value="LoadSemester" id="LoadSemesterButton"><br>
         </div>
-         <!--TODO: Add dropdown for subject-->     
                 <div id='wrap'>
-        <div id='external-events'>
-            <div id='external-events-listing'>
-                <h4>Courses</h4>
-            </div>
-            <p>
-                <input type='checkbox' id='drop-remove'  checked='checked'/>
-                <label for='drop-remove'>remove after drop</label>
-            </p>
-        </div>
-            
-        <div id='calendar' class="pull-left"></div>
+                    <div id='external-events'>
+                        <div id='external-events-listing'>
+                            <h4>Courses</h4>
+                        </div>
+                        <p>
+                            <input type='checkbox' id='drop-remove' checked='checked' />
+                            <label for='drop-remove'>remove after drop</label>
+                        </p>
+                    </div>
 
-        <div style='clear:both'></div>
-
-    </div>
-        <br>
-    <div class="scheduleButtons">
-        <input type="button" value="Save" id="SaveButton"><br>
-        <input type="button" value="Export schedule" id="ExportButton"><br>
-    </div>
- <label for="Errors">Conflicts</label>
- <div class="scheduleErrors" id="Errors">
-        Conflicts 
-    </div>
+                    <div id='calendar' class="pull-left"></div>
+                    <div style='clear:both'></div>
+                </div>
+                <br>           
+                
+                <div class="scheduleErrors" id="Errors">      
+                    Conflicts <br />
+                    <input type="button" value="Save" id="SaveButton"><br>
+                    <input type="button" value="Export schedule" id="ExportButton"><br>
+                </div>           
             }
             @if (ViewBag.sessiontype == "Viewer")
             {
-            <div id='calendar' class="pull-left"></div>
-                    <div id='external-events'>
-            <div id='external-events-listing'>
-                <h4>Courses</h4>
-            </div>
-            <p>
-                <input type='checkbox' id='drop-remove'  checked='checked'/>
-                <label for='drop-remove'>remove after drop</label>
-            </p>
-        </div>
+                <div id='calendar' class="pull-left"></div>
+                <div id='external-events'>
+                    <div id='external-events-listing'>
+                        <h4>Courses</h4>
+                    </div>
+                    <p>
+                        <input type='checkbox' id='drop-remove' checked='checked' />
+                        <label for='drop-remove'>remove after drop</label>
+                    </p>
+                </div>
             }
-@*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@          
-<script type="text/javascript">
+            @*<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>*@
+            <script type="text/javascript">
  $(function()
- {    
+ {
       $('#LoadSemesterButton').click(function()
        {
             var currentsemester = $("#Semester option:selected").text();
@@ -185,15 +170,15 @@
 
 
       //execute on change of semester drop down
-      $("#Semester").change(function() 
+      $("#Semester").change(function()
         {
                 var loadevents = [];
-                var u = $("#Semester option:selected").text()             
+                var u = $("#Semester option:selected").text()
                 //call getsectionvalues in homecontroller and pass value selected
-                $.post("@Url.Action("GetSectionValues", "Home")?val=" + u, function(res) 
+                $.post("@Url.Action("GetSectionValues", "Home")?val=" + u, function(res)
                 {
                     //if function suceeds then do the following
-                    if (res.success === "true" && res.data !== undefined) 
+                    if (res.success === "true" && res.data !== undefined)
                     {
                         //parse data from return
                         var resultjson = JSON.parse(res.data);
@@ -231,7 +216,7 @@
                             });
 
                         });
-                        $.post("@Url.Action("GetSemesterEvents", "Home")?val=" + u, function(result) 
+                        $.post("@Url.Action("GetSemesterEvents", "Home")?val=" + u, function(result)
                         {
                             $('#calendar').fullCalendar('removeEvents');
                             for (let i = 0; i < result.data.length; i++) {
@@ -250,7 +235,7 @@
                             }
                         });
 
-                    } 
+                    }
                     else if (res.success === "true")
                     {
                         alert("There is No Calendar Data for this Semester!");
@@ -262,9 +247,12 @@
 
                 });
 
-                    
+
         });
 
 
  });
-</script>
+            </script>
+        </div>
+    </div>
+</div>

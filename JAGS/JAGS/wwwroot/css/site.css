@@ -91,7 +91,8 @@ body {
 
 .navbar-inverse {
     background-color: #A5ACAF !important;
-    color: white
+    color: white
+
 }
 
 .navbar img{
@@ -106,9 +107,24 @@ body {
 .navbar-inverse .navbar-nav > li > a {
     color: #002F55;
 }
-.scheduleButtons{
-    float:right;
-}
+
 .scheduleErrors{
-    border: 1px solid black;
+    border: 1px solid #333;
+    width:1050px;
+}
+.scheduleErrors button{
+    padding:3px;
+}
+
+.select-sch {
+    float:left;
+}
+
+.semesterSelect {
+    width:auto;
+    float:left;
+}
+.semesterLoad {
+    margin:auto;
+    text-align:left;
 }
