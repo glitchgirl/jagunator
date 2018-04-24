@@ -77,8 +77,8 @@
 
         <br />
         <div class="row">
-            <input type="submit" name="command" value="Save Course" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
-            <input type="submit" name="command" value="Delete Course" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
+            <input type="submit" name="command" value="Save Course" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary"/>
+            <input type="submit" name="command" value="Delete Course" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary"/>
 
         </div>
         <br /><br />
@@ -141,8 +141,8 @@
         <br />
 
         <br />
-        <input type="submit" name="command" value="Save Section" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
-        <input type="submit" name="command" value="Delete Section" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary" />
+        <input type="submit" name="command" value="Save Section" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary"/>
+        <input type="submit" name="command" value="Delete Section" formaction=@Url.Action("CreateEditCourse") formmethod="post" class="btn btn-primary"/>
 
 
     </fieldset>
@@ -153,6 +153,8 @@
 
 <script type="text/javascript">
     $(function () {
+        var initiator = '';
+
         $('#subjectID').change(function () {
             $('#CourseNameID').val("");
             $('#CourseCreditHours').val("").attr('selected', false);
@@ -366,6 +368,42 @@
                 $('#ClassroomTypeText').val(selected);
             }
         });
+
+        $(":submit").click(function ()
+        {
+            initiator = this.value;
+            if (initiator === "Save Course") {
+                $("#subjectID").attr('requried', '');
+                $("#CourseIDText").attr('required', '');
+                $("#CourseCreditHours").attr('required', '');
+                $("#CourseNameID").attr('required', '');
+            }
+            else if (initiator === "Delete Course") {
+                $("#subjectID").attr('required', '');
+                $("#CourseIDText").attr('required', '');
+            }
+            else if (initiator === "Save Section") {
+                $("#subjectID").attr('requried', '');
+                $("#CourseIDText").attr('required', '');
+                $("#CourseCreditHours").attr('required', '');
+                $("#CourseNameID").attr('required', '');
+                $("#sectionSemester").attr('required', '');
+                $("#CampusSelection").attr('required', '');
+                $("#SectionText").attr('required', '');
+                $("#InstructorSelection").attr('required', '');
+                $("#ScheduleSelection").attr('required', '');
+                $("#ClassroomType").attr('required', '');
+                $("#ClassroomSizeText").attr('required', '');
+            }
+            else
+            { 
+                $("#subjectID").attr('required', '');
+                $("#CourseIDText").attr('required', '');
+                $("#sectionSemester").attr('required', '');
+                $("#SectionText").attr('required', '');
+            }
+        });
+
 
     });
 
